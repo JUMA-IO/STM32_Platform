@@ -4,6 +4,7 @@
 
 static void sensor_read(void* arg);
 static void adv_name_generate(uint8_t* uni_name);
+static void app_led_control(uint8_t flag);
 
 #ifdef CANNON_V2
 char name[] = "CANNON_V2";
@@ -95,18 +96,22 @@ static void sensor_read(void* arg)
     run_after_delay(sensor_read, NULL, 500);
 }
 
+static void app_led_control(uint8_t flag)
+{
+    if(flag == 0x00) {
+        BSP_LED_On(LED0);
+    }
+    if(flag == 0x01) {
+        BSP_LED_Off(LED0);
+    }
+}
+
 /* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
 
     if(type == 0x00) {
-        if(*value == 0x00) {
-            BSP_LED_On(LED0);
-        }
-        if(*value == 0x01) {
-            BSP_LED_Off(LED0);
-
-        }
+        app_led_control(*value);
     }
 
 }
