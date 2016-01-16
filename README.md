@@ -17,14 +17,14 @@ This repository includes a comprehensive SDK together with various software reso
 ##Directories
 * /product - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
 * /system - including drivers, HALs, middlewares, JUMA SDKs, etc.
-* /tool - including some APP utilities which could be installed and run on Andoird mobiles. 
+* /tool - including some APP utilities which could be installed and run on Android mobiles. 
 * /document - things like document, datasheet, manuals, etc.
 
 
 ##Quick Start
 1. Choose seed project  
 Learn examples under */product* folder, select one to be the seed project.  
-Copy & pasta it to create your own project.
+Copy & paste it to create your own project.
 
 2. Header files  
 Remember to include necessary header files.  
@@ -43,8 +43,8 @@ Connect Cannon to computer via J-Link or ST-LINK.
 Keil can download firmware to Cannon.
 
 6. Work with BLE APP  
-To facilitate BLE development, we offered a BLE debugger AP in */tool* folder.   
-It can be run on Android moilbe to transmit BLE raw data to/from Cannon.
+To facilitate BLE development, we offered a BLE debugger APP in */tool* folder.   
+It can be run on Android mobile to transmit BLE raw data to/from Cannon.
 
 
 ##Further Resources
