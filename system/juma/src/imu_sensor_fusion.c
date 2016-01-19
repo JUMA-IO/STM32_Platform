@@ -25,7 +25,7 @@ void complementary_filter(int32_t acc_data[3], int32_t gyr_data[3], int32_t mag_
     roll_acc = atan2f((float)acc_data[1], (float)acc_data[2]) * 180 / M_PI;
     *roll = *roll * 0.98 + roll_acc * 0.02;
 
-    yal_mag = atan2f((float)mag_data[0], (float)acc_data[1]) * 180 / M_PI;
+    yal_mag = atan2f((float)mag_data[0], (float)mag_data[1]) * 180 / M_PI;
     *yal = *yal * 0.98 + yal_mag * 0.02;
 
 
