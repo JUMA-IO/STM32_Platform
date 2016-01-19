@@ -184,9 +184,9 @@ int main(void)
             Ble_conn_state = BLE_NOCONNECTABLE;
         }
         dispatch();
-        if(sleep_flag == 1) {
-            StopMode_Measure();
-        }
+//        if(sleep_flag == 1) {
+//            StopMode_Measure();
+//        }
 
     }
 }

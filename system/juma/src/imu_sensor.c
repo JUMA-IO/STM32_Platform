@@ -40,24 +40,24 @@ imu_status_t imu_sensor_reset(void)
         printf("lsm6ds3 reset error\n");
         return imu_status_fail;
     }
-    
+
     /*soft reset*/
     if(imu_sensor_lsm303agr_soft_rest() != imu_status_ok)
     {
         printf("lsm303agr reset error\n");
         return imu_status_fail;
     }
-    
+
     printf("sensor reset\n");
-    
+
     imu_sensor_read_fifo_status();
-  
+
     /*set fifo water mark level*/
     if(imu_sensor_fifo_threshold_level(2046) != imu_status_ok) { //1.2kBytes
         printf("sensor fifo water mark setting error\n");
         return imu_status_fail;
     }
-    
+
     printf("fifo water mark level set over\n");
 
     /*enable fifo interrupt*/
@@ -65,9 +65,9 @@ imu_status_t imu_sensor_reset(void)
         printf("sensor fifo interrupt setting error\n");
         return imu_status_fail;
     }
-    
+
     printf("fifo threshold interrupt set over\n");
-    
+
     if(lsm6ds3_fifo_sensor_enable() != IMU_6AXES_OK)
     {
         printf("sensor fifoenable error\n");
@@ -255,7 +255,26 @@ imu_status_t imu_sensor_stop(void)
 /*received data callback*/
 imu_status_t on_imu_sensor_data(uint8_t flag, int32_t* data)
 {
+// printf("flag : %x,short :%x, sensor data: %x,%x,%x\n",
+//           flag, data[0], data[1],data[2]);
 
+    if(flag == TYPE_ACC_DATA) {
+        sensor_data.acc[0] = data[0];
+        sensor_data.acc[1] = data[1];
+        sensor_data.acc[2] = data[2];
+    }
+    if(flag == TYPE_GYRO_DATA) {
+        sensor_data.gyro[0] = data[0];
+        sensor_data.gyro[1] = data[1];
+        sensor_data.gyro[2] = data[2];
+        app_pitch_roll(&sensor_data);
+    }
+    if(flag == TYPE_MAG_DATA) {
+        sensor_data.mag[0] = data[0];
+        sensor_data.mag[1] = data[1];
+        sensor_data.mag[2] = data[2];
+        app_pitch_roll(&sensor_data);
+    }
 
 }
 
@@ -427,12 +446,12 @@ imu_status_t imu_sensor_read_data_from_fifo(void)
     sensor_data_type_t flag;
 
     printf("read io\n");
-    
+
     /*mag data*/
     LSM303AGR_MAG_Get_Magnetic(data);
     flag = TYPE_MAG_DATA;
     on_imu_sensor_data(flag, data);
-    
+
     while(fifo_threthold > 3) {
         if(LSM6DS3_IO_Read(&tempReg[0], LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_FIFO_DATA_OUT_L, 2) != IMU_6AXES_OK)
         {
@@ -460,28 +479,28 @@ imu_status_t imu_sensor_read_data_from_fifo(void)
 
         if((flag == TYPE_ACC_DATA) || (flag == TYPE_MAG_DATA)) {
             /*acc data*/
-           if(imu_sensor_acc_get_sensitivity( &sensitivity ) != imu_status_ok)
-           {
-              return imu_status_fail;
-           }
-           
-           data[0] = (int32_t)(pData[0] * sensitivity);
-           data[1] = (int32_t)(pData[1] * sensitivity);
-           data[2] = (int32_t)(pData[2] * sensitivity);
-           
+            if(imu_sensor_acc_get_sensitivity( &sensitivity ) != imu_status_ok)
+            {
+                return imu_status_fail;
+            }
+
+            data[0] = (int32_t)(pData[0] * sensitivity);
+            data[1] = (int32_t)(pData[1] * sensitivity);
+            data[2] = (int32_t)(pData[2] * sensitivity);
+
             on_imu_sensor_data(flag, data);
             flag = TYPE_GYRO_DATA;
         } else {
             /*gyro data*/
-           if(imu_sensor_acc_get_sensitivity( &sensitivity ) != imu_status_ok)
-           {
-              return imu_status_fail;
-           }
-           
-           data[0] = (int32_t)(pData[0] * sensitivity);
-           data[1] = (int32_t)(pData[1] * sensitivity);
-           data[2] = (int32_t)(pData[2] * sensitivity);
-           
+            if(imu_sensor_acc_get_sensitivity( &sensitivity ) != imu_status_ok)
+            {
+                return imu_status_fail;
+            }
+
+            data[0] = (int32_t)(pData[0] * sensitivity);
+            data[1] = (int32_t)(pData[1] * sensitivity);
+            data[2] = (int32_t)(pData[2] * sensitivity);
+
             on_imu_sensor_data(flag, data);
             flag = TYPE_ACC_DATA;
         }

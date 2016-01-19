@@ -476,6 +476,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\juma\src\imu_sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>imu_sensor_fusion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\imu_sensor_fusion.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1264,6 +1269,11 @@
               <FileName>imu_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\juma\src\imu_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>imu_sensor_fusion.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\imu_sensor_fusion.c</FilePath>
             </File>
           </Files>
         </Group>
