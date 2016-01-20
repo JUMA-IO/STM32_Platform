@@ -11,19 +11,18 @@ static void fifo_status(void* arg);
 static void pitch_roll_yal_print(void* arg);
 
 #ifdef CANNON_V2
-char name[] = "CANNON_V2";
+char name[20] = "CANNON_V2";
 #endif
 #ifdef CANNON_V1
-char name[] = "CANNON_V1";
+char name[20] = "CANNON_V1";
 #endif
-uint8_t tx_power_level = 7;
-uint16_t adv_interval = 100;
-
 
 void on_ready(void)
 {
+    uint8_t tx_power_level = 7;
+    uint16_t adv_interval = 100;
     uint8_t bdAddr[6];
-     uint32_t data_rate = 800;
+    uint32_t data_rate = 800;
     HCI_get_bdAddr(bdAddr);
     adv_name_generate(bdAddr+4);
     /*Config Adv Parameter And Ready to Adv*/

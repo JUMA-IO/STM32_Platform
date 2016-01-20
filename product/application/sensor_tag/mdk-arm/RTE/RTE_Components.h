@@ -4,7 +4,7 @@
  *      *** Do not modify ! ***
  *
  * Project: 'CAF' 
- * Target:  'CAF_V1' 
+ * Target:  'CAF_V2' 
  */
 
 #ifndef RTE_COMPONENTS_H

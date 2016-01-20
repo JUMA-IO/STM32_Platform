@@ -3,9 +3,8 @@
 /*start adv*/
 
 const char *name = "BlueNRG_IOT_2";
-uint8_t adv_address[] = {0x08, 0x05, 0x04, 0x03, 0x02, 0x02};
-uint8_t tx_power_level = 7;
-uint16_t adv_interval = 100;
+uint8_t adv_address[6] = {0x08, 0x05, 0x04, 0x03, 0x02, 0x02};
+
 static float humidity;
 static float temperature;
 
@@ -13,6 +12,8 @@ static void sensor_read(void* arg);
 
 void on_ready(void)
 {
+    uint8_t tx_power_level = 7;
+    uint16_t adv_interval = 100;
     jsensor_app_set_sensor(JSENSOR_TYPE_HUMITY_TEMP);
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(name, adv_address, tx_power_level, adv_interval);
