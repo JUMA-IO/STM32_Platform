@@ -91,7 +91,6 @@ int fputc(int ch, FILE *f)
 
 void UART_Init(void)
 {
-    uint8_t _ch = 12;
     /*##-1- Configure the UART peripheral ######################################*/
     /* Put the USART peripheral in the Asynchronous mode (UART Mode) */
     /* UART1 configured as follow:

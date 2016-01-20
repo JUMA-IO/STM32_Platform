@@ -1,11 +1,14 @@
-//#include "sensor_service.h"
 
 #include "app.h"
+#include "imu_sensor_fusion.h"
 /*start adv*/
 
-extern volatile uint8_t device_connectable;
+float pitch, roll, yal;
+
 static void sensor_read(void* arg);
 static void adv_name_generate(uint8_t* uni_name);
+static void fifo_status(void* arg);
+static void pitch_roll_yal_print(void* arg);
 
 #ifdef CANNON_V2
 char name[20] = "CANNON_V2";
@@ -16,25 +19,27 @@ char name[20] = "CANNON_V1";
 
 void on_ready(void)
 {
-
     uint8_t tx_power_level = 7;
     uint16_t adv_interval = 100;
-    uint16_t scan_interval = 100;
-
-    uint8_t bdAddr[6] = {0x03,0x03,0x03,0x03,0x03,0x03};
-#ifdef CLIENT_ROLE
-    /*Host*/
-    ble_host_set_scan_param(bdAddr, tx_power_level, scan_interval);
-    ble_host_start_scan();
-#else
+    uint8_t bdAddr[6];
+    uint32_t data_rate = 800;
     HCI_get_bdAddr(bdAddr);
     adv_name_generate(bdAddr+4);
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(name, bdAddr, tx_power_level, adv_interval);
     ble_device_start_advertising();
-#endif
-    //run_after_delay(sensor_read, NULL, 500);
+    
+    imu_sensor_select_features(ACC_AND_GYRO_ENABLE);   
+    
+    imu_sensor_reset();
+    
+    imu_sensor_set_data_rate(&data_rate);
+    
+    imu_sensor_start();
+    
+    run_after_delay(pitch_roll_yal_print, NULL, 500);
 }
+
 
 static void adv_name_generate(uint8_t* uni_name) {
     char temp[3] = "_";
@@ -43,35 +48,30 @@ static void adv_name_generate(uint8_t* uni_name) {
     strcat(name, temp);
 }
 
-void ble_host_found_device_info(scan_device_found_info device_info)
+static void fifo_status(void* arg)
 {
-    if(device_info.RSSI > -60) {
-        device_connectable = CONNECT_DEVICE_ENABLE;
-    } else {
-        ble_host_start_scan();
-    }
+ imu_sensor_read_fifo_status();
+ //imu_sensor_read_data_from_fifo();
+ run_after_delay(fifo_status, NULL, 100);
 }
 
-void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value)
+void app_pitch_roll(imu_sensor_data_t* Data)
 {
-    BSP_LED_Toggle(LED0);
-    /*echo*/
-    *value = 1;
-    ble_host_send(type, length, value);
-    printf("receive data:%x,%x,%x\n\r",type,length,value[0]);
+   
+   complementary_filter(Data->acc, Data->gyro, Data->mag, &pitch, &roll, &yal);
+   //printf("pitch: %f, roll: %f, yal: %f \n", pitch, roll, yal);
 }
 
-void ble_host_on_connect()
+static void pitch_roll_yal_print(void* arg)
 {
-    uint8_t data = 1;
-    ble_host_send(0x01, 0x01, &data);
-    printf("send\n\r");
-
+   printf("pitch: %f, roll: %f, yal: %f \n", pitch, roll, yal);
+   run_after_delay(pitch_roll_yal_print, NULL, 500);
 }
 
 /* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
+
 
 }
 /* Device on connect */

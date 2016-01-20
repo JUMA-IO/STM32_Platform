@@ -7,13 +7,11 @@ static void adv_name_generate(uint8_t* uni_name);
 static void app_led_control(uint8_t flag);
 
 #ifdef CANNON_V2
-char name[] = "CANNON_V2";
+char name[20] = "CANNON_V2";
 #endif
 #ifdef CANNON_V1
-char name[] = "CANNON_V1";
+char name[20] = "CANNON_V1";
 #endif
-uint8_t tx_power_level = 7;
-uint16_t adv_interval = 100;
 
 void jsensor_app_set_sensors(void)
 {
@@ -25,6 +23,8 @@ void jsensor_app_set_sensors(void)
 
 void on_ready(void)
 {
+    uint8_t tx_power_level = 7;
+    uint16_t adv_interval = 100;
     uint8_t bdAddr[6];
     HCI_get_bdAddr(bdAddr);
     adv_name_generate(bdAddr+4);
