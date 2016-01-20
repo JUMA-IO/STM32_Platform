@@ -200,7 +200,7 @@ void PPP_IRQHandler(void)
 {
 }
 */
-
+#ifdef SENSOR_FIFO
 /*lsm6ds3*/
 void EXTI0_IRQHandler(void)
 {
@@ -212,7 +212,7 @@ void EXTI0_IRQHandler(void)
     imu_sensor_read_data_from_fifo();
   }
 }
-
+#endif
 /**
  * @}
  */

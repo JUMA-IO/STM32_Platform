@@ -8,17 +8,19 @@ static void sensor_read(void* arg);
 static void adv_name_generate(uint8_t* uni_name);
 
 #ifdef CANNON_V2
-char name[] = "CANNON_V2";
+char name[20] = "CANNON_V2";
 #endif
 #ifdef CANNON_V1
-char name[] = "CANNON_V1";
+char name[20] = "CANNON_V1";
 #endif
-uint8_t tx_power_level = 7;
-uint16_t adv_interval = 100;
-uint16_t scan_interval = 100;
 
 void on_ready(void)
 {
+
+    uint8_t tx_power_level = 7;
+    uint16_t adv_interval = 100;
+    uint16_t scan_interval = 100;
+
     uint8_t bdAddr[6] = {0x03,0x03,0x03,0x03,0x03,0x03};
 #ifdef CLIENT_ROLE
     /*Host*/
@@ -34,11 +36,11 @@ void on_ready(void)
     //run_after_delay(sensor_read, NULL, 500);
 }
 
-static void adv_name_generate(uint8_t* uni_name){
-  char temp[3] = "_";
-   /*adv name aplice*/
-  sprintf(temp+1,"%d%d",*uni_name,*(uni_name+1));
-  strcat(name, temp);
+static void adv_name_generate(uint8_t* uni_name) {
+    char temp[3] = "_";
+    /*adv name aplice*/
+    sprintf(temp+1,"%d%d",*uni_name,*(uni_name+1));
+    strcat(name, temp);
 }
 
 void ble_host_found_device_info(scan_device_found_info device_info)
