@@ -208,8 +208,8 @@ void EXTI0_IRQHandler(void)
   {
     __HAL_GPIO_EXTI_CLEAR_IT(MEMS_INT1_PIN);
     
-    printf("fifo interrupt \n");
     imu_sensor_read_data_from_fifo();
+    printf("fifo interrupt \n");
   }
 }
 #endif

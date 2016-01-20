@@ -1495,22 +1495,37 @@ status_t LSM303AGR_MAG_Get_Raw_Magnetic(u8_t *buff)
 }
 
 #define LSM303AGR_MAG_SENSITIVITY	15/10
+#ifdef SENSOR_FIFO
+   status_t LSM303AGR_MAG_Get_Magnetic(float *buff)
+   {
+      Type3Axis16bit_U raw_data_tmp;
 
-status_t LSM303AGR_MAG_Get_Magnetic(int *buff)
-{
-    Type3Axis16bit_U raw_data_tmp;
+      /* Read out raw magnetometer samples */
+      LSM303AGR_MAG_Get_Raw_Magnetic(raw_data_tmp.u8bit);
 
-    /* Read out raw magnetometer samples */
-    LSM303AGR_MAG_Get_Raw_Magnetic(raw_data_tmp.u8bit);
+      /* Applysensitivity */
+      buff[0] = raw_data_tmp.i16bit[0] * LSM303AGR_MAG_SENSITIVITY;
+      buff[1] = raw_data_tmp.i16bit[1] * LSM303AGR_MAG_SENSITIVITY;
+      buff[2] = raw_data_tmp.i16bit[2] * LSM303AGR_MAG_SENSITIVITY;
 
-    /* Applysensitivity */
-    buff[0] = raw_data_tmp.i16bit[0] * LSM303AGR_MAG_SENSITIVITY;
-    buff[1] = raw_data_tmp.i16bit[1] * LSM303AGR_MAG_SENSITIVITY;
-    buff[2] = raw_data_tmp.i16bit[2] * LSM303AGR_MAG_SENSITIVITY;
+      return MEMS_SUCCESS;
+  }
+#else
+  status_t LSM303AGR_MAG_Get_Magnetic(int *buff)
+  {
+      Type3Axis16bit_U raw_data_tmp;
 
-    return MEMS_SUCCESS;
-}
+      /* Read out raw magnetometer samples */
+      LSM303AGR_MAG_Get_Raw_Magnetic(raw_data_tmp.u8bit);
 
+      /* Applysensitivity */
+      buff[0] = raw_data_tmp.i16bit[0] * LSM303AGR_MAG_SENSITIVITY;
+      buff[1] = raw_data_tmp.i16bit[1] * LSM303AGR_MAG_SENSITIVITY;
+      buff[2] = raw_data_tmp.i16bit[2] * LSM303AGR_MAG_SENSITIVITY;
+
+      return MEMS_SUCCESS;
+  }
+#endif
 /*******************************************************************************
 * Function Name  : status_t LSM303AGR_MAG_Get_IntThreshld(u8_t *buff)
 * Description    : Read IntThreshld output register

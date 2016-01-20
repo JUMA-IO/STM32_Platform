@@ -25,39 +25,47 @@ extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t Device
 extern void LSM6DS3_IO_ITConfig( void );
 
 enum _imu_status{
-	imu_status_ok = 0,
-	imu_status_fail = 1,
+   imu_status_ok = 0,
+   imu_status_fail = 1,
 };
 
 typedef enum 
 {
-  OUTPUT_DISABLE = 0, 
-  OUTPUT_ENABLE = !OUTPUT_DISABLE
-} output_state;
+   OUTPUT_DISABLE = 0, 
+   OUTPUT_ENABLE = !OUTPUT_DISABLE
+}output_state;
 
 typedef enum _sensor_selection{
-  ACC_ENABLE           = 0,
-  GYRO_ENABLE          = 1,
-  MAG_ENABLE           = 2,
-  ACC_AND_GYRO_ENABLE  = 3,
-  ALL_ENABLE           = 4,
+   ACC_ENABLE           = 1,
+   GYRO_ENABLE          = 2,
+   ACC_AND_GYRO_ENABLE  = 3,
+   MAG_ENABLE           = 4,
+   ALL_ENABLE           = 7,
 } sensor_selsection_t;
 
 typedef enum sensor_data_type{
-  TYPE_ACC_DATA  = 0,
-  TYPE_GYRO_DATA = 1,
-  TYPE_MAG_DATA  = 2,
+   TYPE_ACC_DATA  = 0,
+   TYPE_GYRO_DATA = 1,
+   TYPE_MAG_DATA  = 2,
 } sensor_data_type_t;
 
 typedef struct _imu_sensor_data_t {
 
-    int acc[3];
+    float acc[3];
 
-    int gyro[3];
+    float gyro[3];
 
-    int mag[3];
+    float mag[3];
 
 } imu_sensor_data_t;
+
+typedef struct _sensor_data_sensitivity{
+   
+   float acc_sensitivity;
+ 
+   float gyro_sensitivity;
+ 
+} imu_sensor_data_sensitivity_t;
 
 typedef enum _imu_status imu_status_t;
 typedef struct _imu_sensor_data_t imu_sensor_data_t; 
@@ -68,13 +76,13 @@ imu_status_t imu_sensor_reset(void);
 
 imu_status_t imu_sensor_select_features(sensor_selsection_t features);
 
-imu_status_t imu_sensor_set_data_rate(uint32_t* p_data_rate); 
+imu_status_t imu_sensor_set_data_rate(uint32_t* p_data_rate, uint8_t mode); 
 
 imu_status_t imu_sensor_start(void); 
 
 imu_status_t imu_sensor_stop(void);
 
-imu_status_t on_imu_sensor_data(uint8_t flag, int32_t* data); 
+void on_imu_sensor_data(imu_sensor_data_t* data); 
 
 imu_status_t imu_sensor_read_data_from_fifo(void);
 
