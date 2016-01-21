@@ -727,8 +727,11 @@ status_t LSM303AGR_MAG_R_ZYXOR(LSM303AGR_MAG_ZYXOR_t *value);
 * Permission    : ro 
 *******************************************************************************/
 status_t LSM303AGR_MAG_Get_Raw_Magnetic(u8_t *buff);
-status_t LSM303AGR_MAG_Get_Magnetic(int *buff);
-
+#ifdef SENSOR_FIFO
+  status_t LSM303AGR_MAG_Get_Magnetic(float *buff);
+#else
+  status_t LSM303AGR_MAG_Get_Magnetic(int *buff);
+#endif
 /*******************************************************************************
 * Register      : <REGISTER_L> - <REGISTER_H>
 * Output Type   : IntThreshld
