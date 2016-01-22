@@ -1,0 +1,5 @@
+*.bak
+RTE_Components.h
+Listings/
+DebugConfig/
+Objects/

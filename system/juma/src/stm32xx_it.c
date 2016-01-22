@@ -40,6 +40,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32xx_it.h"
 #include "debug.h"
+#include "x_nucleo_iks01a1.h"
+#include "imu_sensor.h"
 /* Private variables ---------------------------------------------------------*/
 /* RTC handler declared in "main.c" file */
 extern RTC_HandleTypeDef RTCHandle;
@@ -198,7 +200,19 @@ void PPP_IRQHandler(void)
 {
 }
 */
-
+#ifdef SENSOR_FIFO
+/*lsm6ds3*/
+void EXTI0_IRQHandler(void)
+{
+   if(__HAL_GPIO_EXTI_GET_IT(MEMS_INT1_PIN) != RESET)
+  {
+    __HAL_GPIO_EXTI_CLEAR_IT(MEMS_INT1_PIN);
+    
+    imu_sensor_read_data_from_fifo();
+    printf("fifo interrupt \n");
+  }
+}
+#endif
 /**
  * @}
  */

@@ -85,10 +85,6 @@ BLE_RoleTypeDef BLE_Role = SERVER;
 	*/
 tBleStatus ble_init_bluenrg(void)
 {
-    uint8_t SERVER_BDADDR[] = {0x04, 0x34, 0x00, 0xE1, 0x80, 0x02};
-
-    uint8_t bdaddr[BDADDR_SIZE];
-
     tBleStatus ret;
     /*gatt_Init*/
     ret = aci_gatt_init();
@@ -148,6 +144,7 @@ tBleStatus ble_init_bluenrg(void)
         printf("CLIENT: BLE Stack Initialized\n");
     }
 
+    return 0;
 }
 
 /**
@@ -220,7 +217,6 @@ fail:
 	*/
 tBleStatus ble_device_set_name(const char* new_device_name)
 {
-    tBleStatus ret;
     AdvNameLen = strlen(new_device_name);
     memcpy(AdvName,new_device_name,AdvNameLen);
     LocalName[0] = AD_TYPE_COMPLETE_LOCAL_NAME;
@@ -244,6 +240,7 @@ tBleStatus advertise_address(uint8_t* advaddress)
         return BLE_SET_BD_ADDR_FAILED;
     }
 
+    return 0;
 }
 
 /**
@@ -338,6 +335,8 @@ tBleStatus ble_device_send(uint8_t type, uint32_t length, uint8_t* value)
 
         return BLE_STATUS_ERROR ;
     }
+
+    return 0;
 }
 /**
 	*@brief 	Stop Adv
@@ -396,17 +395,20 @@ tBleStatus ble_host_start_scan(void)
         return BLE_STATUS_ERROR;
     }
     printf("start scanning \n\r");
+
+    return 0;
 }
 /*host stop scan*/
 tBleStatus ble_host_stop_scan(void)
 {
     aci_gap_terminate_gap_procedure(GAP_GENERAL_DISCOVERY_PROC);
+ 
+    return 0;
 }
 
 static void ble_host_device_found( le_advertising_info* adv_data)
 {
     uint8_t i;
-    int8_t RSSI;
 
     i = 25;
     while(adv_data->data_RSSI[i] == 0) {
@@ -450,6 +452,8 @@ tBleStatus ble_host_connect(tBDAddr bdaddr)
     set_connectable = FALSE;
     /*discover device*/
     ble_host_discover_char();
+    
+    return ret;
 }
 
 void ble_host_discover_char(void)
@@ -601,6 +605,8 @@ tBleStatus ble_host_send(uint8_t type, uint32_t length, uint8_t* value)
 
         return BLE_STATUS_ERROR ;
     }
+    
+    return ret;
 }
 
 /*Host*/
