@@ -463,6 +463,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\juma\src\juma_sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>usbd_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\usbd_conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\usbd_desc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -673,6 +683,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\drivers\bluenrg\bluenrg_ms\stm32_bluenrg_ble.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_pcd_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -770,6 +790,31 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\cmiss\device\st\src\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>system/drivers/usbd</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\core\src\usbd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ctlreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\core\src\usbd_ctlreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\core\src\usbd_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\class\HID\src\usbd_hid.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1137,7 +1182,7 @@
               <MiscControls>--C99 --gnu -W#177</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\system\drivers\hts221;..\..\..\..\system\drivers\lps25h;..\..\..\..\system\drivers\lps25hb;..\..\..\..\system\drivers\lsm303agr;..\..\..\..\system\drivers\lsm6ds3;..\..\..\..\system\drivers\stm32f4xx_hal_driver\inc;..\..\..\..\system\drivers\common;..\..\..\..\system\drivers\bluenrg\inc;..\..\..\..\system\drivers\bluenrg\bluenrg_ms;..\..\usb;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\juma\inc;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include</IncludePath>
+              <IncludePath>..\..\..\..\system\drivers\hts221;..\..\..\..\system\drivers\lps25h;..\..\..\..\system\drivers\lps25hb;..\..\..\..\system\drivers\lsm303agr;..\..\..\..\system\drivers\lsm6ds3;..\..\..\..\system\drivers\stm32f4xx_hal_driver\inc;..\..\..\..\system\drivers\common;..\..\..\..\system\drivers\bluenrg\inc;..\..\..\..\system\drivers\bluenrg\bluenrg_ms;..\..\usb;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\juma\inc;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\stm32_usb_device_library\class\HID\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1234,6 +1279,16 @@
               <FileName>juma_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\juma\src\juma_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\usbd_conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\usbd_desc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1445,6 +1500,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\drivers\bluenrg\bluenrg_ms\stm32_bluenrg_ble.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_pcd_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1542,6 +1607,31 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\cmiss\device\st\src\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>system/drivers/usbd</GroupName>
+          <Files>
+            <File>
+              <FileName>usbd_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\core\src\usbd_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ctlreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\core\src\usbd_ctlreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\core\src\usbd_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbd_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\drivers\stm32_usb_device_library\class\HID\src\usbd_hid.c</FilePath>
             </File>
           </Files>
         </Group>
