@@ -213,6 +213,33 @@ void EXTI0_IRQHandler(void)
   }
 }
 #endif
+
+extern PCD_HandleTypeDef hpcd;
+extern USBD_HandleTypeDef USBD_Device;
+
+void OTG_FS_IRQHandler(void)
+{
+  HAL_PCD_IRQHandler(&hpcd);
+}
+
+void OTG_FS_WKUP_IRQHandler(void)
+{
+  if((&hpcd)->Init.low_power_enable)
+  {
+    /* Reset SLEEPDEEP bit of Cortex System Control Register */
+    SCB->SCR &= (uint32_t)~((uint32_t)(SCB_SCR_SLEEPDEEP_Msk | SCB_SCR_SLEEPONEXIT_Msk));  
+    
+    /* Configures system clock after wake-up from STOP: enable HSE, PLL and select 
+    PLL as system clock source (HSE and PLL are disabled in STOP mode) */
+    SystemClock_Config();
+    
+    /* ungate PHY clock */
+     __HAL_PCD_UNGATE_PHYCLOCK((&hpcd)); 
+  }
+  /* Clear EXTI pending Bit*/
+  __HAL_USB_OTG_FS_WAKEUP_EXTI_CLEAR_FLAG();
+}
+
 /**
  * @}
  */

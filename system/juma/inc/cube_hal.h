@@ -17,6 +17,9 @@
   #include "stm32f4xx_nucleo_bluenrg.h"
   #include "stm32f4xx_hal_conf.h"
 #endif
+
+#include "usbd_core.h"
+
 void SystemClock_Config(void);
 
 #endif //_CANON_HAL_H_
