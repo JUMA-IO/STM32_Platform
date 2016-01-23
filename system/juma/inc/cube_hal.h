@@ -18,7 +18,9 @@
   #include "stm32f4xx_hal_conf.h"
 #endif
 
+#ifdef INCLUDE_USB_DEVICE
 #include "usbd_core.h"
+#endif
 
 void SystemClock_Config(void);
 

@@ -214,6 +214,7 @@ void EXTI0_IRQHandler(void)
 }
 #endif
 
+#ifdef INCLUDE_USB_DEVICE
 extern PCD_HandleTypeDef hpcd;
 extern USBD_HandleTypeDef USBD_Device;
 
@@ -239,6 +240,7 @@ void OTG_FS_WKUP_IRQHandler(void)
   /* Clear EXTI pending Bit*/
   __HAL_USB_OTG_FS_WAKEUP_EXTI_CLEAR_FLAG();
 }
+#endif
 
 /**
  * @}
