@@ -1,4 +1,5 @@
 *.bak
+*.uvguix.*
 RTE_Components.h
 Listings/
 DebugConfig/
