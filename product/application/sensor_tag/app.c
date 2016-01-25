@@ -1,17 +1,23 @@
-
 #include "app.h"
 /*start adv*/
 
-static void sensor_read(void* arg);
-static void adv_name_generate(uint8_t* uni_name);
-static void app_led_control(uint8_t flag);
+#define UPDATE_INTERVAL 100
 
-#ifdef CANNON_V2
-char name[20] = "CANNON_V2";
+static void read_temperature(void* arg);
+static void read_humidity(void* arg);
+static void read_pressure(void* arg);
+static void read_mag(void* arg);
+static void read_acc(void* arg);
+static void read_gyro(void* arg);
+static void led_on(void* arg);
+static void led_off(void* arg);
+
+#if defined(CANNON_V2)
+const char* board_name = "CANNON V2";
+#elif defined(CANNON_V1)
+const char* board_name = "CANNON V1";
 #endif
-#ifdef CANNON_V1
-char name[20] = "CANNON_V1";
-#endif
+static uint8_t running;
 
 void jsensor_app_set_sensors(void)
 {
@@ -26,105 +32,161 @@ void on_ready(void)
     uint8_t tx_power_level = 7;
     uint16_t adv_interval = 100;
     uint8_t bdAddr[6];
+    char name[32];
+
+    running = 0;
+
+    BSP_LED_On(LED0);
     HCI_get_bdAddr(bdAddr);
-    adv_name_generate(bdAddr+4);
+    sprintf(name, "%s %02x%02x", board_name, bdAddr[0], bdAddr[1]);
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(name, bdAddr, tx_power_level, adv_interval);
     ble_device_start_advertising();
-
-    run_after_delay(sensor_read, NULL, 500);
 }
 
-static void adv_name_generate(uint8_t* uni_name) {
-    char temp[3] = "_";
-    /*adv name aplice*/
-    sprintf(temp+1,"%d%d",*uni_name,*(uni_name+1));
-    strcat(name, temp);
-}
-
-static void sensor_read(void* arg)
+static void read_temperature(void* arg)
+// sensor read temperature
 {
-    // sensor read temperature & humidity
-    {
-        int16_t humidity;
-        int16_t temperature;
-        JSensor_HUM_TEMP_Typedef tdef;
+    int16_t humidity;
+    int16_t temperature;
+    JSensor_HUM_TEMP_Typedef tdef;
 
-        tdef.humidity = &humidity;
-        tdef.temperature = &temperature;
+    if (!running) return;
 
-        if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_HUMITY_TEMP, (void *)&tdef)) {
-            ble_device_send(0x00, 2, (uint8_t *)&temperature);
-            ble_device_send(0x01, 2, (uint8_t *)&humidity);
-        }
-    }
-    // sensor read pressure
-    {
-        JSensor_Press_Typedef tdef;
-        int32_t pressure;
+    tdef.humidity = &humidity;
+    tdef.temperature = &temperature;
 
-        tdef.pressure = &pressure;
-
-        if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_PRESSURE, (void *)&tdef)) {
-            ble_device_send(0x02, 3, (uint8_t *)&pressure);
-        }
-    }
-    // sensor read magenetometer
-    {
-        JSensor_MAG_Typedef tdef;
-        int8_t  MAG[6];
-        tdef.MAG = MAG;
-
-        if(JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MAGNET, (void *)&tdef)) {
-            ble_device_send(0x03, 6, (uint8_t*)MAG);
-            //printf("%x,%x,%x,%x,%x,%x\n\r", MAG[0],MAG[1],MAG[2],MAG[3],MAG[4],MAG[5]);
-        }
-    }
-    // sensor read motion 6 AXIS
-    {
-        JSensor_AXIS_Typedef tdef;
-        int8_t ACC[6], GRO[6];
-        tdef.ACC = ACC;
-        tdef.GRO = GRO;
-
-        if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&tdef)) {
-            ble_device_send(0x04, 6, (uint8_t*)ACC);
-            ble_device_send(0x05, 6, (uint8_t*)GRO);
-        }
+    if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_HUMITY_TEMP, (void *)&tdef)) {
+        ble_device_send(0x00, 2, (uint8_t *)&temperature);
     }
 
-    run_after_delay(sensor_read, NULL, 500);
+    run_after_delay(read_humidity, NULL, UPDATE_INTERVAL);
 }
 
-static void app_led_control(uint8_t flag)
+static void read_humidity(void* arg)
+// sensor read humidity
 {
-    if(flag == 0x00) {
-        BSP_LED_On(LED0);
+    int16_t humidity;
+    int16_t temperature;
+    JSensor_HUM_TEMP_Typedef tdef;
+
+    if (!running) return;
+
+    tdef.humidity = &humidity;
+    tdef.temperature = &temperature;
+
+    if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_HUMITY_TEMP, (void *)&tdef)) {
+        ble_device_send(0x01, 2, (uint8_t *)&humidity);
     }
-    if(flag == 0x01) {
-        BSP_LED_Off(LED0);
+
+    run_after_delay(read_pressure, NULL, UPDATE_INTERVAL);
+}
+
+static void read_pressure(void* arg)
+// sensor read pressure
+{
+    JSensor_Press_Typedef tdef;
+    int32_t pressure;
+
+    if (!running) return;
+
+    tdef.pressure = &pressure;
+
+    if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_PRESSURE, (void *)&tdef)) {
+        ble_device_send(0x02, 3, (uint8_t *)&pressure);
     }
+
+    run_after_delay(read_mag, NULL, UPDATE_INTERVAL);
+}
+
+static void read_mag(void* arg)
+// sensor read magenetometer
+{
+    JSensor_MAG_Typedef tdef;
+    int8_t  MAG[6];
+
+    if (!running) return;
+
+    tdef.MAG = MAG;
+
+    if(JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MAGNET, (void *)&tdef)) {
+        ble_device_send(0x03, 6, (uint8_t*)MAG);
+        //printf("%x,%x,%x,%x,%x,%x\n\r", MAG[0],MAG[1],MAG[2],MAG[3],MAG[4],MAG[5]);
+    }
+
+    run_after_delay(read_acc, NULL, UPDATE_INTERVAL);
+}
+
+static void read_acc(void* arg)
+// sensor read accelerometer
+{
+    JSensor_AXIS_Typedef tdef;
+    int8_t ACC[6], GRO[6];
+
+    if (!running) return;
+
+    tdef.ACC = ACC;
+    tdef.GRO = GRO;
+
+    if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&tdef)) {
+        ble_device_send(0x04, 6, (uint8_t*)ACC);
+    }
+
+    run_after_delay(read_gyro, NULL, UPDATE_INTERVAL);
+}
+
+static void read_gyro(void* arg)
+// sensor read gyroscopic
+{
+    JSensor_AXIS_Typedef tdef;
+    int8_t ACC[6], GRO[6];
+
+    if (!running) return;
+
+    tdef.ACC = ACC;
+    tdef.GRO = GRO;
+
+    if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&tdef)) {
+        ble_device_send(0x05, 6, (uint8_t*)GRO);
+    }
+
+    run_after_delay(read_temperature, NULL, UPDATE_INTERVAL);
 }
 
 /* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
-
-    if(type == 0x00) {
-        app_led_control(*value);
-    }
-
 }
+
 /* Device on connect */
 void ble_device_on_connect(void)
 {
+    running = 1;
 
-    tBleStatus ret = BLE_WAIT_REMOTE_ENABLE_NOTIFY;
-
+    run_after_delay(led_off, NULL, 150);
+    run_after_delay(read_temperature, NULL, UPDATE_INTERVAL);
 }
+
+static void led_on(void* arg)
+{
+    BSP_LED_On(LED0);
+
+    run_after_delay(led_off, NULL, 100);
+}
+
+static void led_off(void* arg)
+{
+    if (!running) return;
+
+    BSP_LED_Off(LED0);
+
+    run_after_delay(led_on, NULL, 150);
+}
+
 /* Device on disconnect */
 void ble_device_on_disconnect(uint8_t reason)
 {
+    running = 0;
     /* Make the device connectable again. */
     Ble_conn_state = BLE_CONNECTABLE;
     ble_device_start_advertising();
