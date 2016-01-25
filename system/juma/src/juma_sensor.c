@@ -165,8 +165,6 @@ static void read_temp_hum(void* args)
         *p->humidity = ((temp >> 8) & 0xFF) | ((temp & 0xFF) << 8);
     }
 
-    HAL_Delay(1000); 	// why need delay?
-
     if (p->temperature != NULL) {
         BSP_HUM_TEMP_GetTemperature(&fTmp);
         temp = (uint16_t)(fTmp*100);
