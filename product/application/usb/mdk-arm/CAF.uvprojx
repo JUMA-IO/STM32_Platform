@@ -1180,7 +1180,7 @@
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls>--C99 --gnu -W#177</MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2</Define>
+              <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2,INCLUDE_USB_DEVICE</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\system\drivers\hts221;..\..\..\..\system\drivers\lps25h;..\..\..\..\system\drivers\lps25hb;..\..\..\..\system\drivers\lsm303agr;..\..\..\..\system\drivers\lsm6ds3;..\..\..\..\system\drivers\stm32f4xx_hal_driver\inc;..\..\..\..\system\drivers\common;..\..\..\..\system\drivers\bluenrg\inc;..\..\..\..\system\drivers\bluenrg\bluenrg_ms;..\..\usb;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\juma\inc;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\stm32_usb_device_library\class\HID\inc</IncludePath>
             </VariousControls>
