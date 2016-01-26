@@ -303,10 +303,6 @@ tBleStatus ble_device_start_advertising(void)
     ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, PUBLIC_ADDR, NO_WHITE_LIST_USE,
                                    AdvNameLen+1, LocalName, uuid_length, serviceUUIDList, 0, 0);//// start advertising
 
-
-    if(ret) {
-        while(1);
-    }
     return ret;
 }
 
