@@ -39,7 +39,7 @@ void on_ready(void)
 static void adv_name_generate(uint8_t* uni_name) {
     char temp[3] = "_";
     /*adv name aplice*/
-    sprintf(temp+1,"%d%d",*uni_name,*(uni_name+1));
+    sprintf(temp+1,"%01d%01d",*uni_name,*(uni_name+1));
     strcat(name, temp);
 }
 
