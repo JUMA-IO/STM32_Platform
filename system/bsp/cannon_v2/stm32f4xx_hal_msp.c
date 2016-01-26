@@ -83,7 +83,7 @@ int fputc(int ch, FILE *f)
     HAL_StatusTypeDef status = HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
 
     if (status != HAL_OK) {
-        while (1);
+        //while (1);
         return 0;
     }
     return ch;
