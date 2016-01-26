@@ -118,14 +118,14 @@ static  void Loop_Test_Sample_Aquisition(void)
 {
     /* init accelerometer */
     if (init_LSM303AGR_acc(LSM303AGR_ACC_FS_2G, LSM303AGR_ACC_ODR_DO_100Hz, FIFO_THSLD) < 0)
-        while(1); /* handle error */
+        Error_Handler(); /* handle error */
 
     /*
      * Set mag to lowest ODR, because in this example we read one
      * mag samples every FIFO-threshold acc samples.
      */
     if (init_LSM303AGR_mag(LSM303AGR_MAG_ODR_10Hz) < 0)
-        while(1); /* handle error */
+        Error_Handler(); /* handle error */
 
 #if (TEST_WITH_WTM_INTERRUPT == 1)
     while(1) {
@@ -185,7 +185,7 @@ static void init_LSM303AGR_Wakeup(void)
 
     /* init accelerometer */
     if (init_LSM303AGR_acc(LSM303AGR_ACC_FS_2G, LSM303AGR_ACC_ODR_DO_100Hz, 0) < 0)
-        while(1); /* handle error */
+        Error_Handler(); /* handle error */
 
     /* Ebale I2 function on INT2 pad */
     LSM303AGR_ACC_W_I2_on_INT2(LSM303AGR_ACC_I2_INT2_ENABLED);
