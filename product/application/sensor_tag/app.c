@@ -38,7 +38,7 @@ void on_ready(void)
 
     BSP_LED_On(LED0);
     HCI_get_bdAddr(bdAddr);
-    sprintf(name, "%s %02x%02x", board_name, bdAddr[0], bdAddr[1]);
+    sprintf(name, "%s %01x%01x", board_name, bdAddr[0], bdAddr[1]);
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(name, bdAddr, tx_power_level, adv_interval);
     ble_device_start_advertising();
