@@ -36,4 +36,5 @@ void ble_device_on_disconnect(uint8_t reason)
 {
     /* Make the device connectable again. */
     Ble_conn_state = BLE_CONNECTABLE;
+    ble_device_start_advertising();
 }
