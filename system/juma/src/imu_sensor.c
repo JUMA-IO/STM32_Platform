@@ -1,6 +1,9 @@
 #include "imu_sensor.h"
 #include "app.h"
 
+#if NO_PRINTF
+#define printf(...)
+#endif
 
 static sensor_selsection_t sensor_selection;
 static imu_sensor_data_sensitivity_t sensor_data_sensitivity;

@@ -2,6 +2,10 @@
 #include "app.h"
 #include "imu_sensor_fusion.h"
 /*start adv*/
+#if NO_PRINTF
+#define printf(...)
+#endif
+
 
 float pitch, roll, yal;
 

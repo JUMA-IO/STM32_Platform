@@ -42,6 +42,10 @@
 #include "debug.h"
 #include "x_nucleo_iks01a1.h"
 #include "imu_sensor.h"
+
+#if NO_PRINTF
+#define printf(...)
+#endif
 /* Private variables ---------------------------------------------------------*/
 /* RTC handler declared in "main.c" file */
 extern RTC_HandleTypeDef RTCHandle;
