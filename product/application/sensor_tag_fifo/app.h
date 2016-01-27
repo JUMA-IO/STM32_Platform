@@ -5,7 +5,7 @@
 #include "juma_sensor.h"
 #include "imu_sensor.h"
 
-
+void app_sensor_data_show(float* data);
 #endif //_APP_H_
 
 
