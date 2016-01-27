@@ -1,6 +1,10 @@
 //#include "sensor_service.h"
 
 #include "app.h"
+
+#if NO_PRINTF
+#define printf(...)
+#endif
 /*start adv*/
 
 extern volatile uint8_t device_connectable;

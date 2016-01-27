@@ -1,6 +1,9 @@
 
 #include "bluenrg_sdk_api.h"
 
+#if NO_PRINTF
+#define printf(...)
+#endif
 
 #define BDADDR_SIZE 6
 
