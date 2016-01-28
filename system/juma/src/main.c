@@ -45,6 +45,7 @@
 #include "debug.h"
 #include "stm32_bluenrg_ble.h"
 #include "bluenrg_sdk_api.h"
+#include "bluenrg_sdk_host_api.h"
 #include "stm32f401_lp_mode.h"
 #include "dispatch.h"
 #include "stm32f4xx_hal_msp.h"
@@ -171,17 +172,7 @@ int main(void)
     on_ready();
     while(1)
     {
-#ifdef CLIENT_ROLE
-        if((host_notification_enabled != TRUE) ) {
-
-            if(device_connectable == CONNECT_DEVICE_ENABLE) {
-
-                ble_host_connect(device_info.bdaddr);
-            }
-        }
-#endif
         HCI_Process();
-
         if(Ble_conn_state) {
             Ble_conn_state = BLE_NOCONNECTABLE;
         }

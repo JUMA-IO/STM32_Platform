@@ -80,25 +80,9 @@ typedef enum {
     SERVER = 1  /**< SERVER is for Peripheral role. */
 } BLE_RoleTypeDef;
 
-/*scan param struct*/
-/*adv parameter structure*/
-typedef struct
-{
-    uint8_t               type;                 /**< See @ref BLE_GAP_ADV_TYPES. */
-    //ble_gap_addr_t       *p_peer_addr;          /**< For @ref BLE_GAP_ADV_TYPE_ADV_DIRECT_IND mode only, known peer address. */
-    uint8_t               fp;                   /**< Filter Policy, see @ref BLE_GAP_ADV_FILTER_POLICIES. */
-    //ble_gap_whitelist_t  *p_whitelist;          /**< Pointer to whitelist, NULL if none is given. */
-    uint16_t              scan_interval;             /**< Advertising interval between 0x0020 and 0x4000 in 0.625 ms units (20ms to 10.24s), see @ref BLE_GAP_ADV_INTERVALS.
-                                                   - If type equals @ref BLE_GAP_ADV_TYPE_ADV_DIRECT_IND, this parameter must be set to 0 for high duty cycle directed advertising.
-                                                   - If type equals @ref BLE_GAP_ADV_TYPE_ADV_DIRECT_IND, set @ref BLE_GAP_ADV_INTERVAL_MIN <= interval <= @ref BLE_GAP_ADV_INTERVAL_MAX for low duty cycle advertising.*/
-    uint16_t              scan_window;              /**< Advertising timeout between 0x0001 and 0x3FFF in seconds, 0x0000 disables timeout. See also @ref BLE_GAP_ADV_TIMEOUT_VALUES. If type equals @ref BLE_GAP_ADV_TYPE_ADV_DIRECT_IND, this parameter must be set to 0 for High duty cycle directed advertising. */
-// ble_gap_adv_ch_mask_t channel_mask;         /**< Advertising channel mask. @see ble_gap_channel_mask_t for documentation. */
-} ble_gap_scan_params_t;
-
 
 /*Ble Connection State*/
 extern volatile uint8_t Ble_conn_state;
-
 
 uint32_t current_time(void);
 void run_when_idle(function_t func, void* args);
@@ -107,10 +91,13 @@ void run_at_time(function_t func, void* args, uint32_t time);
 void on_ready(void);
 /*Init BLUENrg, HCI, Add Service*/
 tBleStatus ble_init_bluenrg(void);
+/*BLE Set Tx Power*/
+tBleStatus ble_set_tx_power(uint8_t level);
+/*Add Adv Address*/
+tBleStatus ble_address(uint8_t* advaddress);
+
 /*Set Adv Namee*/
 tBleStatus ble_device_set_name(const char* new_device_name);
-/*Add Adv Address*/
-tBleStatus advertise_address(uint8_t* advaddress);
 /*Config Adv Interval (min_adv_interval > 32*0.625)*/
 void ble_device_set_advertising_interval(uint16_t interval);
 /*Start to adv*/
@@ -129,27 +116,6 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value);
 void ble_device_on_connect( void );
 /*BLE On Disconnection State*/
 void ble_device_on_disconnect(uint8_t reason);
-/*BLE Set Tx Power*/
-tBleStatus ble_device_set_tx_power(uint8_t level);
-
-/*Host*/
-/*BLE scan param*/
-void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint16_t scan_interval);
-/*ble host scan*/
-tBleStatus ble_host_start_scan(void);
-/*ble host stop scan*/
-tBleStatus ble_host_stop_scan(void);
-/*BLE Host On Connect*/
-tBleStatus ble_host_connect(tBDAddr bdaddr);
-void ble_host_discover_char(void);
-/*send data*/
-tBleStatus ble_host_send(uint8_t type, uint32_t length, uint8_t* value);
-/*receive data*/
-void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value);
-/*host connected*/
-/*BLE On Connnection State*/
-void ble_host_on_connect( void );
-
 
 void Error_Handler(void);
 
