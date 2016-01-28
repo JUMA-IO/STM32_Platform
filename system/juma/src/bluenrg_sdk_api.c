@@ -1,11 +1,29 @@
 
 #include "bluenrg_sdk_api.h"
+#include "bluenrg_sdk_host_api.h"
 
 #if NO_PRINTF
 #define printf(...)
 #endif
 
 #define BDADDR_SIZE 6
+
+extern uint8_t host_connect_init_flag;
+extern volatile int host_connected;
+extern volatile uint8_t host_notification_enabled;
+extern volatile uint8_t start_read_write_char_handle;
+extern volatile uint8_t start_read_notify_read_char_handle;
+extern volatile uint8_t start_read_write_without_rsp_char_handle;
+extern volatile uint8_t start_read_notify_char_handle;
+extern volatile uint8_t end_read_write_char_handle;
+extern volatile uint8_t end_read_notify_read_char_handle;
+extern volatile uint8_t end_read_write_without_rsp_char_handle;
+extern volatile uint8_t end_read_notify_char_handle;
+
+extern uint16_t write_handle;
+extern uint16_t notify_read_handle;
+extern uint16_t write_without_rsp_handle;
+extern uint16_t notify_handle;
 
 /*adv parameter structure*/
 typedef struct
@@ -20,44 +38,18 @@ typedef struct
 } ble_gap_adv_params_t;
 
 ble_gap_adv_params_t m_adv_params;
-ble_gap_scan_params_t host_scan_param;
+static uint8_t adv_name[20], adv_name_len = 7,  local_name[20], local_name_len;
 
-uint8_t temp_creat_conn_flag;
-volatile int connected = FALSE;
-volatile uint8_t set_connectable = 1;
-volatile   scan_device_found_info device_info;
-
-volatile uint8_t host_notification_enabled = FALSE;
-volatile uint8_t start_read_write_char_handle = FALSE;
-volatile uint8_t start_read_notify_read_char_handle = FALSE;
-volatile uint8_t start_read_write_without_rsp_char_handle = FALSE;
-volatile uint8_t start_read_notify_char_handle = FALSE;
-volatile uint8_t end_read_write_char_handle = FALSE;
-volatile uint8_t end_read_notify_read_char_handle = FALSE;
-volatile uint8_t end_read_write_without_rsp_char_handle = FALSE;
-volatile uint8_t end_read_notify_char_handle = FALSE;
-
-uint16_t write_handle;
-uint16_t notify_read_handle;
-uint16_t write_without_rsp_handle;
-uint16_t notify_handle;
+uint16_t connection_handle = 0 ,notification_enabled = 0;
 
 volatile uint8_t Ble_conn_state = BLE_CONNECTABLE;
-static uint16_t connection_handle = 0 ,notification_enabled = 0;
 uint16_t BLueNrgServHandle =0x0001, WriteCharHandle = 0x0006, WriteCmdCharHandle = 0x000A, ReadNotifyCharHandle = 0x000D, NotifyCharHandle = 0x0010;
 uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
-const uint8_t AdvName[20];
-char LocalName[20] = {AD_TYPE_COMPLETE_LOCAL_NAME,'B','l','u','e','N','R','G'};
-static uint8_t AdvNameLen = 7;
-
 
 __weak void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value) {}
 __weak void ble_device_on_connect( void ) {}
 __weak void ble_device_on_disconnect(uint8_t reason) {}
-/*Host*/
-__weak void ble_host_found_device_info(scan_device_found_info device_info) {}
-__weak void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value) {}
-__weak void ble_host_on_connect( void ) {}
+
 
 /*Record Connection Handle*/
 static void connection_information(uint16_t handle);
@@ -65,14 +57,6 @@ static void connection_information(uint16_t handle);
 static void Read_Request_CB(uint16_t handle);
 /*Add Service*/
 static tBleStatus Add_Service(void);
-
-/*Host*/
-static void read_write_char_handle(void);
-static void read_notify_read_char_handle(void);
-static void read_write_without_rsp_char_handle(void);
-static void read_notify_char_handle(void);
-static void enableNotification(void);
-static void ble_host_device_found( le_advertising_info* adv_data);
 
 #ifdef CLIENT_ROLE
 BLE_RoleTypeDef BLE_Role = CLIENT;
@@ -99,14 +83,14 @@ tBleStatus ble_init_bluenrg(void)
     if(BLE_Role == SERVER) {
 #ifdef BLUENRG_MS
         /*BUG: Name Length*/
-        ret = aci_gap_init(GAP_PERIPHERAL_ROLE, 0, AdvNameLen, &service_handle, &dev_name_char_handle, &appearance_char_handle);
+        ret = aci_gap_init(GAP_PERIPHERAL_ROLE, 0, adv_name_len, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #else
         ret = aci_gap_init(GAP_PERIPHERAL_ROLE, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #endif
     } else {
 #ifdef BLUENRG_MS
         /*BUG: Name Length*/
-        ret = aci_gap_init(GAP_CENTRAL_ROLE, 0, AdvNameLen, &service_handle, &dev_name_char_handle, &appearance_char_handle);
+        ret = aci_gap_init(GAP_CENTRAL_ROLE, 0, adv_name_len, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #else
         ret = aci_gap_init(GAP_CENTRAL_ROLE, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #endif
@@ -155,7 +139,7 @@ tBleStatus ble_init_bluenrg(void)
 	*@param Level
 	*@retval ret
 */
-tBleStatus ble_device_set_tx_power(uint8_t level)
+tBleStatus ble_set_tx_power(uint8_t level)
 {
     tBleStatus ret;
     /* Set output power level */
@@ -220,10 +204,11 @@ fail:
 	*/
 tBleStatus ble_device_set_name(const char* new_device_name)
 {
-    AdvNameLen = strlen(new_device_name);
-    memcpy(AdvName,new_device_name,AdvNameLen);
-    LocalName[0] = AD_TYPE_COMPLETE_LOCAL_NAME;
-    memcpy(LocalName+1,new_device_name,AdvNameLen);
+    adv_name_len = strlen(new_device_name);
+    local_name_len = adv_name_len+1;
+    memcpy(adv_name,new_device_name,adv_name_len);
+    local_name[0] = AD_TYPE_COMPLETE_LOCAL_NAME;
+    memcpy(local_name+1,new_device_name,adv_name_len);
 
     return BLE_STATUS_SUCCESS;
 }
@@ -233,7 +218,7 @@ tBleStatus ble_device_set_name(const char* new_device_name)
 	*@param Adv Address
 	*@retval ret
 	*/
-tBleStatus advertise_address(uint8_t* advaddress)
+tBleStatus ble_address(uint8_t* advaddress)
 {
     tBleStatus ret;
     ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET,
@@ -254,37 +239,20 @@ tBleStatus advertise_address(uint8_t* advaddress)
 void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pevel, uint16_t adv_interval)
 {
     /*Set Adv Address*/
-    advertise_address(adv_address);
+    ble_address(adv_address);
     /*Set Adv Name*/
     ble_device_set_name(adv_name);
     /*Gatt And Gap Init*/
     ble_init_bluenrg();
     /*Set Tx Power Level*/
-    ble_device_set_tx_power(tx_power_pevel);
+    ble_set_tx_power(tx_power_pevel);
     /* Range: 0x0020 to 0x4000
     	 Default: 1.28 s
     	 Time = AdvInterval * 0.625 msec
     */
     ble_device_set_advertising_interval(adv_interval);
 }
-/*scan param*/
-void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint16_t scan_interval)
-{
 
-    /*set address*/
-    advertise_address(own_address);
-    /*Gatt And Gap Init*/
-    ble_init_bluenrg();
-    /*Set Tx Power Level*/
-    ble_device_set_tx_power(tx_power_level);
-    /*scan_interval scan window*/
-    host_scan_param.scan_interval = scan_interval;
-    host_scan_param.scan_window = scan_interval;
-    host_scan_param.fp = SCAN_FILTER_DUPLICATE_DISABLE;
-
-    aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0,
-                               AdvNameLen, AdvName);
-}
 
 /**
 	*@brief 	Start To Adv
@@ -295,21 +263,19 @@ tBleStatus ble_device_start_advertising(void)
 {
     tBleStatus ret;
     uint8_t uuid_length = 3;
-    const uint8_t serviceUUIDList[] = {AD_TYPE_16_BIT_SERV_UUID,0xFE,0x90};
+    uint8_t serviceUUIDList[] = {AD_TYPE_16_BIT_SERV_UUID,0xFE,0x90};
 
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);
     ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0,
-                                     AdvNameLen, AdvName);
+                                     adv_name_len, adv_name);
 
     /*min_adv_interval > 32*0.625*/
     ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, PUBLIC_ADDR, NO_WHITE_LIST_USE,
-                                   AdvNameLen+1, LocalName, uuid_length, serviceUUIDList, 0, 0);//// start advertising
+                                  local_name_len, (char*)local_name, uuid_length, serviceUUIDList, 0, 0);//// start advertising
 
     return ret;
 }
-
-
 
 /**
 	*@brief 	Start Adv
@@ -381,187 +347,6 @@ static void connection_information(uint16_t handle)
     connection_handle = handle;
 
 }
-/*host scan device*/
-tBleStatus ble_host_start_scan(void)
-{
-    tBleStatus ret;
-    SCAN_Type scan_type = SCAN_ACTIVE;
-
-//  ret = aci_gap_start_general_conn_establish_proc(scan_type,host_scan_param.scan_interval,  host_scan_param.scan_window, PUBLIC_ADDR, host_scan_param.fp);
-    ret = aci_gap_start_general_conn_establish_proc(scan_type, SCAN_P,  SCAN_L, PUBLIC_ADDR, host_scan_param.fp);
-
-    if(ret != BLE_STATUS_SUCCESS) {
-        return BLE_STATUS_ERROR;
-    }
-    printf("start scanning \n\r");
-
-    return 0;
-}
-/*host stop scan*/
-tBleStatus ble_host_stop_scan(void)
-{
-    aci_gap_terminate_gap_procedure(GAP_GENERAL_DISCOVERY_PROC);
- 
-    return 0;
-}
-
-static void ble_host_device_found( le_advertising_info* adv_data)
-{
-    uint8_t i;
-
-    i = 25;
-    while(adv_data->data_RSSI[i] == 0) {
-        i--;
-    }
-    /*RSSI*/
-    device_info.RSSI = adv_data->data_RSSI[i] - 255;
-    /*bdaddr type*/
-    device_info.bdaddr_type = adv_data->bdaddr_type;
-    /*bdaddr*/
-    memcpy(device_info.bdaddr, adv_data->bdaddr, 6);
-    /*local name length*/
-    device_info.local_name_len = adv_data->data_RSSI[3];
-    /*local name*/
-    memcpy(device_info.local_name, (adv_data->data_RSSI)+4, device_info.local_name_len);
-
-    ble_host_found_device_info(device_info);
-}
-
-/*host creat connection*/
-tBleStatus ble_host_connect(tBDAddr bdaddr)
-{
-
-    tBleStatus ret;
-    if(set_connectable == TRUE) {
-        printf("Client Create Connection\n");
-        BSP_LED_On(LED0);
-        /*
-          Scan_Interval, Scan_Window, Peer_Address_Type, Peer_Address, Own_Address_Type, Conn_Interval_Min,
-          Conn_Interval_Max, Conn_Latency, Supervision_Timeout, Conn_Len_Min, Conn_Len_Max
-          */
-        ret = aci_gap_create_connection(SCAN_P, SCAN_L, PUBLIC_ADDR, bdaddr, PUBLIC_ADDR, CONN_P1, CONN_P2, 0,
-                                        SUPERV_TIMEOUT, CONN_L1 , CONN_L2);
-        if (ret != 0) {
-            printf("Error while starting connection.\n");
-            Clock_Wait(100);
-        }
-        printf("connection init\n\r");
-
-    }
-    set_connectable = FALSE;
-    /*discover device*/
-    ble_host_discover_char();
-    
-    return ret;
-}
-
-void ble_host_discover_char(void)
-{
-    /* Start TX handle Characteristic dynamic discovery if not yet done */
-    if (connected && !end_read_write_char_handle) {
-        read_write_char_handle();
-    }
-    /* Start RX handle Characteristic dynamic discovery if not yet done */
-    else if (connected && !end_read_write_without_rsp_char_handle) {
-        read_write_without_rsp_char_handle();
-    }
-    else if (connected && !end_read_notify_read_char_handle) {
-        read_notify_read_char_handle();
-    }
-    else if (connected && !end_read_notify_char_handle) {
-        read_notify_char_handle();
-    }
-
-    if(connected && end_read_write_char_handle && end_read_notify_read_char_handle && end_read_write_without_rsp_char_handle && end_read_notify_char_handle && !host_notification_enabled) {
-        BSP_LED_Off(LED0); //end of the connection and chars discovery phase
-        enableNotification();
-        printf("discover over\n\r");
-    }
-
-}
-
-/*start read write char handle*/
-static void read_write_char_handle(void)
-{
-    if (!start_read_write_char_handle)
-    {
-        printf("Start reading write_char_handle\n");
-
-        const uint8_t charUuid128_TX[16] = { 0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x01, 0x80, 0x00, 0x00};
-        aci_gatt_disc_charac_by_uuid(connection_handle, 0x0001, 0xFFFF, UUID_TYPE_128, charUuid128_TX);
-        start_read_write_char_handle = TRUE;
-    }
-
-}
-/*start read notify read char handle*/
-static void read_notify_read_char_handle(void)
-{
-    if (!start_read_notify_read_char_handle)
-    {
-        printf("Start reading notify_read_char_handle\n");
-
-        const uint8_t charUuid128_RX[16] = {0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x02, 0x80, 0x00, 0x00};
-        aci_gatt_disc_charac_by_uuid(connection_handle, 0x0001, 0xFFFF, UUID_TYPE_128, charUuid128_RX);
-        start_read_notify_read_char_handle = TRUE;
-    }
-}
-/*start read write without rsp char handle*/
-static void read_write_without_rsp_char_handle(void)
-{
-    if (!start_read_write_without_rsp_char_handle)
-    {
-        printf("Start reading write_without_rsp_char_handle\n");
-
-        const uint8_t charUuid128_TX[16] = { 0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x03, 0x80, 0x00, 0x00};
-        aci_gatt_disc_charac_by_uuid(connection_handle, 0x0001, 0xFFFF, UUID_TYPE_128, charUuid128_TX);
-        start_read_write_without_rsp_char_handle = TRUE;
-    }
-
-}
-/*start read notify char handle*/
-static void read_notify_char_handle(void)
-{
-    if (!start_read_notify_char_handle)
-    {
-        printf("Start reading notify_char_handle\n");
-
-        const uint8_t charUuid128_TX[16] = { 0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x04, 0x80, 0x00, 0x00};
-        aci_gatt_disc_charac_by_uuid(connection_handle, 0x0001, 0xFFFF, UUID_TYPE_128, charUuid128_TX);
-        start_read_notify_char_handle = TRUE;
-    }
-
-}
-
-/*  Enable notification */
-static void enableNotification(void)
-{
-    uint8_t client_char_conf_data[] = {0x01, 0x00}; // Enable notifications
-    struct timer t;
-    Timer_Set(&t, CLOCK_SECOND*10);
-
-    while(aci_gatt_write_charac_descriptor(connection_handle, notify_read_handle+2, 2, client_char_conf_data)==BLE_STATUS_NOT_ALLOWED) {
-        /* Radio is busy */
-        if(Timer_Expired(&t)) break;
-    }
-    host_notification_enabled = TRUE;
-    HAL_Delay(100);
-    ble_host_on_connect();
-    printf("notification enable\n\r");
-}
-
-void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
-{
-    connected = TRUE;
-    connection_handle = handle;
-
-    printf("Connected to device:\n\r");
-    for(int i = 5; i > 0; i--) {
-        printf("%02X-", addr[i]);
-    }
-    printf("%02X\n", addr[0]);
-
-
-}
 
 /**
  * @brief  This function is called when the peer device get disconnected.
@@ -570,11 +355,10 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
  */
 void GAP_DisconnectionComplete_CB(void)
 {
-    connected = FALSE;
-
+    host_connected = FALSE;
+    host_connect_init_flag = FALSE;
     printf("Disconnected\n");
     /* Make the device connectable again. */
-    set_connectable = TRUE;
     host_notification_enabled = FALSE;
     start_read_write_char_handle = FALSE;
     start_read_write_without_rsp_char_handle = FALSE;
@@ -586,29 +370,25 @@ void GAP_DisconnectionComplete_CB(void)
     end_read_notify_char_handle = FALSE;
 }
 
-tBleStatus ble_host_send(uint8_t type, uint32_t length, uint8_t* value)
+/*connection complete callback*/
+void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
 {
-    tBleStatus ret;
-    uint8_t packet[20];
-    if(host_notification_enabled == FALSE) {
+    host_connected = TRUE;
+    connection_handle = handle;
 
-        return BLE_WAIT_ENABLE_NOTIFY;
+    printf("Connected to device:\n\r");
+    for(int i = 5; i > 0; i--) {
+        printf("%02X-", addr[i]);
     }
-
-    if (length > 18) length = 18;
-    packet[0] = type;
-    packet[1] = length;
-    memcpy(packet + 2, value, length);
-    ret = aci_gatt_write_charac_value(connection_handle, write_handle+1, packet[1]+2, packet);
-    if (ret != BLE_STATUS_SUCCESS) {
-
-        return BLE_STATUS_ERROR ;
-    }
+    printf("%02X\n", addr[0]);
     
-    return ret;
+    /*discover device*/
+    ble_host_discover_char(NULL);
+
+
 }
 
-/*Host*/
+/*gatt notification call back*/
 void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_value)
 {
     if (BLE_Role == CLIENT) {
@@ -621,6 +401,7 @@ void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_
     }
 
 }
+
 
 /**
 	*@brief 	Read Req
@@ -682,7 +463,7 @@ void HCI_Event_CB(void *pckt)
         break;
         case EVT_LE_ADVERTISING_REPORT:
         {
-            le_advertising_info* adv_data = (void *)(event_pckt->data)+2;
+            le_advertising_info* adv_data = (void *)((event_pckt->data)+2);
             ble_host_device_found(adv_data);
         }
         break;
@@ -768,18 +549,22 @@ void HCI_Event_CB(void *pckt)
                 if (start_read_write_char_handle && !end_read_write_char_handle)
                 {
                     end_read_write_char_handle = TRUE;
+                     run_when_idle(ble_host_discover_char, NULL);
                 }
                 else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
                 {
                     end_read_notify_read_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
                 }
                 else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
                 {
                     end_read_write_without_rsp_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
                 }
                 else if (start_read_notify_char_handle && !end_read_notify_char_handle)
                 {
                     end_read_notify_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
                 }
             }
             break;

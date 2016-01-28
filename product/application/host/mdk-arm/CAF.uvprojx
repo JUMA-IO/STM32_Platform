@@ -471,6 +471,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\juma\src\juma_sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>bluenrg_sdk_api_host.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\bluenrg_sdk_api_host.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1155,7 +1160,7 @@
             <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls>--C99 --gnu</MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2,CLIENT_ROLE</Define>
+              <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2,CLIENT_ROLE,NO_PRINTF</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\..\..\system\drivers\hts221;..\..\..\..\system\drivers\lps25h;..\..\..\..\system\drivers\lps25hb;..\..\..\..\system\drivers\lsm303agr;..\..\..\..\system\drivers\lsm6ds3;..\..\..\..\system\drivers\stm32f4xx_hal_driver\inc;..\..\..\..\system\drivers\common;..\..\..\..\system\drivers\bluenrg\inc;..\..\..\..\system\drivers\bluenrg\bluenrg_ms;..\..\sensor_tag;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\juma\inc;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include</IncludePath>
             </VariousControls>
@@ -1254,6 +1259,11 @@
               <FileName>juma_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\juma\src\juma_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>bluenrg_sdk_api_host.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\juma\src\bluenrg_sdk_api_host.c</FilePath>
             </File>
           </Files>
         </Group>
