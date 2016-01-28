@@ -5,12 +5,15 @@
 #include "lsm303agr.h"
 #include "stm32f4xx_hal_msp.h"
 #include "bluenrg_sdk_api.h"
-
+/*sensor feature*/
 #define IMU_SENSOR_FEATURE_ACC  0x01
 
 #define IMU_SENSOR_FEATURE_GYRO 0x02
 
 #define IMU_SENSOR_FEATURE_MAG  0x04
+
+/*fifo threthold level*/
+#define FIFO_WATER_MARK         2400
 
 /*FIFO CTRL MASK*/
 #define LSM6DS3_XG_FIFO_THRESHOLD_MASK                      ((uint8_t)0x0F)
@@ -48,8 +51,8 @@ typedef enum sensor_data_type{
    TYPE_GYRO_DATA = 1,
    TYPE_MAG_DATA  = 2,
 } sensor_data_type_t;
-
 typedef struct _imu_sensor_data_t {
+
 
     float acc[3];
 
@@ -84,9 +87,8 @@ imu_status_t imu_sensor_stop(void);
 
 void on_imu_sensor_data(imu_sensor_data_t* data); 
 
-imu_status_t imu_sensor_read_data_from_fifo(void);
+void imu_sensor_read_data_from_fifo(void);
 
-imu_status_t imu_sensor_read_fifo_status(void);
 
 #endif /*_IMU_SENSOR_H_*/
 

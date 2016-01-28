@@ -2,19 +2,29 @@
 #include "app.h"
 #include "imu_sensor_fusion.h"
 /*start adv*/
+
 #if NO_PRINTF
 #define printf(...)
 #endif
 
+sensor_fusion_angle_t sensor_angle[1] = {0};
 
-float pitch, roll, yal;
+static imu_sensor_fusion_1_context_t imu_sensor_context = {
+     
+        0.02,
+        0.001,
+        0.98,
+        0.02,
+        0.02,
+        0.02,
+        0.0001,
+        0.0,
+        0.0,
+        0.0,
+    };
 
 static void adv_name_generate(uint8_t* uni_name);
-static void fifo_status(void* arg);
 static void pitch_roll_yal_print(void* arg);
-static void app_pitch_roll_yal_data_show(float* Data);
-static void app_sensor_data_show(imu_sensor_data_t* Data);
-static void app_uart_niming_report(uint8_t fun,uint8_t*data,uint8_t len);
 static void app_pitch_roll(imu_sensor_data_t* data);
 
 #ifdef CANNON_V2
@@ -26,7 +36,7 @@ char name[20] = "CANNON_V1";
 
 void on_ready(void)
 {
-    uint8_t tx_power_level = 7;
+    uint8_t tx_power_level = 5;
     uint16_t adv_interval = 100;
 
     uint8_t bdAddr[6];
@@ -36,7 +46,8 @@ void on_ready(void)
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(name, bdAddr, tx_power_level, adv_interval);
     ble_device_start_advertising();
-
+    
+    BSP_LED_On(LED0);
     imu_sensor_select_features(ALL_ENABLE);
 
     imu_sensor_reset();
@@ -45,7 +56,7 @@ void on_ready(void)
 
     imu_sensor_start();
 
-    run_after_delay(pitch_roll_yal_print, NULL, 1250);
+    run_after_delay(pitch_roll_yal_print, NULL, 110);
 }
 
 
@@ -56,59 +67,31 @@ static void adv_name_generate(uint8_t* uni_name) {
     strcat(name, temp);
 }
 
-static void fifo_status(void* arg)
-{
-    imu_sensor_read_fifo_status();
-//imu_sensor_read_data_from_fifo();
-    run_after_delay(fifo_status, NULL, 1250);
-}
-
 static void app_pitch_roll(imu_sensor_data_t* data)
-{
-
-    complementary_filter(data->acc, data->gyro, data->mag, &pitch, &roll, &yal);
-    //printf("pitch: %f, roll: %f, yal: %f \n", pitch, roll, yal);
+{    
+    imu_sensor_fusion_1(data, sensor_angle, &imu_sensor_context);
 }
 
-static void app_pitch_roll_yal_data_show(float* Data)
-{
-
-}
-
-static void app_sensor_data_show(imu_sensor_data_t* Data)
-{
-
-}
-
-static void app_uart_niming_report(uint8_t fun,uint8_t*data,uint8_t len)
-{
-    uint8_t send_buf[32];
-    uint8_t i;
-    if(len>28)return;	//less than
-    send_buf[len+3]=0;	//校验数置零
-    send_buf[0]=0X88;	//帧头
-    send_buf[1]=fun;	//功能字
-    send_buf[2]=len;	//数据长度
-    for(i=0; i<len; i++)send_buf[3+i]=data[i];			//复制数据
-    for(i=0; i<len+3; i++)send_buf[len+3]+=send_buf[i];	//计算校验和
-    //for(i=0;i<len+4;i++)usart1_send_char(send_buf[i]);	//发送数据到串口1
-}
 
 static void pitch_roll_yal_print(void* arg)
 {
-    printf("pitch: %f, roll: %f, yal: %f \n", pitch, roll, yal);
-    run_after_delay(pitch_roll_yal_print, NULL, 1250);
+    uint8_t tmp_buf[6];
+    
+    tmp_buf[0] = (((int32_t)sensor_angle->pitch) >> 8) & 0xFF;
+    tmp_buf[1] = ((int32_t)sensor_angle->pitch) & 0xFF;
+    tmp_buf[2] = (((int32_t)sensor_angle->roll) >> 8) & 0xFF;
+    tmp_buf[3] = ((int32_t)sensor_angle->roll) & 0xFF;
+    tmp_buf[4] = (((int32_t)sensor_angle->yaw) >> 8) & 0xFF;
+    tmp_buf[5] = ((int32_t)sensor_angle->yaw) & 0xFF;
+    
+    ble_device_send(0x01, 6, tmp_buf);
+    run_after_delay(pitch_roll_yal_print, NULL, 110);
 }
 
 /*received data callback*/
 void on_imu_sensor_data(imu_sensor_data_t* data)
 {
-// printf("flag : %x,short :%x, sensor data: %x,%x,%x\n",
-//           flag, data[0], data[1],data[2]);
-
-    //printf("on imu_sensor_data\n");
     app_pitch_roll(data);
-
 }
 
 /* Device On Message */
@@ -121,7 +104,6 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 void ble_device_on_connect(void)
 {
 
-   BLE_WAIT_REMOTE_ENABLE_NOTIFY;
 
 }
 /* Device on disconnect */
