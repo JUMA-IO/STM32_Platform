@@ -24,12 +24,12 @@ uint8_t g_func_dfu_en 	= 0;
 
 
 
-void jsensor_app_setSensors(void)
+void jsensor_app_set_sensors(void)
 {
-	jsensor_app_setSensor(JSENSOR_TYPE_HUMITY_TEMP);
-	jsensor_app_setSensor(JSENSOR_TYPE_PRESSURE);
-	jsensor_app_setSensor(JSENSOR_TYPE_MOTION_6AXIS);
-	jsensor_app_setSensor(JSENSOR_TYPE_MAGNET);
+	jsensor_app_set_sensor(JSENSOR_TYPE_HUMITY_TEMP);
+	jsensor_app_set_sensor(JSENSOR_TYPE_PRESSURE);
+	jsensor_app_set_sensor(JSENSOR_TYPE_MOTION_6AXIS);
+	jsensor_app_set_sensor(JSENSOR_TYPE_MAGNET);
 }
 	
 void on_ready(void)
@@ -40,59 +40,6 @@ void on_ready(void)
 	ble_device_start_advertising();
 }
 
-//static void sensor_read(void* arg)
-//{
-//	// sensor read temperature & humidity
-//	{
-//		int16_t humidity;
-//		int16_t temperature;
-//		JSensor_HUM_TEMP_Typedef tdef;
-//	
-//		tdef.humidity = &humidity;
-//		tdef.temperature = &temperature;
-//	
-//		if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_HUMITY_TEMP, (void *)&tdef)) {
-//			ble_device_send(0x00, 2, (uint8_t *)&temperature);
-//			ble_device_send(0x01, 2, (uint8_t *)&humidity);
-//		}
-//	}
-//	// sensor read pressure
-//	{
-//		JSensor_Press_Typedef tdef;
-//		int32_t pressure;
-//		
-//		tdef.pressure = &pressure;
-//		
-//		if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_PRESSURE, (void *)&tdef)) {
-//			ble_device_send(0x02, 3, (uint8_t *)&pressure);
-//		}
-//	}
-//	// sensor read magnetometer 
-//	{
-//		JSensor_MAG_Typedef tdef;
-//		int8_t  MAG[6];
-//		tdef.MAG = MAG;
-//		
-//		if(JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MAGNET, (void *)&tdef)) {
-//			ble_device_send(0x03, 6, (uint8_t*)MAG);
-//      //printf("%x,%x,%x,%x,%x,%x\n\r", MAG[0],MAG[1],MAG[2],MAG[3],MAG[4],MAG[5]);
-//		}
-//	}
-//	// sensor read motion 6 AXIS
-//	{
-//		JSensor_AXIS_Typedef tdef;
-//		int8_t ACC[6], GRO[6];
-//		tdef.ACC = ACC;
-//		tdef.GRO = GRO;
-//		
-//		if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&tdef)) {
-//			ble_device_send(0x04, 6, (uint8_t*)ACC);
-//			ble_device_send(0x05, 6, (uint8_t*)GRO);
-//		}
-//	}
-//	
-//	run_after_delay(sensor_read, NULL, 2000);
-//}
 
 
 /*********************************
