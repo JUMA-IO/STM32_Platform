@@ -51,18 +51,9 @@ void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value);
 /*BLE On Connnection State*/
 void ble_host_on_connect( void );
 
-/**
- * @brief  This function is called when the peer device get disconnected.
- * @param  None
- * @retval None
- */
-void GAP_DisconnectionComplete_CB(void);
-/*connection complete callback*/
-void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle);
 /*host found device*/
 void ble_host_device_found( le_advertising_info* adv_data);
-/*gatt notification call back*/
-void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_value);
+
 #endif /*_BLUENRG_SDK_HOST_API_H_*/
 
 

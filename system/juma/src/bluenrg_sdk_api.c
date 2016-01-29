@@ -8,6 +8,7 @@
 
 #define BDADDR_SIZE 6
 
+#ifdef CLIENT_ROLE
 extern uint8_t host_connect_init_flag;
 extern volatile int host_connected;
 extern volatile uint8_t host_notification_enabled;
@@ -24,6 +25,8 @@ extern uint16_t write_handle;
 extern uint16_t notify_read_handle;
 extern uint16_t write_without_rsp_handle;
 extern uint16_t notify_handle;
+
+#endif
 
 /*adv parameter structure*/
 typedef struct
@@ -355,6 +358,7 @@ static void connection_information(uint16_t handle)
  */
 void GAP_DisconnectionComplete_CB(void)
 {
+ #ifdef CLIENT_ROLE
     host_connected = FALSE;
     host_connect_init_flag = FALSE;
     printf("Disconnected\n");
@@ -368,11 +372,13 @@ void GAP_DisconnectionComplete_CB(void)
     end_read_write_without_rsp_char_handle = FALSE;
     end_read_notify_read_char_handle = FALSE;
     end_read_notify_char_handle = FALSE;
+ #endif
 }
 
 /*connection complete callback*/
 void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
 {
+ #ifdef CLIENT_ROLE
     host_connected = TRUE;
     connection_handle = handle;
 
@@ -384,13 +390,15 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
     
     /*discover device*/
     ble_host_discover_char(NULL);
-
+ #endif
 
 }
+
 
 /*gatt notification call back*/
 void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_value)
 {
+  #ifdef CLIENT_ROLE
     if (BLE_Role == CLIENT) {
         if(attr_handle == (notify_read_handle+1)) {
             ble_host_on_message(attr_value[0], attr_value[1], attr_value+2);
@@ -399,7 +407,7 @@ void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_
     } else {
 
     }
-
+  #endif
 }
 
 
@@ -438,11 +446,13 @@ void HCI_Event_CB(void *pckt)
 
     case EVT_DISCONN_COMPLETE:
     {
-        host_notification_enabled = 0;
+        #ifdef CLIENT_ROLE
+          host_notification_enabled = 0;
+        #endif
         notification_enabled = 0;
         ble_device_on_disconnect(event_pckt->data[3]);
-        /*Host*/
-        GAP_DisconnectionComplete_CB();
+         /*Host*/
+         GAP_DisconnectionComplete_CB();
     }
     break;
 
@@ -464,7 +474,9 @@ void HCI_Event_CB(void *pckt)
         case EVT_LE_ADVERTISING_REPORT:
         {
             le_advertising_info* adv_data = (void *)((event_pckt->data)+2);
-            ble_host_device_found(adv_data);
+            #ifdef CLIENT_ROLE
+              ble_host_device_found(adv_data);
+            #endif
         }
         break;
         }
@@ -485,7 +497,9 @@ void HCI_Event_CB(void *pckt)
                 ble_device_on_message(evt->att_data[0], evt->att_data[1], (evt->att_data)+2);
             } else if(evt->att_data[0] == 1) {
                 notification_enabled = 1;
-                host_notification_enabled = 1;
+                #ifdef CLIENT_ROLE
+                  host_notification_enabled = 1;
+                #endif
             }
         }
         break;
@@ -513,60 +527,65 @@ void HCI_Event_CB(void *pckt)
         break;
 #if 1
         case EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP:
-            if(BLE_Role == CLIENT) {
-                printf("EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP\n");
+            #ifdef CLIENT_ROLE
+              if(BLE_Role == CLIENT) {
+                  printf("EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP\n");
 
-                evt_gatt_disc_read_char_by_uuid_resp *resp = (void*)blue_evt->data;
+                  evt_gatt_disc_read_char_by_uuid_resp *resp = (void*)blue_evt->data;
 
-                if (start_read_write_char_handle && !end_read_write_char_handle)
-                {
-                    write_handle = resp->attr_handle;
-                    printf("write_handle  %04X\n", write_handle);
-                }
-                else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
-                {
-                    notify_read_handle = resp->attr_handle;
-                    printf("notify_read_handle  %04X\n", notify_read_handle);
-                }
-                else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
-                {
-                    write_without_rsp_handle = resp->attr_handle;
-                    printf("write_without_rsp_handle  %04X\n", write_without_rsp_handle);
-                }
-                else if (start_read_notify_char_handle && !end_read_notify_char_handle)
-                {
-                    notify_handle = resp->attr_handle;
-                    printf("notify_handle %04X\n", notify_handle);
-                }
-            }
+                  if (start_read_write_char_handle && !end_read_write_char_handle)
+                  {
+                      write_handle = resp->attr_handle;
+                      printf("write_handle  %04X\n", write_handle);
+                  }
+                  else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
+                  {
+                      notify_read_handle = resp->attr_handle;
+                      printf("notify_read_handle  %04X\n", notify_read_handle);
+                  }
+                  else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
+                  {
+                      write_without_rsp_handle = resp->attr_handle;
+                      printf("write_without_rsp_handle  %04X\n", write_without_rsp_handle);
+                  }
+                  else if (start_read_notify_char_handle && !end_read_notify_char_handle)
+                  {
+                      notify_handle = resp->attr_handle;
+                      printf("notify_handle %04X\n", notify_handle);
+                  }
+              }
+            #endif
             break;
 
         case EVT_BLUE_GATT_PROCEDURE_COMPLETE:
-            if(BLE_Role == CLIENT) {
-                /* Wait for gatt procedure complete event trigger related to Discovery Charac by UUID */
-                //evt_gatt_procedure_complete *pr = (void*)blue_evt->data;
+            #ifdef CLIENT_ROLE
+              if(BLE_Role == CLIENT) {
+                  /* Wait for gatt procedure complete event trigger related to Discovery Charac by UUID */
+                  //evt_gatt_procedure_complete *pr = (void*)blue_evt->data;
 
-                if (start_read_write_char_handle && !end_read_write_char_handle)
-                {
-                    end_read_write_char_handle = TRUE;
-                     run_when_idle(ble_host_discover_char, NULL);
-                }
-                else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
-                {
-                    end_read_notify_read_char_handle = TRUE;
-                    run_when_idle(ble_host_discover_char, NULL);
-                }
-                else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
-                {
-                    end_read_write_without_rsp_char_handle = TRUE;
-                    run_when_idle(ble_host_discover_char, NULL);
-                }
-                else if (start_read_notify_char_handle && !end_read_notify_char_handle)
-                {
-                    end_read_notify_char_handle = TRUE;
-                    run_when_idle(ble_host_discover_char, NULL);
-                }
-            }
+                  if (start_read_write_char_handle && !end_read_write_char_handle)
+                  {
+                      end_read_write_char_handle = TRUE;
+                      run_when_idle(ble_host_discover_char, NULL);
+
+                  }
+                  else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
+                  {
+                      end_read_notify_read_char_handle = TRUE;
+                      run_when_idle(ble_host_discover_char, NULL);
+                  }
+                  else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
+                  {
+                      end_read_write_without_rsp_char_handle = TRUE;
+                      run_when_idle(ble_host_discover_char, NULL);
+                  }
+                  else if (start_read_notify_char_handle && !end_read_notify_char_handle)
+                  {
+                      end_read_notify_char_handle = TRUE;
+                      run_when_idle(ble_host_discover_char, NULL);
+                  }
+              }
+            #endif
             break;
 #endif
         }

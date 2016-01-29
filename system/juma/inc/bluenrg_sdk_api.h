@@ -88,6 +88,17 @@ uint32_t current_time(void);
 void run_when_idle(function_t func, void* args);
 void run_at_time(function_t func, void* args, uint32_t time);
 
+/**
+ * @brief  This function is called when the peer device get disconnected.
+ * @param  None
+ * @retval None
+ */
+void GAP_DisconnectionComplete_CB(void);
+/*connection complete callback*/
+void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle);
+/*gatt notification call back*/
+void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_value);
+
 void on_ready(void);
 /*Init BLUENrg, HCI, Add Service*/
 tBleStatus ble_init_bluenrg(void);
