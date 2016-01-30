@@ -229,6 +229,7 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
   return HAL_OK;
 }
 
+#ifdef CANNON_V1
 /**
   * @brief  Initializes the SPI according to the specified parameters 
   *         in the SPI_InitTypeDef and create the associated handle.
@@ -292,7 +293,7 @@ HAL_StatusTypeDef HAL_SPI2_Init(SPI_HandleTypeDef *hspi)
   
   return HAL_OK;
 }
-
+#endif
 
 /**
   * @brief  DeInitializes the SPI peripheral 

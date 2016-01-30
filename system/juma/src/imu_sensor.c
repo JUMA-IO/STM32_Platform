@@ -18,7 +18,9 @@ static imu_status_t imu_sensor_gyro_output_status_config(uint8_t status);
 static imu_status_t imu_sensor_fifo_threshold_interrupt(void);
 static imu_status_t imu_sensor_fifo_threshold_level(uint16_t fifo_level);
 static imu_status_t imu_sensor_lsm6ds3_soft_reset(void);
+#ifdef LSM303AGR_SOFT_RESET
 static imu_status_t imu_sensor_lsm303agr_soft_rest(void);
+#endif
 static imu_status_t imu_sensor_acc_get_sensitivity( float *pfData );
 static imu_status_t  imu_sensor_gyro_get_sensitivity( float *pfData );
 static imu_status_t imu_sensor_clear_fifo(void);
@@ -585,7 +587,7 @@ static imu_status_t imu_sensor_lsm6ds3_soft_reset(void)
     return imu_status_ok;
 
 }
-
+#ifdef LSM303AGR_SOFT_RESET
 /*lsm303agr soft reset*/
 static imu_status_t imu_sensor_lsm303agr_soft_rest(void)
 {
@@ -607,6 +609,7 @@ static imu_status_t imu_sensor_lsm303agr_soft_rest(void)
     HAL_Delay(1);
     return imu_status_ok;
 }
+#endif
 
 static imu_status_t imu_sensor_acc_get_sensitivity( float *pfData )
 {
