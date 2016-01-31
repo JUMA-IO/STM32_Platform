@@ -2,11 +2,8 @@
 #include "juma_sensor.h"
 /*start adv*/
 
-const char *name = "BlueNRG_IOT_2";
+char *name = "BlueNRG_IOT_2";
 uint8_t adv_address[6] = {0x08, 0x05, 0x04, 0x03, 0x02, 0x02};
-
-static float humidity;
-static float temperature;
 
 static void sensor_read(void* arg);
 
@@ -57,8 +54,6 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 /* Device on connect */
 void ble_device_on_connect(void)
 {
-
-    tBleStatus ret = BLE_WAIT_REMOTE_ENABLE_NOTIFY;
 
 }
 /* Device on disconnect */

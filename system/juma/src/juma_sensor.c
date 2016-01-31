@@ -226,9 +226,9 @@ static void read_raw_magnetometer_data(void* args)
 {
     int32_t _Magnetic_mGa[3] = {0};
     JSensor_MAG_Typedef *p = (JSensor_MAG_Typedef *)args;
-    uint8_t *mag = p->MAG;
+    
 #ifdef CANNON_V1
-
+    uint8_t *mag = p->MAG;
     LSM6DS3_IO_Read(mag, NULL, 0x2e, 6); //read magnetometer data from sensorhub_reg[0]
 #endif
 

@@ -9,8 +9,9 @@
 int Acceleration_mG[FIFO_SIZE][3];
 int Magnetic_mGa[3];
 
-#if (TEST_WITH_WTM_INTERRUPT == 1)
+#ifdef WAKEUP_TEST
 static u32_t LSM303AGR_ACC_sample_calls = 0;
+
 
 /*
  * Callback to handle the ACC event.
@@ -113,19 +114,20 @@ int init_LSM303AGR_mag(LSM303AGR_MAG_ODR_t odr)
     return(0);
 }
 
+#ifdef SAMPLE_AQUISITION
 /* Test Acquisition of sensor samples */
 static  void Loop_Test_Sample_Aquisition(void)
 {
     /* init accelerometer */
     if (init_LSM303AGR_acc(LSM303AGR_ACC_FS_2G, LSM303AGR_ACC_ODR_DO_100Hz, FIFO_THSLD) < 0)
-        Error_Handler(); /* handle error */
+       return; /* handle error */
 
     /*
      * Set mag to lowest ODR, because in this example we read one
      * mag samples every FIFO-threshold acc samples.
      */
     if (init_LSM303AGR_mag(LSM303AGR_MAG_ODR_10Hz) < 0)
-        Error_Handler(); /* handle error */
+        return; /* handle error */
 
 #if (TEST_WITH_WTM_INTERRUPT == 1)
     while(1) {
@@ -156,7 +158,9 @@ static  void Loop_Test_Sample_Aquisition(void)
     }
 #endif
 }
+#endif
 
+#ifdef WAKEUP_TEST
 /*
  * Wakeup feature
  */
@@ -176,7 +180,9 @@ static void LSM303AGR_ACC_Wakeup_Callback(u8_t intID)
     /* clear wakeup event */
     LSM303AGR_ACC_R_Int2_IA(&WakeupStatus);
 }
+#endif
 
+#ifdef WAKEUP_TEST
 /* Init the Wakeup feature */
 static void init_LSM303AGR_Wakeup(void)
 {
@@ -202,7 +208,10 @@ static void init_LSM303AGR_Wakeup(void)
     LSM303AGR_ACC_W_LatchInterrupt_on_INT2(LSM303AGR_ACC_LIR_INT2_ENABLED);
 }
 
+#endif
+
 /* Test Wakeup */
+#ifdef WAKEUP_TEST
 static void  Loop_Test_Wakeup(void)
 {
     LSM303AGR_ACC_IA_t WakeupStatus;
@@ -217,11 +226,12 @@ static void  Loop_Test_Wakeup(void)
         /* Event will be handled in driver callback */
     }
 }
+#endif
 
+#ifdef FREE_FALL_TEST
 /*
  * Free-Fall feature
  */
-
 static u32_t LSM303AGR_ACC_FreeFall_ev_num = 0;
 
 /*
@@ -237,7 +247,9 @@ static void LSM303AGR_ACC_FreeFall_Callback(u8_t intID)
     /* clear FreeFall event */
     LSM303AGR_ACC_R_Int2_IA(&FreeFallStatus);
 }
+#endif
 
+#ifdef FREE_FALL_TEST
 /* Init the FreeFall feature */
 static void init_LSM303AGR_FreeFall(void)
 {
@@ -264,7 +276,9 @@ static void init_LSM303AGR_FreeFall(void)
     /* Enable LIR on INT2 */
     LSM303AGR_ACC_W_LatchInterrupt_on_INT2(LSM303AGR_ACC_LIR_INT2_ENABLED);
 }
+#endif
 
+#ifdef FREE_FALL_TEST
 /* Test Free-Fall */
 static void  Loop_Test_FreeFall(void)
 {
@@ -280,7 +294,7 @@ static void  Loop_Test_FreeFall(void)
         /* Event will be handled in driver callback */
     }
 }
-
+#endif
 /*******************************************************************************
 * Function Name  : main.
 * Description    : Simple LSM303AGR Example.

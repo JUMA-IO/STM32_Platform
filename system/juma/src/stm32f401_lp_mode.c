@@ -3,7 +3,6 @@
 
 
 static void RTC_CalendarConfig(void);
-static void rtc_alarm_config(uint32_t time);
 static void SYSCLKConfig_STOP(void);
 /* Private variables ---------------------------------------------------------*/
 /* RTC handler declaration */
@@ -319,32 +318,6 @@ void StandbyRTCBKPSRAMMode_Measure(void)
     /*## Enter Standby Mode ####################################################*/
     /* Request to enter STANDBY mode  */
     HAL_PWR_EnterSTANDBYMode();
-}
-
-static void rtc_alarm_config(uint32_t time)
-{
-    RTC_AlarmTypeDef salarmstructure;
-
-    /*##-3- Configure the RTC Alarm peripheral #################################*/
-    /* Set Alarm to 02:20:30
-       RTC Alarm Generation: Alarm on Hours, Minutes and Seconds */
-    salarmstructure.Alarm = RTC_ALARM_A;
-    salarmstructure.AlarmDateWeekDay = RTC_WEEKDAY_TUESDAY;
-    salarmstructure.AlarmDateWeekDaySel = RTC_ALARMDATEWEEKDAYSEL_DATE;
-    salarmstructure.AlarmMask = RTC_ALARMMASK_DATEWEEKDAY;
-    salarmstructure.AlarmSubSecondMask = RTC_ALARMSUBSECONDMASK_NONE;
-    salarmstructure.AlarmTime.TimeFormat = RTC_HOURFORMAT12_AM;
-    salarmstructure.AlarmTime.Hours = 0x01;
-    salarmstructure.AlarmTime.Minutes = 0x20;
-    salarmstructure.AlarmTime.Seconds = 0x20;
-    salarmstructure.AlarmTime.SubSeconds = 0x02;
-
-    if(HAL_RTC_SetAlarm_IT(&RTCHandle,&salarmstructure,RTC_FORMAT_BCD) != HAL_OK)
-    {
-        /* Initialization Error */
-        Error_Handler();
-    }
-
 }
 
 

@@ -192,7 +192,7 @@ static void dispatch_head_op(dispatch_queue_t* q, uint32_t now)
 
 static void reset_rtc( void )
 {
-    uint32_t now, head_time, next_time, sleep_time;
+    uint32_t now, head_time, sleep_time;
 
     if (timerq.head) {
         now = current_time();

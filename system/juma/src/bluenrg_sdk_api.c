@@ -473,8 +473,9 @@ void HCI_Event_CB(void *pckt)
         break;
         case EVT_LE_ADVERTISING_REPORT:
         {
-            le_advertising_info* adv_data = (void *)((event_pckt->data)+2);
-            #ifdef CLIENT_ROLE
+             #ifdef CLIENT_ROLE
+              le_advertising_info* adv_data = (void *)((event_pckt->data)+2);
+           
               ble_host_device_found(adv_data);
             #endif
         }
