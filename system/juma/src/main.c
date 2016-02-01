@@ -162,7 +162,8 @@ int main(void)
     HCI_Init();
     /* Reset BlueNRG hardware */
     BlueNRG_RST();
-
+    /*Gatt And Gap Init*/
+    ble_init_bluenrg();
     /* Enable Power Clock */
     __HAL_RCC_PWR_CLK_ENABLE();
 
