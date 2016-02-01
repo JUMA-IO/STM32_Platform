@@ -94,5 +94,115 @@ void imu_sensor_fusion_1(imu_sensor_data_t* sensor_raw, sensor_fusion_angle_t* s
     
 }
 
+vec3f_t vec3f_add(vec3f_t u, vec3f_t v)
+{
+    vec3f_t r;
 
+    r.x = u.x + v.x;
+    r.y = u.y + v.y;
+    r.z = u.z + v.z;
+
+    return r;
+}
+
+vec3f_t vec3f_mul_scalar(float s, vec3f_t v)
+{
+    vec3f_t r;
+
+    r.x = s*v.x;
+    r.y = s*v.y;
+    r.z = s*v.z;
+
+    return r;
+}
+
+vec3f_t vec3f_mul_cross(vec3f_t u, vec3f_t v)
+{
+    vec3f_t r;
+
+    r.x = u.y * v.z - u.z * v.y;
+    r.y = u.z * v.x - u.x * v.z;
+    r.z = u.x * v.y - u.y * v.x;
+    
+    return r;
+}
+
+float vec3f_mul_dot(vec3f_t u, vec3f_t v)
+{
+    return (u.x * v.x + u.y * v.y + u.z * v.z);
+}
+
+// computer the vector caused by rotation q on vector v
+vec3f_t vec3f_rotate(vec3f_t v, quat4f_t q)
+{
+    float w;
+    vec3f_t r, wv, rv, tmp1, tmp2, delta, result;
+    
+    w = q.w;
+    r.x = q.x;
+    r.y = q.y;
+    r.z = q.z;
+
+    // v + 2r X (r X v + wv)
+
+    // computer wv
+    wv = vec3f_mul_scalar(w, v);
+    // computer r X v
+    rv = vec3f_mul_cross(r, v);
+    // computer r X v + wv
+    tmp1 = vec3f_add(rv, wv);
+    // computer 2r
+    tmp2 = vec3f_mul_scalar(2, r);
+    // computer delta
+    delta = vec3f_mul_cross(tmp2, tmp1);
+    // computer final result
+    result = vec3f_add(v, delta);
+    
+    return result;
+}
+
+void gravity_filter_init(gravity_filter_context_t* cx)
+{
+    memset(cx, 0, sizeof(gravity_filter_context_t));
+}
+
+void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
+{
+    quat4f_t q;
+    vec3f_t axis_angles, e;
+
+    if (cx->flags == 0) {
+        cx->gravity.x = sensor->acc[0];
+        cx->gravity.y = sensor->acc[1];
+        cx->gravity.z = sensor->acc[2];
+        cx->flags = 1;
+        return;
+    }
+    
+    // computer axis angles measured by gyroscopic
+    axis_angles.x = ((double)sensor->gyro[0] * dt * M_PI / 180.0);
+    axis_angles.y = ((double)sensor->gyro[1] * dt * M_PI / 180.0);
+    axis_angles.z = ((double)sensor->gyro[2] * dt * M_PI / 180.0);
+
+    // form a quaternion
+    // hereby, we assume the angles are tiny
+    q.w = 1;
+    q.x = axis_angles.x / 2;
+    q.y = axis_angles.y / 2;
+    q.z = axis_angles.z / 2;
+
+    // update gravity vector by rotation
+    cx->gravity = vec3f_rotate(cx->gravity, q);
+
+    // computer prediction error according to accelerometer's measurements
+    e.x = sensor->acc[0] - cx->gravity.x;
+    e.y = sensor->acc[1] - cx->gravity.y;
+    e.z = sensor->acc[2] - cx->gravity.z;
+
+    // computer error estimation
+    e = vec3f_mul_scalar(0.01, e);
+    
+    // correct predicted gravity
+    cx->gravity = vec3f_add(cx->gravity, e);
+}
 
