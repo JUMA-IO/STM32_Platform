@@ -41,7 +41,7 @@ typedef struct
 } ble_gap_adv_params_t;
 
 ble_gap_adv_params_t m_adv_params;
-static uint8_t adv_name[20], adv_name_len = 7,  local_name[20], local_name_len;
+static uint8_t adv_name[20] = "BlueNRG", adv_name_len = 20,  local_name[20], local_name_len;
 
 uint16_t connection_handle = 0 ,notification_enabled = 0;
 
@@ -60,6 +60,9 @@ static void connection_information(uint16_t handle);
 static void Read_Request_CB(uint16_t handle);
 /*Add Service*/
 static tBleStatus Add_Service(void);
+/*init gap/gatt service*/
+/*Init BLUENrg, HCI, Add Service*/
+tBleStatus ble_init_bluenrg(void);
 
 #ifdef CLIENT_ROLE
 BLE_RoleTypeDef BLE_Role = CLIENT;
@@ -97,7 +100,7 @@ tBleStatus ble_init_bluenrg(void)
 #else
         ret = aci_gap_init(GAP_CENTRAL_ROLE, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #endif
-    }
+    }  
     if(ret != BLE_STATUS_SUCCESS) {
         printf("GAP_Init failed.\n");
     }
@@ -245,8 +248,6 @@ void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pev
     ble_address(adv_address);
     /*Set Adv Name*/
     ble_device_set_name(adv_name);
-    /*Gatt And Gap Init*/
-    ble_init_bluenrg();
     /*Set Tx Power Level*/
     ble_set_tx_power(tx_power_pevel);
     /* Range: 0x0020 to 0x4000
@@ -270,13 +271,16 @@ tBleStatus ble_device_start_advertising(void)
 
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);
+    HAL_Delay(1);
     ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0,
                                      adv_name_len, adv_name);
-
+      if(ret){
+         printf("aci_gatt_update_char_value failed.\n");
+      }
     /*min_adv_interval > 32*0.625*/
     ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, PUBLIC_ADDR, NO_WHITE_LIST_USE,
                                   local_name_len, (char*)local_name, uuid_length, serviceUUIDList, 0, 0);//// start advertising
-
+    
     return ret;
 }
 
