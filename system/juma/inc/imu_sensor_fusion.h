@@ -49,6 +49,8 @@ typedef struct _imu_sensor_fusion_1_context_t{
 typedef struct {
     uint32_t flags;
     vec3f_t gravity;
+    vec3f_t acc_last;
+    vec3f_t drift; // gyroscopic drifting rate
 } gravity_filter_context_t;
 
 void complementary_filter(float acc_raw[3], float gyr_raw[3], float mag_raw[3], float *pitch, float *roll, float *yaw);
