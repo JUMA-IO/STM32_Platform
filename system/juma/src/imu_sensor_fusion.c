@@ -161,24 +161,46 @@ vec3f_t vec3f_rotate(vec3f_t v, quat4f_t q)
     return result;
 }
 
+float vec3f_magnitude(vec3f_t v)
+{
+    float magnitude;
+    
+    magnitude = sqrt(v.x * v.x +
+                     v.y * v.y +
+                     v.z * v.z);
+
+    return magnitude;
+}
+
 void gravity_filter_init(gravity_filter_context_t* cx)
 {
     memset(cx, 0, sizeof(gravity_filter_context_t));
 }
 
-#define ZERO_MOTION_THRESHOLD     2
-#define K_GYRO_DRIFT              0.001
-#define CORRECTION_GAIN           0.01
+#define ZERO_MOTION_THRESHOLD_ACC     10
+#define ZERO_MOTION_THRESHOLD_GYRO    3
+#define ZERO_MOTION_CYCLES        100
+#define K_GYRO_DRIFT              0.1
 
 void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
 {
     quat4f_t q;
-    vec3f_t angular_rate, axis_angles, e, gravity_new;
+    vec3f_t acc_norm, angular_rate, axis_angles, e, gravity_new;
+    float acc_magnitude, gravity_magnitude, err_magnitude, angle_magnitude, gain;
+    
+    acc_magnitude = sqrt(sensor->acc[0] * sensor->acc[0] +
+                         sensor->acc[1] * sensor->acc[1] +
+                         sensor->acc[2] * sensor->acc[2]);
 
+    // normalize sensed gravity
+    acc_norm.x = (double)1000.0 * sensor->acc[0] / acc_magnitude;
+    acc_norm.y = (double)1000.0 * sensor->acc[1] / acc_magnitude;
+    acc_norm.z = (double)1000.0 * sensor->acc[2] / acc_magnitude;
+    
     if (cx->flags == 0) {
-        cx->gravity.x = sensor->acc[0];
-        cx->gravity.y = sensor->acc[1];
-        cx->gravity.z = sensor->acc[2];
+        cx->gravity.x = acc_norm.x;
+        cx->gravity.y = acc_norm.y;
+        cx->gravity.z = acc_norm.z;
         cx->flags = 1;
         return;
     }
@@ -201,30 +223,108 @@ void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
 
     // update gravity vector by rotation
     gravity_new = vec3f_rotate(cx->gravity, q);
+    
+    // gyroscopic autocalibration
+    if (cx->cycle < ZERO_MOTION_CYCLES) {
+        if (cx->cycle == 0) {
+            cx->acc_min.x = acc_norm.x;
+            cx->acc_min.y = sensor->acc[1];
+            cx->acc_min.z = sensor->acc[2];
+            cx->acc_max.x = sensor->acc[0];
+            cx->acc_max.y = sensor->acc[1];
+            cx->acc_max.z = sensor->acc[2];
+            
+            cx->gyro_min.x = sensor->gyro[0];
+            cx->gyro_min.y = sensor->gyro[1];
+            cx->gyro_min.z = sensor->gyro[2];
+            cx->gyro_max.x = sensor->gyro[0];
+            cx->gyro_max.y = sensor->gyro[1];
+            cx->gyro_max.z = sensor->gyro[2];
+            cx->drift_sum.x = 0;
+            cx->drift_sum.y = 0;
+            cx->drift_sum.z = 0;
+        } else {
+            if (sensor->acc[0] < cx->acc_min.x) cx->acc_min.x = sensor->acc[0];
+            if (sensor->acc[1] < cx->acc_min.y) cx->acc_min.y = sensor->acc[1];
+            if (sensor->acc[2] < cx->acc_min.z) cx->acc_min.z = sensor->acc[2];
+            if (sensor->acc[0] > cx->acc_max.x) cx->acc_max.x = sensor->acc[0];
+            if (sensor->acc[1] > cx->acc_max.y) cx->acc_max.y = sensor->acc[1];
+            if (sensor->acc[2] > cx->acc_max.z) cx->acc_max.z = sensor->acc[2];
+            
+            if (sensor->gyro[0] < cx->gyro_min.x) cx->gyro_min.x = sensor->gyro[0];
+            if (sensor->gyro[1] < cx->gyro_min.y) cx->gyro_min.y = sensor->gyro[1];
+            if (sensor->gyro[2] < cx->gyro_min.z) cx->gyro_min.z = sensor->gyro[2];
+            if (sensor->gyro[0] > cx->gyro_max.x) cx->gyro_max.x = sensor->gyro[0];
+            if (sensor->gyro[1] > cx->gyro_max.y) cx->gyro_max.y = sensor->gyro[1];
+            if (sensor->gyro[2] > cx->gyro_max.z) cx->gyro_max.z = sensor->gyro[2];
+        }
+        cx->drift_sum.x += sensor->gyro[0];
+        cx->drift_sum.y += sensor->gyro[1];
+        cx->drift_sum.z += sensor->gyro[2];
+        cx->cycle++;
+    }
+
+    if (cx->cycle >= ZERO_MOTION_CYCLES) {
+        if ((abs(cx->acc_max.x - cx->acc_min.x) < ZERO_MOTION_THRESHOLD_ACC) &&
+            (abs(cx->acc_max.y - cx->acc_min.y) < ZERO_MOTION_THRESHOLD_ACC) &&
+            (abs(cx->acc_max.z - cx->acc_min.z) < ZERO_MOTION_THRESHOLD_ACC)&&
+            (abs(cx->gyro_max.x - cx->gyro_min.x) < ZERO_MOTION_THRESHOLD_GYRO) &&
+            (abs(cx->gyro_max.y - cx->gyro_min.y) < ZERO_MOTION_THRESHOLD_GYRO) &&
+            (abs(cx->gyro_max.z - cx->gyro_min.z) < ZERO_MOTION_THRESHOLD_GYRO)) {
+            cx->drift.x += (double)K_GYRO_DRIFT * (cx->drift_sum.x/ZERO_MOTION_CYCLES - cx->drift.x);
+            cx->drift.y += (double)K_GYRO_DRIFT * (cx->drift_sum.y/ZERO_MOTION_CYCLES - cx->drift.y);
+            cx->drift.z += (double)K_GYRO_DRIFT * (cx->drift_sum.z/ZERO_MOTION_CYCLES - cx->drift.z);
+        }
+        cx->cycle = 0;
+    }
 
     // computer prediction error according to accelerometer's measurements
-    e.x = sensor->acc[0] - gravity_new.x;
-    e.y = sensor->acc[1] - gravity_new.y;
-    e.z = sensor->acc[2] - gravity_new.z;
+    e.x = acc_norm.x - gravity_new.x;
+    e.y = acc_norm.y - gravity_new.y;
+    e.z = acc_norm.z - gravity_new.z;
+    if (cx->cycle == 0) printf("%f ", angular_rate.x);
+    err_magnitude = vec3f_magnitude(e);
+    angle_magnitude = vec3f_magnitude(angular_rate);
 
-    // gyroscopic autocalibration
-    if ((abs(sensor->acc[0] - cx->acc_last.x) < ZERO_MOTION_THRESHOLD) &&
-        (abs(sensor->acc[1] - cx->acc_last.y) < ZERO_MOTION_THRESHOLD) &&
-        (abs(sensor->acc[2] - cx->acc_last.z) < ZERO_MOTION_THRESHOLD)) {
-        cx->drift.x += (double)K_GYRO_DRIFT * (sensor->gyro[0] - cx->drift.x);
-        cx->drift.y += (double)K_GYRO_DRIFT * (sensor->gyro[1] - cx->drift.y);
-        cx->drift.z += (double)K_GYRO_DRIFT * (sensor->gyro[2] - cx->drift.z);
-    }
+    // todo
+    // should revise the gain
+    // the principle is:
+    //   * when accelerometer reading is jumping around, filter it out
+    //   * otherwise, we should follow it quickly
     
+    if (err_magnitude < 10) {
+        // gyroscopic predicted result matches accelerometer readings
+        // we are lucky!
+        gain = 0.1;
+    } else {
+        // gyroscopic does not agree with accelerometer
+        if ((angle_magnitude < 100) &&
+            (abs(acc_magnitude - 1000) > 40)) {
+            // angular rate is low & acceleration is high
+            // most likely there is high linear acceleration
+            // so we don't trust accelerometer now
+            gain = 0.0001;
+        } else {
+            // looks like there is rapid motion.
+            // both gyroscopic and accelerometer are noisy in this case
+            // follow accelerometer to prevent big lag
+            gain = 0.5;
+        }
+    }
+
     // computer error estimation
-    e = vec3f_mul_scalar(CORRECTION_GAIN, e);
+    e = vec3f_mul_scalar(gain, e);
     
     // correct predicted gravity
     cx->gravity = vec3f_add(gravity_new, e);
 
-    // record last acc sensor reading
-    cx->acc_last.x = sensor->acc[0];
-    cx->acc_last.y = sensor->acc[1];
-    cx->acc_last.z = sensor->acc[2];
+    // renormalise
+    gravity_magnitude = sqrt(cx->gravity.x * cx->gravity.x +
+                         cx->gravity.y * cx->gravity.y +
+                         cx->gravity.z * cx->gravity.z);
+
+    cx->gravity.x = (double)1000.0 * cx->gravity.x / gravity_magnitude;
+    cx->gravity.y = (double)1000.0 * cx->gravity.y / gravity_magnitude;
+    cx->gravity.z = (double)1000.0 * cx->gravity.z / gravity_magnitude;
 }
 
