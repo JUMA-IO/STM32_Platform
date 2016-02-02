@@ -166,10 +166,14 @@ void gravity_filter_init(gravity_filter_context_t* cx)
     memset(cx, 0, sizeof(gravity_filter_context_t));
 }
 
+#define ZERO_MOTION_THRESHOLD     2
+#define K_GYRO_DRIFT              0.001
+#define CORRECTION_GAIN           0.01
+
 void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
 {
     quat4f_t q;
-    vec3f_t axis_angles, e;
+    vec3f_t angular_rate, axis_angles, e, gravity_new;
 
     if (cx->flags == 0) {
         cx->gravity.x = sensor->acc[0];
@@ -178,11 +182,15 @@ void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
         cx->flags = 1;
         return;
     }
+
+    angular_rate.x = sensor->gyro[0] - cx->drift.x;
+    angular_rate.y = sensor->gyro[1] - cx->drift.y;
+    angular_rate.z = sensor->gyro[2] - cx->drift.z;
     
     // computer axis angles measured by gyroscopic
-    axis_angles.x = ((double)sensor->gyro[0] * dt * M_PI / 180.0);
-    axis_angles.y = ((double)sensor->gyro[1] * dt * M_PI / 180.0);
-    axis_angles.z = ((double)sensor->gyro[2] * dt * M_PI / 180.0);
+    axis_angles.x = -((double)angular_rate.x * dt * M_PI / 180.0);
+    axis_angles.y = -((double)angular_rate.y * dt * M_PI / 180.0);
+    axis_angles.z = -((double)angular_rate.z * dt * M_PI / 180.0);
 
     // form a quaternion
     // hereby, we assume the angles are tiny
@@ -192,17 +200,31 @@ void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
     q.z = axis_angles.z / 2;
 
     // update gravity vector by rotation
-    cx->gravity = vec3f_rotate(cx->gravity, q);
+    gravity_new = vec3f_rotate(cx->gravity, q);
 
     // computer prediction error according to accelerometer's measurements
-    e.x = sensor->acc[0] - cx->gravity.x;
-    e.y = sensor->acc[1] - cx->gravity.y;
-    e.z = sensor->acc[2] - cx->gravity.z;
+    e.x = sensor->acc[0] - gravity_new.x;
+    e.y = sensor->acc[1] - gravity_new.y;
+    e.z = sensor->acc[2] - gravity_new.z;
 
+    // gyroscopic autocalibration
+    if ((abs(sensor->acc[0] - cx->acc_last.x) < ZERO_MOTION_THRESHOLD) &&
+        (abs(sensor->acc[1] - cx->acc_last.y) < ZERO_MOTION_THRESHOLD) &&
+        (abs(sensor->acc[2] - cx->acc_last.z) < ZERO_MOTION_THRESHOLD)) {
+        cx->drift.x += (double)K_GYRO_DRIFT * (sensor->gyro[0] - cx->drift.x);
+        cx->drift.y += (double)K_GYRO_DRIFT * (sensor->gyro[1] - cx->drift.y);
+        cx->drift.z += (double)K_GYRO_DRIFT * (sensor->gyro[2] - cx->drift.z);
+    }
+    
     // computer error estimation
-    e = vec3f_mul_scalar(0.01, e);
+    e = vec3f_mul_scalar(CORRECTION_GAIN, e);
     
     // correct predicted gravity
-    cx->gravity = vec3f_add(cx->gravity, e);
+    cx->gravity = vec3f_add(gravity_new, e);
+
+    // record last acc sensor reading
+    cx->acc_last.x = sensor->acc[0];
+    cx->acc_last.y = sensor->acc[1];
+    cx->acc_last.z = sensor->acc[2];
 }
 
