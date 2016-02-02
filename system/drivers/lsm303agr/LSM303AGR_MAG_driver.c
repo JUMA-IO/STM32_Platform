@@ -410,7 +410,7 @@ status_t  LSM303AGR_MAG_W_MD(LSM303AGR_MAG_MD_t newValue)
     value &= ~LSM303AGR_MAG_MD_MASK;
     value |= newValue;
 
-    if( !LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_A, value) )
+    if( HAL_OK !=LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_A, value) )
         return MEMS_ERROR;
 
     return MEMS_SUCCESS;
@@ -450,7 +450,7 @@ status_t  LSM303AGR_MAG_W_ODR(LSM303AGR_MAG_ODR_t newValue)
     value &= ~LSM303AGR_MAG_ODR_MASK;
     value |= newValue;
 
-    if( !LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_A, value) )
+    if( HAL_OK != LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_A, value) )
         return MEMS_ERROR;
 
     return MEMS_SUCCESS;
@@ -690,7 +690,7 @@ status_t  LSM303AGR_MAG_W_INT_ON_DATAOFF(LSM303AGR_MAG_INT_ON_DATAOFF_t newValue
     value &= ~LSM303AGR_MAG_INT_ON_DATAOFF_MASK;
     value |= newValue;
 
-    if( !LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_B, value) )
+    if( HAL_OK !=LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_B, value) )
         return MEMS_ERROR;
 
     return MEMS_SUCCESS;
@@ -890,7 +890,7 @@ status_t  LSM303AGR_MAG_W_I2C_DIS(LSM303AGR_MAG_I2C_DIS_t newValue)
     value &= ~LSM303AGR_MAG_I2C_DIS_MASK;
     value |= newValue;
 
-    if( !LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_C, value) )
+    if( HAL_OK !=LSM303AGR_MAG_WriteReg(LSM303AGR_MAG_CFG_REG_C, value) )
         return MEMS_ERROR;
 
     return MEMS_SUCCESS;
