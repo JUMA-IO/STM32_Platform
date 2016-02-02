@@ -49,7 +49,15 @@ typedef struct _imu_sensor_fusion_1_context_t{
 typedef struct {
     uint32_t flags;
     vec3f_t gravity;
-    vec3f_t acc_last;
+
+    // variables for gyroscopic calibration
+    
+    vec3f_t acc_min;
+    vec3f_t acc_max;
+    vec3f_t gyro_min;
+    vec3f_t gyro_max;
+    uint8_t cycle;
+    vec3f_t drift_sum;
     vec3f_t drift; // gyroscopic drifting rate
 } gravity_filter_context_t;
 

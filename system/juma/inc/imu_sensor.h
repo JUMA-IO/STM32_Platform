@@ -13,7 +13,7 @@
 #define IMU_SENSOR_FEATURE_MAG  0x04
 
 /*fifo threthold level*/
-#define FIFO_WATER_MARK         2400
+#define FIFO_WATER_MARK         48
 
 /*FIFO CTRL MASK*/
 #define LSM6DS3_XG_FIFO_THRESHOLD_MASK                      ((uint8_t)0x0F)

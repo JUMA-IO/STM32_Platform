@@ -43,7 +43,7 @@ void on_ready(void)
 
     imu_sensor_start();
 
-    run_when_idle(print_message, NULL);
+    run_after_delay(print_message, NULL, 0);
 }
 
 
@@ -63,10 +63,24 @@ void on_imu_sensor_data(imu_sensor_data_t* data)
 void print_message(void* args)
 {
     gravity_filter_context_t* cx = &gravity_filter_context;
+    uint8_t tmp_buf[6];
+    int32_t x,y,z;
+    extern float test[3];
 
-    printf("%f %f %f\r\n", cx->gravity.x, cx->gravity.y, cx->gravity.z);
-    
-    run_after_delay(print_message, NULL, 500);
+    run_after_delay(print_message, NULL, 100);
+
+    x = (int32_t) cx->gravity.x;
+    y = (int32_t) cx->gravity.y;
+    z = (int32_t) cx->gravity.z;
+
+    tmp_buf[0] = (x >> 8) & 0xFF;
+    tmp_buf[1] = (x) & 0xFF;
+    tmp_buf[2] = (y >> 8) & 0xFF;
+    tmp_buf[3] = (y) & 0xFF;
+    tmp_buf[4] = (z >> 8) & 0xFF;
+    tmp_buf[5] = (z) & 0xFF;
+
+    ble_device_send(0x01, 6, tmp_buf);
 }
 
 /* Device On Message */
