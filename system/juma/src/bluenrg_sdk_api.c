@@ -267,7 +267,7 @@ tBleStatus ble_device_start_advertising(void)
 {
     tBleStatus ret;
     uint8_t uuid_length = 3;
-    uint8_t serviceUUIDList[] = {AD_TYPE_16_BIT_SERV_UUID,0xFE,0x90};
+    uint8_t serviceUUIDList[] = {AD_TYPE_16_BIT_SERV_UUID_CMPLT_LIST,0x90,0xFE};
 
     /* disable scan response */
     hci_le_set_scan_resp_data(0,NULL);
