@@ -70,6 +70,12 @@ typedef struct _sensor_data_sensitivity{
  
 } imu_sensor_data_sensitivity_t;
 
+typedef struct _sensor_data_read_param_t{
+    uint8_t delay_time;
+    uint8_t group_number;
+    uint32_t sample_rate;
+}sensor_data_read_param_t;
+
 typedef enum _imu_status imu_status_t;
 typedef struct _imu_sensor_data_t imu_sensor_data_t; 
 
@@ -87,7 +93,7 @@ imu_status_t imu_sensor_stop(void);
 
 void on_imu_sensor_data(imu_sensor_data_t* data); 
 
-void imu_sensor_read_data_from_fifo(void);
+void imu_sensor_read_data_from_fifo(void* arg);
 
 
 #endif /*_IMU_SENSOR_H_*/
