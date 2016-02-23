@@ -243,6 +243,21 @@ imu_status_t imu_sensor_stop(void)
 static imu_status_t lsm6ds3_fifo_sensor_enable(void)
 {
     uint8_t tmp1 = 0x00;
+    /*fifo decimation setting*/
+    {
+        if(LSM6DS3_IO_Read(&tmp1, LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_FIFO_CTRL3, 1) != imu_status_ok)
+        {
+            return imu_status_fail;
+        }
+        /*set */
+        tmp1 &= ~(0x3F);
+        tmp1 |= 0x09;
+        if(LSM6DS3_IO_Write(&tmp1, LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_FIFO_CTRL3, 1) != imu_status_ok)
+        {
+            return imu_status_fail;
+        }
+
+    }
     /*lsm6ds3*/
     {
 
