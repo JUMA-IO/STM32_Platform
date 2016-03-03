@@ -1,39 +1,52 @@
 
 #include "app.h"
-/*start adv*/
+#include "pwm.h"
+TIM_HandleTypeDef        TimHandleT2;
+int16_t LED_luminance=0;
+ 
+void breathing_led_init(){
+	
+TIM_OC_InitTypeDef       pwmConfig;
+	
+  GPIO_InitTypeDef GPIO_InitStruct;
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_TIM2_CLK_ENABLE();
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	
+  TimHandleT2.Instance = TIM2;
+  TimHandleT2.Init.Period =  1000 - 1;
+  TimHandleT2.Init.Prescaler = 168-1;
+  TimHandleT2.Init.ClockDivision = 0;
+  TimHandleT2.Init.CounterMode = TIM_COUNTERMODE_UP;  
+  HAL_TIM_PWM_Init(&TimHandleT2);
 
-char *name = "CAF_ECHO";
-uint8_t adv_address[6] = {0x08, 0x05, 0x04, 0x03, 0x02, 0x04};
+  pwmConfig.OCMode=TIM_OCMODE_PWM1;
+  pwmConfig.Pulse=0;
+  HAL_TIM_PWM_ConfigChannel(&TimHandleT2, &pwmConfig, TIM_CHANNEL_2);
+	HAL_TIM_PWM_Start(&TimHandleT2, TIM_CHANNEL_2);
+	
+}
+ void breathing_led_run(){
+	LED_luminance+=10;
+		if(LED_luminance>=1000)LED_luminance=-1000;
+		TIM_PWM_Duty(&TimHandleT2,TIM_CHANNEL_2,abs(LED_luminance));
+	 run_after_delay(breathing_led_run, NULL, 10);//FIXME:there are warning: #167-D
+	
+}
+
 
 void on_ready(void)
 {
-    uint8_t tx_power_level = 7;
-    uint16_t adv_interval = 100;
-
-    /*Config Adv Parameter And Ready to Adv*/
-    ble_set_adv_param(name, adv_address, tx_power_level, adv_interval);
-    ble_device_start_advertising();
-
+	
+	breathing_led_init();
+	
+	breathing_led_run();
+  
 }
 
-/* Device On Message */
-void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
-{
 
-    /*echo data*/
-    ble_device_send(type, length, value);
-
-}
-/* Device on connect */
-void ble_device_on_connect(void)
-{
-
-
-}
-/* Device on disconnect */
-void ble_device_on_disconnect(uint8_t reason)
-{
-    /* Make the device connectable again. */
-    Ble_conn_state = BLE_CONNECTABLE;
-    ble_device_start_advertising();
-}
