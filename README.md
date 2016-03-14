@@ -10,7 +10,7 @@ This repository includes a comprehensive SDK together with various software reso
 * Cannon is one of the development boards belongs to STM32 platform. 
 * Cannon boards allow anyone to try out new ideas and to quickly create prototypes.
 * Learn hardware specs at: [http://www.juma.io/platform/cannon.html](http://www.juma.io/platform/cannon.html)
-* Learn software usages at: [http://www.juma.io/doc/zh/boards/st/cannon.html](http://www.juma.io/doc/zh/boards/st/cannon.html)
+* Learn step-by-step tutorial at: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
 * Learn software API manuals at: [http://www.juma.io/doc/zh/embedded_sdk.html](http://www.juma.io/doc/zh/embedded_sdk.html)
 * Get a Cannon board at JUMA's Taobao shop: [http://tao.bb/5Dh6u](http://tao.bb/5Dh6u)
 
@@ -22,6 +22,9 @@ This repository includes a comprehensive SDK together with various software reso
 
 
 ##Quick Start
+> You can get detail tutorial at:   
+> [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
+
 1. Choose seed project  
 Learn examples under */product* folder, select one to be the seed project.  
 Copy & paste it to create your own project.
@@ -50,3 +53,8 @@ It can be run on Android mobile to transmit BLE raw data to/from Cannon.
 ##Further Resources
 * Home: [http://www.juma.io](http://www.juma.io)
 * Contact: [hello@jumacc.com](hello@jumacc.com)
+* Forum: [juma.io/bbs](juma.io/bbs)
+* Quick Start/上手指南: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
+* QQ discuzz group/小钢炮QQ群: 271927055
+
+
