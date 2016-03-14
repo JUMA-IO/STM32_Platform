@@ -22,7 +22,7 @@ This repository includes a comprehensive SDK together with various software reso
 
 
 ##Quick Start
-> You can get detail tutorial at:   
+> You can get detailed tutorial at:   
 > [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
 
 1. Choose seed project  
