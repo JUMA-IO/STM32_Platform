@@ -6,7 +6,7 @@ This repository includes a comprehensive SDK, together with various software res
 
 
 ##Cannon
-![](http://mydiscuz.b0.upaiyun.com/forum/201603/15/174813gbv4ijpirovv3a8r.jpg)
+![](http://mydiscuz.b0.upaiyun.com/forum/201603/15/175436widgtvqjl48ujsv4.jpg)  
 
 * Cannon is the very first development board we made for STM32 platform. 
 * Cannon boards allow anyone to try out new ideas and to quickly create product prototypes.
