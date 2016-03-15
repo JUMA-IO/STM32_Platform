@@ -15,10 +15,10 @@ This repository includes a comprehensive SDK together with various software reso
 * Get a Cannon board at JUMA's Taobao shop: [http://tao.bb/5Dh6u](http://tao.bb/5Dh6u)
 
 ##Directories
-* /product - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
-* /system - including drivers, HALs, middlewares, JUMA SDKs, etc.
-* /tool - including some APP utilities which could be installed and run on Android mobiles. 
-* /document - things like document, datasheet, manuals, etc.
+* `/product` - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
+* `/system` - including drivers, HALs, middlewares, JUMA SDKs, etc.
+* `/tools` - including some APP utilities which could be installed and run on Android mobiles. 
+* `/document` - things like document, datasheet, manuals, etc.
 
 
 ##Quick Start
@@ -26,13 +26,13 @@ This repository includes a comprehensive SDK together with various software reso
 > [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
 
 1. Choose seed project  
-Learn examples under */product* folder, select one to be the seed project.  
+Learn examples under `/product` folder, select one to be the seed project.  
 Copy & paste it to create your own project.
 
 2. Header files  
 Remember to include necessary header files.  
-For BLE, it is: */system/juma/inc/bluenrg_sdk_api.h*  
-For sensors, it is: */system/juma/inc/juma_sensor.h*
+For BLE, it is: `/system/juma/inc/bluenrg_sdk_api.h`  
+For sensors, it is: `/system/juma/inc/juma_sensor.h`
 
 3. Make your own application  
 Modify the seed project, change the logics, flows, algorithms, etc.  
@@ -46,7 +46,7 @@ Connect Cannon to computer via J-Link or ST-LINK.
 Keil can download firmware to Cannon.
 
 6. Work with BLE APP  
-To facilitate BLE development, we offered a BLE debugger APP in */tool* folder.   
+To facilitate BLE development, we offered a BLE debugger APP in `/tools` folder.   
 It can be run on Android mobile to transmit BLE raw data to/from Cannon.
 
 
