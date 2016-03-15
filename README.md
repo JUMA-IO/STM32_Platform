@@ -1,18 +1,23 @@
 # STM32_Platform
 
-##Introduction
-The STM32 platform integrates a MCU, a BLE transmitter(BlueNRG), and several sensors manufactured by STMicroelectronics.
+The STM32 platform integrates a MCU, a BLE transmitter(BlueNRG), and several sensors. All the chips are manufactured by STMicroelectronics.
 
-This repository includes a comprehensive SDK together with various software resources like drivers, middlewares, examples for STM32 platform development.
+This repository includes a comprehensive SDK, together with various software resources like drivers, middlewares, and application demos for further developments.
 
 
 ##Cannon
-* Cannon is one of the development boards belongs to STM32 platform. 
-* Cannon boards allow anyone to try out new ideas and to quickly create prototypes.
+![](http://mydiscuz.b0.upaiyun.com/forum/201603/15/174813gbv4ijpirovv3a8r.jpg)
+
+* Cannon is the very first development board we made for STM32 platform. 
+* Cannon boards allow anyone to try out new ideas and to quickly create product prototypes.
 * Learn hardware specs at: [http://www.juma.io/platform/cannon.html](http://www.juma.io/platform/cannon.html)
 * Learn step-by-step tutorial at: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
 * Learn software API manuals at: [http://www.juma.io/doc/zh/embedded_sdk.html](http://www.juma.io/doc/zh/embedded_sdk.html)
-* Get a Cannon board at JUMA's Taobao shop: [http://tao.bb/5Dh6u](http://tao.bb/5Dh6u)
+
+
+> Cannon is FREE now! Get a Cannon board at JUMA's Taobao shop: [http://tao.bb/5Dh6u](http://tao.bb/5Dh6u)  
+> 小钢炮正处于免费推广期，您可以从我们的[淘宝店](http://tao.bb/5Dh6u)申请一块。
+
 
 ##Directories
 * `/product` - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
