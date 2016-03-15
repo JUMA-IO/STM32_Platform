@@ -178,10 +178,11 @@ int main(void)
             Ble_conn_state = BLE_NOCONNECTABLE;
         }
         dispatch();
-//        if(sleep_flag == 1) {
-//            StopMode_Measure();
-//        }
-
+#ifdef LOW_POWER_MODE
+        if(sleep_flag == 1) {
+            StopMode_Measure();
+        }
+#endif
     }
 }
 
