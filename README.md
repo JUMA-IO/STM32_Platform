@@ -12,7 +12,7 @@ This repository includes a comprehensive SDK, together with various software res
 * Cannon boards allow anyone to try out new ideas and to quickly create product prototypes.
 * Learn hardware specs at [here](http://www.juma.io/platform/cannon.html).
 * Learn step-by-step tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).
-* Learn software API manuals at: [here](http://www.juma.io/doc/zh/embedded_sdk.html).
+* Learn software API manuals at [here](http://www.juma.io/doc/zh/embedded_sdk.html).
 
 
 > Cannon is FREE now! Get a Cannon board at JUMA's [Taobao shop](http://tao.bb/5Dh6u).  
