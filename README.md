@@ -27,39 +27,31 @@ This repository includes a comprehensive SDK, together with various software res
 
 
 ##Quick Start
-> You can get detailed tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).    
-> 小钢炮的上手指南文档请[戳我](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)。
 
-1. Choose seed project  
-Learn examples under `/product` folder, select one to be the seed project.  
-Copy & paste it to create your own project.
+1. Choose Demo project  
+Learn demos under `/product` folder, select and open one project in Keil.  
 
-2. Header files  
-Remember to include necessary header files.  
-For BLE, it is: `/system/juma/inc/bluenrg_sdk_api.h`  
-For sensors, it is: `/system/juma/inc/juma_sensor.h`
+2. Learn how to Compile   
+Cannon board has two versions, select the right one in Keil compile option.  
+Make sure all the header files are included.
 
-3. Make your own application  
-Modify the seed project, change the logics, flows, algorithms, etc.  
-Make it fit to your own application.
-
-4. Compile firmware  
-Cannon board has two versions, select the right one in Keil compile option.
-
-5. Download firmware  
+3. Learn how to Download firmware  
 Connect Cannon to computer via J-Link or ST-LINK.   
-Keil can download firmware to Cannon.
+Download firmware to Cannon.
 
-6. Work with BLE APP  
-To facilitate BLE development, we offered a BLE debugger APP in `/tools` folder.   
-It can be run on Android mobile to transmit BLE raw data to/from Cannon.
+4. Work with BLE APP  
+A debugger APP (`/tools/JumaBleHelper.apk`) is offered to facilitate BLE development. It can be installed and run on Android machine to transmit BLE raw data to/from Cannon.  
+The iOS version can be downloaded in AppStore as well.
+
+> You can get detailed tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).    
+> 详细的小钢炮的上手指南文档请[戳我](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)，请仔细阅读。
 
 
 ##Further Resources
-* Home: [http://www.juma.io](http://www.juma.io)
-* Contact: [hello@jumacc.com](hello@jumacc.com)
-* Forum: [juma.io/bbs](juma.io/bbs)
+* Home/主页: [http://www.juma.io](http://www.juma.io)
+* Contact/联系: [hello@jumacc.com](hello@jumacc.com)
+* Forum/论坛: [juma.io/bbs](juma.io/bbs)
 * Quick Start/上手指南: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
-* QQ discuzz group/小钢炮QQ群: `271927055`
+* QQ group/小钢炮QQ群: `271927055`
 
 
