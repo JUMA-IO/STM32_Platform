@@ -66,8 +66,8 @@ typedef struct scan_device_found {
 } scan_device_found_info;
 
 typedef enum {
-   SCAN_FILTER_DUPLICATE_DISABLE = 0, /**< scan filter duplicate disable. */
-   SCAN_FILTER_DUPLICATE_ENABLE = 1  /**< scan filter duplicate enable. */
+    SCAN_FILTER_DUPLICATE_DISABLE = 0, /**< scan filter duplicate disable. */
+    SCAN_FILTER_DUPLICATE_ENABLE = 1  /**< scan filter duplicate enable. */
 } SCAN_FilterDuplicateType;
 
 typedef enum {
@@ -76,8 +76,9 @@ typedef enum {
 } SCAN_Type;
 
 typedef enum {
-    CLIENT = 0, /**< CLIENT is for Central role. */
-    SERVER = 1  /**< SERVER is for Peripheral role. */
+    CLIENT = 0x01, /**< CLIENT is for Central role. */
+    SERVER = 0x02,  /**< SERVER is for Peripheral role. */
+    CLIENT_SERVER = 0x03
 } BLE_RoleTypeDef;
 
 
