@@ -8,7 +8,7 @@
 
 #define BDADDR_SIZE 6
 
-#ifdef CLIENT_ROLE
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
 extern uint8_t host_connect_init_flag;
 extern volatile int host_connected;
 extern volatile uint8_t host_notification_enabled;
@@ -66,6 +66,10 @@ tBleStatus ble_init_bluenrg(void);
 
 #ifdef CLIENT_ROLE
 BLE_RoleTypeDef BLE_Role = CLIENT;
+#endif
+
+#ifdef CLIENT_SERVER_ROLE
+BLE_RoleTypeDef BLE_Role = CLIENT_SERVER;
 #else
 BLE_RoleTypeDef BLE_Role = SERVER;
 #endif
@@ -93,6 +97,10 @@ tBleStatus ble_init_bluenrg(void)
 #else
         ret = aci_gap_init(GAP_PERIPHERAL_ROLE, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #endif
+    } else if(BLE_Role == CLIENT_SERVER) {
+#ifdef BLUENRG_MS
+        ret = aci_gap_init(GAP_CENTRAL_ROLE | GAP_PERIPHERAL_ROLE, 0, adv_name_len, &service_handle, &dev_name_char_handle, &appearance_char_handle);
+#endif
     } else {
 #ifdef BLUENRG_MS
         /*BUG: Name Length*/
@@ -100,7 +108,7 @@ tBleStatus ble_init_bluenrg(void)
 #else
         ret = aci_gap_init(GAP_CENTRAL_ROLE, &service_handle, &dev_name_char_handle, &appearance_char_handle);
 #endif
-    }  
+    }
     if(ret != BLE_STATUS_SUCCESS) {
         printf("GAP_Init failed.\n");
     }
@@ -133,6 +141,16 @@ tBleStatus ble_init_bluenrg(void)
         if(ret != BLE_STATUS_SUCCESS) {
             return BLE_ADD_SERVICE_FAILED;
         }
+    } else if(BLE_Role == CLIENT_SERVER) {
+        printf("CLIENT_SERVER: BLE Stack Initialized\n");
+        /* add JUMA SERVICE*/
+        ret = Add_Service();
+        if(ret == BLE_STATUS_SUCCESS)
+            printf("Service added successfully.\n");
+        if(ret != BLE_STATUS_SUCCESS) {
+            return BLE_ADD_SERVICE_FAILED;
+        }
+
     } else {
         printf("CLIENT: BLE Stack Initialized\n");
     }
@@ -274,13 +292,17 @@ tBleStatus ble_device_start_advertising(void)
     HAL_Delay(1);
     ret = aci_gatt_update_char_value(service_handle, dev_name_char_handle, 0,
                                      adv_name_len, adv_name);
-      if(ret){
-         printf("aci_gatt_update_char_value failed.\n");
-      }
+    if(ret) {
+        printf("aci_gatt_update_char_value failed.\n");
+    }
     /*min_adv_interval > 32*0.625*/
     ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, PUBLIC_ADDR, NO_WHITE_LIST_USE,
-                                  local_name_len, (char*)local_name, uuid_length, serviceUUIDList, 0, 0);//// start advertising
-    
+                                   local_name_len, (char*)local_name, uuid_length, serviceUUIDList, 0, 0);//// start advertising
+    if(ret) {
+        printf("aci_gap_set_discoverable failed.\n");
+    } else {
+        printf("start advertising \n");
+    }
     return ret;
 }
 
@@ -319,6 +341,9 @@ tBleStatus ble_device_stop_advertising(void)
 {
     tBleStatus ret;
     ret = aci_gap_set_non_discoverable();
+    if(ret) {
+        printf("aci_gap_set_non_discoverable  failed\n");
+    }
 
     return ret;
 }
@@ -362,7 +387,7 @@ static void connection_information(uint16_t handle)
  */
 void GAP_DisconnectionComplete_CB(void)
 {
- #ifdef CLIENT_ROLE
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
     host_connected = FALSE;
     host_connect_init_flag = FALSE;
     printf("Disconnected\n");
@@ -376,13 +401,13 @@ void GAP_DisconnectionComplete_CB(void)
     end_read_write_without_rsp_char_handle = FALSE;
     end_read_notify_read_char_handle = FALSE;
     end_read_notify_char_handle = FALSE;
- #endif
+#endif
 }
 
 /*connection complete callback*/
 void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
 {
- #ifdef CLIENT_ROLE
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
     host_connected = TRUE;
     connection_handle = handle;
 
@@ -391,10 +416,10 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
         printf("%02X-", addr[i]);
     }
     printf("%02X\n", addr[0]);
-    
+
     /*discover device*/
     ble_host_discover_char(NULL);
- #endif
+#endif
 
 }
 
@@ -402,8 +427,8 @@ void GAP_ConnectionComplete_CB(uint8_t addr[6], uint16_t handle)
 /*gatt notification call back*/
 void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_value)
 {
-  #ifdef CLIENT_ROLE
-    if (BLE_Role == CLIENT) {
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
+    if (BLE_Role & CLIENT) {
         if(attr_handle == (notify_read_handle+1)) {
             ble_host_on_message(attr_value[0], attr_value[1], attr_value+2);
         }
@@ -411,7 +436,7 @@ void GATT_Notification_CB(uint16_t attr_handle, uint8_t attr_len, uint8_t *attr_
     } else {
 
     }
-  #endif
+#endif
 }
 
 
@@ -450,13 +475,13 @@ void HCI_Event_CB(void *pckt)
 
     case EVT_DISCONN_COMPLETE:
     {
-        #ifdef CLIENT_ROLE
-          host_notification_enabled = 0;
-        #endif
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
+        host_notification_enabled = 0;
+#endif
         notification_enabled = 0;
         ble_device_on_disconnect(event_pckt->data[3]);
-         /*Host*/
-         GAP_DisconnectionComplete_CB();
+        /*Host*/
+        GAP_DisconnectionComplete_CB();
     }
     break;
 
@@ -477,11 +502,10 @@ void HCI_Event_CB(void *pckt)
         break;
         case EVT_LE_ADVERTISING_REPORT:
         {
-             #ifdef CLIENT_ROLE
-              le_advertising_info* adv_data = (void *)((event_pckt->data)+2);
-           
-              ble_host_device_found(adv_data);
-            #endif
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
+            le_advertising_info* adv_data = (void *)((event_pckt->data)+2);
+            run_after_delay(ble_host_device_found, adv_data, 2);
+#endif
         }
         break;
         }
@@ -502,9 +526,9 @@ void HCI_Event_CB(void *pckt)
                 ble_device_on_message(evt->att_data[0], evt->att_data[1], (evt->att_data)+2);
             } else if(evt->att_data[0] == 1) {
                 notification_enabled = 1;
-                #ifdef CLIENT_ROLE
-                  host_notification_enabled = 1;
-                #endif
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
+                host_notification_enabled = 1;
+#endif
             }
         }
         break;
@@ -527,72 +551,73 @@ void HCI_Event_CB(void *pckt)
         break;
         case EVT_BLUE_GAP_PROCEDURE_COMPLETE:
         {
-
+#ifdef CLIENT_SERVER_ROLE
+            run_after_delay(ble_host_start_scan, NULL, 10);
+            printf("EVT_BLUE_GAP_PROCEDURE_COMPLETE \n\r");
+#endif
         }
         break;
-#if 1
         case EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP:
-            #ifdef CLIENT_ROLE
-              if(BLE_Role == CLIENT) {
-                  printf("EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP\n");
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
+            if(BLE_Role & CLIENT) {
+                printf("EVT_BLUE_GATT_DISC_READ_CHAR_BY_UUID_RESP\n");
 
-                  evt_gatt_disc_read_char_by_uuid_resp *resp = (void*)blue_evt->data;
+                evt_gatt_disc_read_char_by_uuid_resp *resp = (void*)blue_evt->data;
 
-                  if (start_read_write_char_handle && !end_read_write_char_handle)
-                  {
-                      write_handle = resp->attr_handle;
-                      printf("write_handle  %04X\n", write_handle);
-                  }
-                  else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
-                  {
-                      notify_read_handle = resp->attr_handle;
-                      printf("notify_read_handle  %04X\n", notify_read_handle);
-                  }
-                  else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
-                  {
-                      write_without_rsp_handle = resp->attr_handle;
-                      printf("write_without_rsp_handle  %04X\n", write_without_rsp_handle);
-                  }
-                  else if (start_read_notify_char_handle && !end_read_notify_char_handle)
-                  {
-                      notify_handle = resp->attr_handle;
-                      printf("notify_handle %04X\n", notify_handle);
-                  }
-              }
-            #endif
+                if (start_read_write_char_handle && !end_read_write_char_handle)
+                {
+                    write_handle = resp->attr_handle;
+                    printf("write_handle  %04X\n", write_handle);
+                }
+                else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
+                {
+                    notify_read_handle = resp->attr_handle;
+                    printf("notify_read_handle  %04X\n", notify_read_handle);
+                }
+                else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
+                {
+                    write_without_rsp_handle = resp->attr_handle;
+                    printf("write_without_rsp_handle  %04X\n", write_without_rsp_handle);
+                }
+                else if (start_read_notify_char_handle && !end_read_notify_char_handle)
+                {
+                    notify_handle = resp->attr_handle;
+                    printf("notify_handle %04X\n", notify_handle);
+                }
+            }
+#endif
             break;
 
         case EVT_BLUE_GATT_PROCEDURE_COMPLETE:
-            #ifdef CLIENT_ROLE
-              if(BLE_Role == CLIENT) {
-                  /* Wait for gatt procedure complete event trigger related to Discovery Charac by UUID */
-                  //evt_gatt_procedure_complete *pr = (void*)blue_evt->data;
+#if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
+            if(BLE_Role & CLIENT) {
+                /* Wait for gatt procedure complete event trigger related to Discovery Charac by UUID */
+                //evt_gatt_procedure_complete *pr = (void*)blue_evt->data;
 
-                  if (start_read_write_char_handle && !end_read_write_char_handle)
-                  {
-                      end_read_write_char_handle = TRUE;
-                      run_when_idle(ble_host_discover_char, NULL);
+                if (start_read_write_char_handle && !end_read_write_char_handle)
+                {
+                    end_read_write_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
 
-                  }
-                  else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
-                  {
-                      end_read_notify_read_char_handle = TRUE;
-                      run_when_idle(ble_host_discover_char, NULL);
-                  }
-                  else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
-                  {
-                      end_read_write_without_rsp_char_handle = TRUE;
-                      run_when_idle(ble_host_discover_char, NULL);
-                  }
-                  else if (start_read_notify_char_handle && !end_read_notify_char_handle)
-                  {
-                      end_read_notify_char_handle = TRUE;
-                      run_when_idle(ble_host_discover_char, NULL);
-                  }
-              }
-            #endif
-            break;
+                }
+                else if (start_read_notify_read_char_handle && !end_read_notify_read_char_handle)
+                {
+                    end_read_notify_read_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
+                }
+                else if (start_read_write_without_rsp_char_handle && !end_read_write_without_rsp_char_handle)
+                {
+                    end_read_write_without_rsp_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
+                }
+                else if (start_read_notify_char_handle && !end_read_notify_char_handle)
+                {
+                    end_read_notify_char_handle = TRUE;
+                    run_when_idle(ble_host_discover_char, NULL);
+                }
+            }
 #endif
+            break;
         }
     }
     break;
