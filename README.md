@@ -10,12 +10,12 @@ This repository includes a comprehensive SDK, together with various software res
 
 * Cannon is the very first development board we made for STM32 platform. 
 * Cannon boards allow anyone to try out new ideas and to quickly create product prototypes.
-* Learn hardware specs at: [http://www.juma.io/platform/cannon.html](http://www.juma.io/platform/cannon.html)
-* Learn step-by-step tutorial at: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
-* Learn software API manuals at: [http://www.juma.io/doc/zh/embedded_sdk.html](http://www.juma.io/doc/zh/embedded_sdk.html)
+* Learn hardware specs at [here](http://www.juma.io/platform/cannon.html).
+* Learn step-by-step tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).
+* Learn software API manuals at: [here](http://www.juma.io/doc/zh/embedded_sdk.html).
 
 
-> Cannon is FREE now! Get a Cannon board at JUMA's Taobao shop: [http://tao.bb/5Dh6u](http://tao.bb/5Dh6u)  
+> Cannon is FREE now! Get a Cannon board at JUMA's [Taobao shop](http://tao.bb/5Dh6u).  
 > 小钢炮正处于免费推广期，您可以从我们的[淘宝店](http://tao.bb/5Dh6u)申请一块。
 
 
@@ -27,7 +27,7 @@ This repository includes a comprehensive SDK, together with various software res
 
 
 ##Quick Start
-> You can get detailed tutorial at: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)    
+> You can get detailed tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).    
 > 小钢炮的上手指南文档请[戳我](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)。
 
 1. Choose seed project  
@@ -60,6 +60,6 @@ It can be run on Android mobile to transmit BLE raw data to/from Cannon.
 * Contact: [hello@jumacc.com](hello@jumacc.com)
 * Forum: [juma.io/bbs](juma.io/bbs)
 * Quick Start/上手指南: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
-* QQ discuzz group/小钢炮QQ群: 271927055
+* QQ discuzz group/小钢炮QQ群: `271927055`
 
 
