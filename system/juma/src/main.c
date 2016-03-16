@@ -132,6 +132,8 @@ uint8_t aShowTime[50] = {0};
 uint8_t aShowDate[50] = {0},sleep_flag;
 uint32_t stime ;
 
+__weak void loop(void){};
+	
 int main(void)
 {
     /* STM32Cube HAL library initialization:
@@ -178,6 +180,7 @@ int main(void)
             Ble_conn_state = BLE_NOCONNECTABLE;
         }
         dispatch();
+        loop();
 #ifdef LOW_POWER_MODE
         if(sleep_flag == 1) {
             StopMode_Measure();
