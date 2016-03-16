@@ -27,8 +27,8 @@ This repository includes a comprehensive SDK, together with various software res
 
 
 ##Quick Start
-> You can get detailed tutorial at:   
-> [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
+> You can get detailed tutorial at: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)    
+> 小钢炮的上手指南文档请[戳我](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)。
 
 1. Choose seed project  
 Learn examples under `/product` folder, select one to be the seed project.  
