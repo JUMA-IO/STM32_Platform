@@ -36,7 +36,7 @@ typedef struct
 /*BLE scan param*/
 void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint16_t scan_interval);
 /*ble host scan*/
-tBleStatus ble_host_start_scan(void);
+void ble_host_start_scan(void* arg);
 /*ble host stop scan*/
 tBleStatus ble_host_stop_scan(void);
 /*BLE Host Connect*/
@@ -52,7 +52,7 @@ void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value);
 void ble_host_on_connect( void );
 
 /*host found device*/
-void ble_host_device_found( le_advertising_info* adv_data);
+void ble_host_device_found( void* arg);
 
 #endif /*_BLUENRG_SDK_HOST_API_H_*/
 

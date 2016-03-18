@@ -29,27 +29,26 @@ volatile uint8_t end_read_notify_char_handle = FALSE;
 uint8_t host_connect_init_flag = FALSE;
 
 /*Host*/
-__weak void ble_host_on_device_info(scan_device_found_info device_info) {}
+__weak void ble_host_on_device_info(void* data) {}
 __weak void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value) {}
 __weak void ble_host_on_connect( void ) {}
- 
+
 /*Host*/
 static void read_write_char_handle(void);
 static void read_notify_read_char_handle(void);
 static void read_write_without_rsp_char_handle(void);
 static void read_notify_char_handle(void);
 static void enableNotification(void);
- 
+
 /*scan param*/
 void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint16_t scan_interval)
 {
-
+#ifdef CLIENT_ROLE
     /*set address*/
     ble_address(own_address);
-    /*Gatt And Gap Init*/
-    ble_init_bluenrg();
     /*Set Tx Power Level*/
     ble_set_tx_power(tx_power_level);
+#endif
     /*scan_interval scan window*/
     host_scan_param.scan_interval = scan_interval;
     host_scan_param.scan_window = scan_interval;
@@ -57,34 +56,43 @@ void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint1
 
 }
 
+
+
 /*host scan device*/
-tBleStatus ble_host_start_scan(void)
+void ble_host_start_scan(void* arg)
 {
     tBleStatus ret;
+#ifdef CLIENT_ROLE
     SCAN_Type scan_type = SCAN_ACTIVE;
 
     ret = aci_gap_start_general_conn_establish_proc(scan_type, SCAN_P,  SCAN_L, PUBLIC_ADDR, host_scan_param.fp);
+#endif
+#ifdef CLIENT_SERVER_ROLE
+    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval, host_scan_param.scan_window, RANDOM_ADDR, host_scan_param.fp);
+#endif
     if(ret != BLE_STATUS_SUCCESS) {
-        return BLE_STATUS_ERROR;
+        printf("scan failed\n");
+        return ;
     }
     printf("start scanning \n\r");
 
-    return 0;
 }
 
 /*host stop scan*/
 tBleStatus ble_host_stop_scan(void)
 {
     aci_gap_terminate_gap_procedure(GAP_GENERAL_DISCOVERY_PROC);
- 
+
     return 0;
 }
 
-void ble_host_device_found( le_advertising_info* adv_data)
+void ble_host_device_found( void* arg)
 {
+#ifdef CLIENT_ROLE
     uint8_t i;
-
     i = 25;
+    le_advertising_info* adv_data = arg;
+
     while(adv_data->data_RSSI[i] == 0) {
         i--;
     }
@@ -98,34 +106,35 @@ void ble_host_device_found( le_advertising_info* adv_data)
     device_info.local_name_len = adv_data->data_RSSI[3];
     /*local name*/
     memcpy(device_info.local_name, (adv_data->data_RSSI)+4, device_info.local_name_len);
-
-    ble_host_on_device_info(device_info);
+    ble_host_on_device_info((void*)device_info);
+#endif
+    ble_host_on_device_info(arg);
 }
 
 
 /*host creat connection*/
 void ble_host_connect(tBDAddr bdaddr)
 {
-    if(host_connect_init_flag == FALSE){
-       tBleStatus ret;
+    if(host_connect_init_flag == FALSE) {
+        tBleStatus ret;
         printf("Client Create Connection\n");
         BSP_LED_On(LED0);
         /*
           Scan_Interval, Scan_Window, Peer_Address_Type, Peer_Address, Own_Address_Type, Conn_Interval_Min,
           Conn_Interval_Max, Conn_Latency, Supervision_Timeout, Conn_Len_Min, Conn_Len_Max
           */
-        ret = aci_gap_create_connection(SCAN_P, SCAN_L, PUBLIC_ADDR, bdaddr, PUBLIC_ADDR, CONN_P1, CONN_P2, 0,
+        ret = aci_gap_create_connection(SCAN_P, SCAN_L, RANDOM_ADDR, bdaddr, RANDOM_ADDR, CONN_P1, CONN_P2, 0,
                                         SUPERV_TIMEOUT, CONN_L1 , CONN_L2);
         if (ret != 0) {
             printf("Error while starting connection.\n");
             Clock_Wait(100);
-        }else{
+        } else {
             host_connect_init_flag = TRUE;
         }
         printf("connection init\n\r");
 
     }
-   
+
 }
 
 void ble_host_discover_char(void* arg)
@@ -139,7 +148,7 @@ void ble_host_discover_char(void* arg)
         read_notify_read_char_handle();
         printf("2\n");
     }
-    else if (host_connected && !end_read_write_without_rsp_char_handle) { 
+    else if (host_connected && !end_read_write_without_rsp_char_handle) {
         read_write_without_rsp_char_handle();
         printf("3\n");
     }
@@ -152,10 +161,10 @@ void ble_host_discover_char(void* arg)
         BSP_LED_Off(LED0); //end of the connection and chars discovery phase
         enableNotification();
         printf("discover over\n\r");
-    }else{
-     printf("host_connected: %x, end_read_write_char_handle : %x\n", host_connected, end_read_write_char_handle);
+    } else {
+        printf("host_connected: %x, end_read_write_char_handle : %x\n", host_connected, end_read_write_char_handle);
     }
-   
+
 }
 
 /*start read write char handle*/
@@ -247,7 +256,7 @@ tBleStatus ble_host_send(uint8_t type, uint32_t length, uint8_t* value)
 
         return BLE_STATUS_ERROR ;
     }
-    
+
     return ret;
 }
 

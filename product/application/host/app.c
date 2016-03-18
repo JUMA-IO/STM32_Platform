@@ -21,7 +21,7 @@ void on_ready(void)
     uint8_t bdAddr[6] = {0x03,0x03,0x03,0x03,0x03,0x03};
     /*Host*/
     ble_host_set_scan_param(bdAddr, tx_power_level, scan_interval);
-    ble_host_start_scan();
+    ble_host_start_scan(NULL);
 }
 
 void ble_host_on_device_info(scan_device_found_info device_info)
@@ -29,7 +29,7 @@ void ble_host_on_device_info(scan_device_found_info device_info)
     if(device_info.RSSI > -60) {
         ble_host_connect(device_info.bdaddr);
     } else {
-        ble_host_start_scan();
+        ble_host_start_scan(NULL);
     }
 }
 
