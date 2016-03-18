@@ -204,6 +204,7 @@ void PPP_IRQHandler(void)
 {
 }
 */
+void (*EXTI0_IRQFUNC)(void)=0;
 #ifdef SENSOR_FIFO
 /*lsm6ds3*/
 void EXTI0_IRQHandler(void)
@@ -211,7 +212,8 @@ void EXTI0_IRQHandler(void)
    if(__HAL_GPIO_EXTI_GET_IT(MEMS_INT1_PIN) != RESET)
   {
     __HAL_GPIO_EXTI_CLEAR_IT(MEMS_INT1_PIN);
-    
+    if(EXTI0_IRQFUNC)
+      (*EXTI0_IRQFUNC)();
 //    imu_sensor_read_data_from_fifo();
 //    printf("fifo interrupt \n");
   }
