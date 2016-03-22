@@ -296,7 +296,7 @@ tBleStatus ble_device_start_advertising(void)
         printf("aci_gatt_update_char_value failed.\n");
     }
     /*min_adv_interval > 32*0.625*/
-    ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, PUBLIC_ADDR, NO_WHITE_LIST_USE,
+    ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, RANDOM_ADDR, NO_WHITE_LIST_USE,
                                    local_name_len, (char*)local_name, uuid_length, serviceUUIDList, 0, 0);//// start advertising
     if(ret) {
         printf("aci_gap_set_discoverable failed.\n");
@@ -475,29 +475,37 @@ void HCI_Event_CB(void *pckt)
 
     case EVT_DISCONN_COMPLETE:
     {
+     disconn_event_pckt *evt = (void *)event_pckt->data;
+     if(evt->conn_handle == HOST_CONN_HANDLE){
 #if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
         host_notification_enabled = 0;
 #endif
+           /*Host*/
+       GAP_DisconnectionComplete_CB();
+     }
+     if(evt->conn_handle == DEVICE_CONN_HANDLE){
         notification_enabled = 0;
-        ble_device_on_disconnect(event_pckt->data[3]);
-        /*Host*/
-        GAP_DisconnectionComplete_CB();
+        ble_device_on_disconnect(evt->disconn_reason);
+     }
+     
     }
     break;
-
+    
     case EVT_LE_META_EVENT:
     {
         evt_le_meta_event *evt = (void *)event_pckt->data;
         switch(evt->subevent) {
         case EVT_LE_CONN_COMPLETE:
         {
-
-            ble_device_on_connect();
             evt_le_connection_complete *cc = (void *)evt->data;
-            connection_information(cc->handle);
-            /*host*/
-            GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
-
+            if(cc->handle == DEVICE_CONN_HANDLE){
+                ble_device_on_connect();
+                connection_information(cc->handle);
+            }
+            if(cc->handle == HOST_CONN_HANDLE){
+                /*host*/
+                GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
+            }
         }
         break;
         case EVT_LE_ADVERTISING_REPORT:
