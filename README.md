@@ -15,8 +15,8 @@ This repository includes a comprehensive SDK, together with various software res
 * Learn software API manuals at [here](http://www.juma.io/doc/zh/embedded_sdk.html).
 
 
-> Cannon is FREE now! Get a Cannon board at JUMA's [Taobao shop](http://tao.bb/5Dh6u).  
-> 小钢炮正处于免费推广期，您可以从我们的[淘宝店](http://tao.bb/5Dh6u)申请一块。
+> Cannon is FREE now! Apply for a Free Cannon at JUMA's [forum](http://bbs.juma.io:8080/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433).  
+> 小钢炮正处于免费推广期，您可以从我们的[论坛](http://bbs.juma.io:8080/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433)申请一块。
 
 
 ##Directories
