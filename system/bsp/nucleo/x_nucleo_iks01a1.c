@@ -36,6 +36,7 @@
  */
 /* Includes ------------------------------------------------------------------*/
 #include "x_nucleo_iks01a1.h"
+#include "string.h"
 /** @addtogroup BSP
  * @{
  */
@@ -63,7 +64,9 @@ uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Time
 static I2C_HandleTypeDef    I2C_EXPBD_Handle;
 
 /*SPI2*/
+#ifdef CANNON_V1
 static void       LSM6DS3_SPIx_Error(void);
+#endif
 uint32_t Lsm6ds3_SpixTimeout = LSM6DS3_SPIx_TIMEOUT_MAX; /*<! Value of Timeout when SPI communication fails */
 static SPI_HandleTypeDef Lsm6ds3_hnucleo_Spi;
 
@@ -123,11 +126,13 @@ static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Write(uint8_t* pBuffer, uint8_t Devi
         uint16_t NumByteToWrite);
 static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToRead);
+#ifdef MAGNETO_DRIVER
 static MAGNETO_StatusTypeDef MAGNETO_IO_Init(void);
 static MAGNETO_StatusTypeDef MAGNETO_IO_Write(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToWrite);
 static MAGNETO_StatusTypeDef MAGNETO_IO_Read(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToRead);
+#endif
 static PRESSURE_StatusTypeDef PRESSURE_IO_Init(void);
 static PRESSURE_StatusTypeDef PRESSURE_IO_Write(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToWrite);
@@ -146,9 +151,11 @@ static HAL_StatusTypeDef I2C_EXPBD_Init(void);
 static HAL_StatusTypeDef I2C_EXPBD_WriteData(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
 static HAL_StatusTypeDef I2C_EXPBD_ReadData(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
 /************************************SPI2**********************************************/
+#ifdef CANNON_V1
 static HAL_StatusTypeDef  SPI2_EXPBD_Init(void);
 static HAL_StatusTypeDef    SPI2_EXPBD_IO_ReadByte(uint8_t* pBuffer, uint8_t RegisterAddr,uint16_t NumByteToRead );
 static HAL_StatusTypeDef SPI2_EXPBD_IO_WriteByte(uint8_t* pBuffer, uint8_t RegisterAddr,uint16_t NumByteToWrite);
+#endif
 /** @defgroup X_NUCLEO_IKS01A1_Exported_Functions X_NUCLEO_IKS01A1_Exported_Functions
  * @{
  */
@@ -645,7 +652,7 @@ static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read( uint8_t* pBuffer, uint8_t Devi
     return ret_val;
 }
 
-
+#ifdef MAGNETO_DRIVER
 /**
  * @brief  Configures magneto I2C interface
  * @retval MAGNETO_OK in case of success, an error code otherwise
@@ -659,7 +666,9 @@ static MAGNETO_StatusTypeDef MAGNETO_IO_Init(void)
 
     return MAGNETO_OK;
 }
+#endif
 
+#ifdef MAGNETO_DRIVER
 /**
  * @brief  Writes a buffer to the magneto sensor
  * @param  pBuffer the pointer to data to be written
@@ -682,6 +691,9 @@ static MAGNETO_StatusTypeDef MAGNETO_IO_Write(uint8_t* pBuffer, uint8_t DeviceAd
     return ret_val;
 }
 
+#endif
+
+#ifdef MAGNETO_DRIVER
 /**
  * @brief  Reads a buffer from the magneto sensor
  * @param  pBuffer the pointer to data to be read
@@ -704,6 +716,7 @@ static MAGNETO_StatusTypeDef MAGNETO_IO_Read(uint8_t* pBuffer, uint8_t DeviceAdd
     return ret_val;
 }
 
+#endif
 /**
  * @brief  Configures pressure I2C interface
  * @retval PRESSURE_OK in case of success, an error code otherwise
@@ -981,7 +994,7 @@ static void I2C_EXPBD_MspInit(void)
 }
 
 /*************************************SPI2*************************************************/
-
+#ifdef CANNON_V1
 /**
   * @brief  Initializes SPI MSP.
   * @param  None
@@ -1038,7 +1051,9 @@ void HAL_SPI2_MspInit(SPI_HandleTypeDef *hspi)
     /* Enable SPI clock */
     LSM6DS3_SPIx_CLK_ENABLE();
 }
+#endif
 
+#ifdef CANNON_V1
 /**
   * @brief  Initializes SPI HAL.
   * @param  None
@@ -1078,7 +1093,9 @@ static HAL_StatusTypeDef SPI2_EXPBD_Init(void)
     }
     return ret_val;
 }
+#endif
 
+#ifdef CANNON_V1
 /**
   * @brief  SPI error treatment function.
   * @param  None
@@ -1090,9 +1107,12 @@ static void LSM6DS3_SPIx_Error (void)
     HAL_SPI_DeInit(&Lsm6ds3_hnucleo_Spi);
 
     /* Re-Initiaize the SPI communication BUS */
-    SPI2_EXPBD_Init();
+ 
+     SPI2_EXPBD_Init();
 }
+#endif
 
+#ifdef CANNON_V1
 /**
   * @brief  Writes a byte on the SD.
   * @param  Data: byte to send.
@@ -1118,8 +1138,9 @@ static HAL_StatusTypeDef SPI2_EXPBD_IO_WriteByte(uint8_t* pBuffer, uint8_t Regis
     HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_SET);
     return status;
 }
+#endif
 
-
+#ifdef CANNON_V1
 /**
   * @brief  Reads a byte from the SD.
   * @param  None
@@ -1142,7 +1163,7 @@ static HAL_StatusTypeDef SPI2_EXPBD_IO_ReadByte(uint8_t* pBuffer, uint8_t Regist
 
     return status;
 }
-
+#endif
 
 /**
  * @}
