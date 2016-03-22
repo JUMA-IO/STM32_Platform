@@ -55,6 +55,10 @@ typedef void (*function_t)(void* args);
 #define CONN_L1     (CONN_L(1250))
 #define CONN_L2     (CONN_L(1250))
 
+/*connection handle*/
+#define DEVICE_CONN_HANDLE  0x0801
+#define HOST_CONN_HANDLE    0x0802
+
 typedef struct scan_device_found {
     uint8_t		bdaddr_type;  /**< Type of the peer address (@ref PUBLIC_ADDR, @ref RANDOM_ADDR). */
     tBDAddr	 bdaddr;       /**< Address of the peer device found during scanning. */
@@ -64,6 +68,12 @@ typedef struct scan_device_found {
     uint8_t  uuid[VARIABLE_SIZE];
     int8_t RSSI;
 } scan_device_found_info;
+
+typedef __packed struct _disconn_event_pckt{
+  uint8_t status;
+  uint16_t conn_handle;
+  uint8_t  disconn_reason;
+} PACKED disconn_event_pckt;
 
 typedef enum {
     SCAN_FILTER_DUPLICATE_DISABLE = 0, /**< scan filter duplicate disable. */
