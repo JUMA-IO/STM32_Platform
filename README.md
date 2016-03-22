@@ -19,13 +19,6 @@ This repository includes a comprehensive SDK, together with various software res
 > 小钢炮正处于免费推广期，您可以从我们的[论坛](http://bbs.juma.io:8080/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433)申请一块。
 
 
-##Directories
-* `/product` - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
-* `/system` - including drivers, HALs, middlewares, JUMA SDKs, etc.
-* `/tools` - including some APP utilities which could be installed and run on Android mobiles. 
-* `/document` - things like document, datasheet, manuals, etc.
-
-
 ##Quick Start
 
 1. Choose Demo project  
@@ -46,6 +39,15 @@ The iOS version can be downloaded in AppStore as well.
 > You can get detailed tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).    
 > 详细的小钢炮的上手指南文档请[戳我](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)，请仔细阅读。
 
+
+##Directories
+* `/product` - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
+* `/system` - including drivers, HALs, middlewares, JUMA SDKs, etc.
+* `/tools` - including some APP utilities which could be installed and run on Android mobiles. 
+* `/document` - things like document, datasheet, manuals, etc.
+
+> Learn Cannon software architecture at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_software/).  
+> 小钢炮代码学习请参阅[这里](http://www.juma.io/doc/zh/stm32_platform/cannon_software/)。
 
 ##Further Resources
 * Home/主页: [http://www.juma.io](http://www.juma.io)
