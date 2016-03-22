@@ -476,17 +476,14 @@ void HCI_Event_CB(void *pckt)
     case EVT_DISCONN_COMPLETE:
     {
      disconn_event_pckt *evt = (void *)event_pckt->data;
-     if(evt->conn_handle == HOST_CONN_HANDLE){
 #if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
         host_notification_enabled = 0;
 #endif
-           /*Host*/
+       /*Host*/
        GAP_DisconnectionComplete_CB();
-     }
-     if(evt->conn_handle == DEVICE_CONN_HANDLE){
-        notification_enabled = 0;
-        ble_device_on_disconnect(evt->disconn_reason);
-     }
+       /*device*/
+       notification_enabled = 0;
+       ble_device_on_disconnect(evt->disconn_reason);
      
     }
     break;
@@ -498,14 +495,10 @@ void HCI_Event_CB(void *pckt)
         case EVT_LE_CONN_COMPLETE:
         {
             evt_le_connection_complete *cc = (void *)evt->data;
-            if(cc->handle == DEVICE_CONN_HANDLE){
-                ble_device_on_connect();
-                connection_information(cc->handle);
-            }
-            if(cc->handle == HOST_CONN_HANDLE){
-                /*host*/
-                GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
-            }
+            ble_device_on_connect();
+            connection_information(cc->handle);
+            /*host*/
+            GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
         }
         break;
         case EVT_LE_ADVERTISING_REPORT:
