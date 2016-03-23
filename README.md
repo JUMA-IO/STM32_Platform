@@ -49,6 +49,16 @@ The iOS version can be downloaded in AppStore as well.
 > Learn Cannon software architecture at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_software/).  
 > 小钢炮代码学习请参阅[这里](http://www.juma.io/doc/zh/stm32_platform/cannon_software/)。
 
+##Bugs & New Features
+You can report a bug by firing a issue at [here](https://github.com/JUMA-IO/STM32_Platform/issues).   
+
+You are also warmly appreciated if you fix bugs or submit new features for Cannon, that indeed is the spirit of Open Source.
+
+> For code contributing, please follow `Fork + Pull` flow, detailed could be viewed at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_software/#_5).  
+> 欢迎为小钢炮提交代码，代码提交采用`Fork + Pull`的方式，详情参见[这里](http://www.juma.io/doc/zh/stm32_platform/cannon_software/#_5)。
+
+
+
 ##Further Resources
 * Home/主页: [http://www.juma.io](http://www.juma.io)
 * Contact/联系: [hello@jumacc.com](hello@jumacc.com)
