@@ -60,7 +60,7 @@ You are also warmly appreciated if you fix bugs or submit new features for Canno
 
 
 ##Further Resources
-* Home/主页: [http://www.juma.io](http://www.juma.io)
+* Home/主页: [http://www.juma.io/cannon.html](http://www.juma.io/cannon.html)
 * Contact/联系: [hello@jumacc.com](hello@jumacc.com)
 * Forum/论坛: [juma.io/bbs](juma.io/bbs)
 * Quick Start/上手指南: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
