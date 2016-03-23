@@ -124,7 +124,6 @@ void user_process(void);
 /*host*/
 extern volatile uint8_t host_notification_enabled;
 extern volatile uint8_t set_connectable;
-extern volatile   scan_device_found_info device_info;
 volatile uint8_t device_connectable = 0;
 extern RTC_HandleTypeDef RTCHandle;
 /* Buffers used for displaying Time and Date */
@@ -164,11 +163,9 @@ int main(void)
     HCI_Init();
     /* Reset BlueNRG hardware */
     BlueNRG_RST();
-    /*Gatt And Gap Init*/
-    ble_init_bluenrg();
     /* Enable Power Clock */
     __HAL_RCC_PWR_CLK_ENABLE();
-
+    
     rtc_init();
     dispatch_init();
     //send_acc_data(NULL);

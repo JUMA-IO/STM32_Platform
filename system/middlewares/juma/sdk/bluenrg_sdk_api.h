@@ -115,23 +115,24 @@ void on_ready(void);
 tBleStatus ble_init_bluenrg(void);
 /*BLE Set Tx Power*/
 tBleStatus ble_set_tx_power(uint8_t level);
-/*Add Adv Address*/
-tBleStatus ble_address(uint8_t* advaddress);
 
 /*Set Adv Namee*/
 tBleStatus ble_device_set_name(const char* new_device_name);
 /*Config Adv Interval (min_adv_interval > 32*0.625)*/
 void ble_device_set_advertising_interval(uint16_t interval);
+/*Add Adv Address*/
+tBleStatus ble_address(uint8_t* advaddress);
 /*Start to adv*/
 tBleStatus ble_device_start_advertising(void);
 /*set adv param*/
+//void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_level, uint16_t adv_interval);
 void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_level, uint16_t adv_interval);
 /*Stop Adv*/
 tBleStatus ble_device_stop_advertising(void);
 /*Tx data(Notify)*/
 tBleStatus ble_device_send(uint8_t type, uint32_t length, uint8_t* value);
 /*To Disconnect Ble Connection*/
-tBleStatus ble_user_disconnect_device(void);
+tBleStatus ble_disconnect_device(void);
 /*Rx Data(write / write without responce)*/
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value);
 /*BLE On Connnection State*/
