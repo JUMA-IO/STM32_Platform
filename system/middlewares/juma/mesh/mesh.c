@@ -17,6 +17,13 @@ static mesh_manuf_data_t  mesh_manuf_data = {
     0x0000                               // data
 };
 
+static void mesh_disconn_connection(void* data)
+{
+    ble_disconnect_device();
+    printf("device disconnected\n");
+    run_after_delay(mesh_disconnect_handle, NULL, 500);
+}
+
 static void mesh_manuf_data_config(void* data)
 {
      mesh_manuf_data_t* rx_data = data;
@@ -46,6 +53,8 @@ void mesh_rx_scan_data(void* data)
 void mesh_rx_host_message(void* data)
 {
     mesh_manuf_data_t* rx_data = data;
+    /*disconnect master connection*/
+    run_after_delay(mesh_disconn_connection, NULL, 10);
  
     if((rx_data->group_id == 0x0000)  || (((rx_data->id & MESH_ID) || (rx_data->id == 0x0000)) && (rx_data->group_id & MESH_GROUP_ID))){
        

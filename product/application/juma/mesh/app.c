@@ -8,7 +8,7 @@
 #endif
 
 #ifdef CANNON_V2
-char board_name[20] = "V2_2.1";
+char board_name[20] = "V2_1.1";
 #endif
 #ifdef CANNON_V1
 char board_name[20] = "CANNON_V1";
@@ -20,14 +20,14 @@ char board_name[20] = "CANNON_V1";
 void on_ready(void)
 {
     uint8_t tx_power_level = 7;
-    uint16_t scan_interval = 400, adv_interval = 1000;
-    uint8_t bdAddr[6] = {0x03,0x03,0x03,0x03,0x03,0x02};
+    uint16_t scan_interval = 400, adv_interval = 700;
+    uint8_t bdAddr[6] = {0x03,0x03,0x03,0x03,0x03,0x05};
 
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(board_name, bdAddr, tx_power_level, adv_interval);
     ble_device_start_advertising();
     /*Host*/
-    ble_host_set_scan_param(bdAddr, tx_power_level, scan_interval);
+    ble_host_set_scan_param(tx_power_level, bdAddr, scan_interval);
     ble_host_start_scan(NULL);
 
 }
@@ -87,8 +87,7 @@ void ble_device_on_connect( void )
 
 void ble_device_on_disconnect(uint8_t reason)
 {
-
-    run_after_delay(mesh_disconnect_handle, NULL, 1000);
+    
 }
 
 

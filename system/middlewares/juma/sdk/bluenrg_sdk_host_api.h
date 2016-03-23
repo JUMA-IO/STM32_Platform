@@ -34,7 +34,7 @@ typedef struct
 
 /*Host*/
 /*BLE scan param*/
-void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint16_t scan_interval);
+void ble_host_set_scan_param(uint8_t tx_power_level, uint8_t* bdaddr, uint16_t scan_interval);
 /*ble host scan*/
 void ble_host_start_scan(void* arg);
 /*ble host stop scan*/
