@@ -8,7 +8,6 @@ extern BLE_RoleTypeDef BLE_Role;
 extern uint16_t connection_handle;
 
 ble_gap_scan_params_t host_scan_param;
-scan_device_found_info device_info;
 
 uint16_t write_handle;
 uint16_t notify_read_handle;
@@ -41,13 +40,18 @@ static void read_notify_char_handle(void);
 static void enableNotification(void);
 
 /*scan param*/
-void ble_host_set_scan_param(uint8_t* own_address, uint8_t tx_power_level, uint16_t scan_interval)
+void ble_host_set_scan_param(uint8_t tx_power_level, uint8_t* bdaddr, uint16_t scan_interval)
 {
 #ifdef CLIENT_ROLE
-    /*set address*/
-    ble_address(own_address);
+    tBleStatus ret;
+    ble_address(bdaddr);
     /*Set Tx Power Level*/
     ble_set_tx_power(tx_power_level);
+    /*Gatt And Gap Init*/
+    ret = ble_init_bluenrg();
+    if(ret){
+        printf("ble_init_bluenrg\n");
+    }
 #endif
     /*scan_interval scan window*/
     host_scan_param.scan_interval = scan_interval;
@@ -63,12 +67,12 @@ void ble_host_start_scan(void* arg)
 {
     tBleStatus ret;
 #ifdef CLIENT_ROLE
-    SCAN_Type scan_type = SCAN_ACTIVE;
+    SCAN_Type scan_type = SCAN_PASSIVE;
 
     ret = aci_gap_start_general_conn_establish_proc(scan_type, SCAN_P,  SCAN_L, PUBLIC_ADDR, host_scan_param.fp);
 #endif
 #ifdef CLIENT_SERVER_ROLE
-    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval, host_scan_param.scan_window, RANDOM_ADDR, host_scan_param.fp);
+    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval, host_scan_param.scan_window, PUBLIC_ADDR, host_scan_param.fp);
 #endif
     if(ret != BLE_STATUS_SUCCESS) {
         printf("scan failed\n");
@@ -89,6 +93,7 @@ tBleStatus ble_host_stop_scan(void)
 void ble_host_device_found( void* arg)
 {
 #ifdef CLIENT_ROLE
+    scan_device_found_info device_info;
     uint8_t i;
     i = 25;
     le_advertising_info* adv_data = arg;
@@ -106,9 +111,11 @@ void ble_host_device_found( void* arg)
     device_info.local_name_len = adv_data->data_RSSI[3];
     /*local name*/
     memcpy(device_info.local_name, (adv_data->data_RSSI)+4, device_info.local_name_len);
-    ble_host_on_device_info((void*)device_info);
+    ble_host_on_device_info(&device_info);
 #endif
+#ifdef CLIENT_SERVER_ROLE
     ble_host_on_device_info(arg);
+#endif
 }
 
 
@@ -123,7 +130,7 @@ void ble_host_connect(tBDAddr bdaddr)
           Scan_Interval, Scan_Window, Peer_Address_Type, Peer_Address, Own_Address_Type, Conn_Interval_Min,
           Conn_Interval_Max, Conn_Latency, Supervision_Timeout, Conn_Len_Min, Conn_Len_Max
           */
-        ret = aci_gap_create_connection(SCAN_P, SCAN_L, RANDOM_ADDR, bdaddr, RANDOM_ADDR, CONN_P1, CONN_P2, 0,
+        ret = aci_gap_create_connection(SCAN_P, SCAN_L, RANDOM_ADDR, bdaddr, PUBLIC_ADDR, CONN_P1, CONN_P2, 0,
                                         SUPERV_TIMEOUT, CONN_L1 , CONN_L2);
         if (ret != 0) {
             printf("Error while starting connection.\n");

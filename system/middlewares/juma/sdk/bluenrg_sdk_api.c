@@ -42,7 +42,6 @@ typedef struct
 
 ble_gap_adv_params_t m_adv_params;
 static uint8_t adv_name[20] = "BlueNRG", adv_name_len = 20,  local_name[20], local_name_len;
-
 uint16_t connection_handle = 0 ,notification_enabled = 0;
 
 volatile uint8_t Ble_conn_state = BLE_CONNECTABLE;
@@ -70,7 +69,9 @@ BLE_RoleTypeDef BLE_Role = CLIENT;
 
 #ifdef CLIENT_SERVER_ROLE
 BLE_RoleTypeDef BLE_Role = CLIENT_SERVER;
-#else
+#endif
+ 
+#ifdef SERVER_ROLE
 BLE_RoleTypeDef BLE_Role = SERVER;
 #endif
 
@@ -262,7 +263,8 @@ tBleStatus ble_address(uint8_t* advaddress)
 	*/
 void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pevel, uint16_t adv_interval)
 {
-    /*Set Adv Address*/
+    tBleStatus ret;
+    /*set adv address*/
     ble_address(adv_address);
     /*Set Adv Name*/
     ble_device_set_name(adv_name);
@@ -273,6 +275,13 @@ void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pev
     	 Time = AdvInterval * 0.625 msec
     */
     ble_device_set_advertising_interval(adv_interval);
+   /*Gatt And Gap Init*/
+    ret = ble_init_bluenrg();
+    if(ret){
+        printf("ble_init_bluenrg\n");
+    }
+    
+
 }
 
 
@@ -296,7 +305,7 @@ tBleStatus ble_device_start_advertising(void)
         printf("aci_gatt_update_char_value failed.\n");
     }
     /*min_adv_interval > 32*0.625*/
-    ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, RANDOM_ADDR, NO_WHITE_LIST_USE,
+    ret = aci_gap_set_discoverable(ADV_IND, m_adv_params.interval, m_adv_params.interval, PUBLIC_ADDR, NO_WHITE_LIST_USE,
                                    local_name_len, (char*)local_name, uuid_length, serviceUUIDList, 0, 0);//// start advertising
     if(ret) {
         printf("aci_gap_set_discoverable failed.\n");
@@ -362,7 +371,7 @@ void ble_device_set_advertising_interval(uint16_t interval)
 	*@param  	None
 	*@retval 	ret
 	*/
-tBleStatus ble_user_disconnect_device(void)
+tBleStatus ble_disconnect_device(void)
 {
     tBleStatus ret;
     ret = aci_gap_terminate(connection_handle, HCI_OE_USER_ENDED_CONNECTION);
@@ -476,10 +485,11 @@ void HCI_Event_CB(void *pckt)
     case EVT_DISCONN_COMPLETE:
     {
      disconn_event_pckt *evt = (void *)event_pckt->data;
+     printf("conn handle: %x\n", evt->conn_handle);
 #if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
         host_notification_enabled = 0;
 #endif
-       /*Host*/
+        /*Host*/
        GAP_DisconnectionComplete_CB();
        /*device*/
        notification_enabled = 0;
@@ -495,6 +505,7 @@ void HCI_Event_CB(void *pckt)
         case EVT_LE_CONN_COMPLETE:
         {
             evt_le_connection_complete *cc = (void *)evt->data;
+            /*device*/
             ble_device_on_connect();
             connection_information(cc->handle);
             /*host*/
