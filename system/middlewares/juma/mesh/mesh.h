@@ -3,7 +3,7 @@
 #include "bluenrg_sdk_api.h"
 #include "bluenrg_sdk_host_api.h"
 
-#define MESH_ID  0x0001
+#define MESH_ID  0x0004
 
 typedef struct _mesh_manuf_data_t{
  
