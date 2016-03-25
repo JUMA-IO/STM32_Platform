@@ -72,7 +72,7 @@ void ble_host_start_scan(void* arg)
     ret = aci_gap_start_general_conn_establish_proc(scan_type, SCAN_P,  SCAN_L, PUBLIC_ADDR, host_scan_param.fp);
 #endif
 #ifdef CLIENT_SERVER_ROLE
-    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval, host_scan_param.scan_window, PUBLIC_ADDR, host_scan_param.fp);
+    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval+400, host_scan_param.scan_window, PUBLIC_ADDR, host_scan_param.fp);
 #endif
     if(ret != BLE_STATUS_SUCCESS) {
         printf("scan failed\n");
