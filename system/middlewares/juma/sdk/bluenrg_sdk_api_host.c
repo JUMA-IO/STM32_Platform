@@ -165,7 +165,6 @@ void ble_host_discover_char(void* arg)
     }
 
     if(host_connected && end_read_write_char_handle && end_read_notify_read_char_handle && end_read_write_without_rsp_char_handle && end_read_notify_char_handle && !host_notification_enabled) {
-        BSP_LED_Off(LED0); //end of the connection and chars discovery phase
         enableNotification();
         printf("discover over\n\r");
     } else {

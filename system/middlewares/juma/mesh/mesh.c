@@ -9,19 +9,16 @@ uint16_t adv_info_number = 1;
 
 /*manufacturing data in advertise payload*/
 static mesh_manuf_data_t  mesh_manuf_data = {
-    9,                                  //length
+    5,                                  //length
     AD_TYPE_MANUFACTURER_SPECIFIC_DATA,  //adv data type
     0x0001,                              //advertise information number
-    MESH_GROUP_ID,                       // mesh group id
-    MESH_ID,                             // mesh id
-    0x0000                               // data
+    0x000F                               // data
 };
 
 static void mesh_disconn_connection(void* data)
 {
     ble_disconnect_device();
-    printf("device disconnected\n");
-    run_after_delay(mesh_disconnect_handle, NULL, 500);
+    
 }
 
 static void mesh_manuf_data_config(void* data)
@@ -30,10 +27,8 @@ static void mesh_manuf_data_config(void* data)
      
      adv_info_number++;
      mesh_manuf_data.adv_info_number = adv_info_number;
-     mesh_manuf_data.group_id = rx_data->group_id;
-     mesh_manuf_data.id = rx_data->id;
      mesh_manuf_data.data = rx_data->data;
-     printf("mesh_manuf_data_config:data:%x,%x,%x\n", mesh_manuf_data.data, mesh_manuf_data.group_id ,mesh_manuf_data.id);
+     printf("mesh_manuf_data_config:data:%x\n", mesh_manuf_data.data);
 }
 
 void mesh_rx_scan_data(void* data)
@@ -42,9 +37,7 @@ void mesh_rx_scan_data(void* data)
   
     if(rx_data->adv_info_number > adv_info_number){
       
-       if((rx_data->group_id == 0x0000)  || (((rx_data->id & MESH_ID) || (rx_data->id == 0x0000)) && (rx_data->group_id & MESH_GROUP_ID))){
-          mesh_on_message(&(rx_data->data));
-       }
+       run_when_idle(mesh_on_message, &(rx_data->data));
        run_when_idle(mesh_manuf_data_config, data);
        run_when_idle(mesh_adv_data_update, NULL);
     }
@@ -54,13 +47,8 @@ void mesh_rx_host_message(void* data)
 {
     mesh_manuf_data_t* rx_data = data;
     /*disconnect master connection*/
-    run_after_delay(mesh_disconn_connection, NULL, 10);
- 
-    if((rx_data->group_id == 0x0000)  || (((rx_data->id & MESH_ID) || (rx_data->id == 0x0000)) && (rx_data->group_id & MESH_GROUP_ID))){
-       
-       mesh_on_message(&(rx_data->data));
-    }
-    
+    run_after_delay(mesh_disconn_connection, NULL, 10);  
+    run_when_idle(mesh_on_message, &(rx_data->data));
     run_when_idle(mesh_manuf_data_config, data);
 }
 
@@ -68,11 +56,11 @@ void mesh_rx_host_message(void* data)
 void mesh_adv_data_update(void* arg)
 {
     tBleStatus ret;   
-    ret = aci_gap_update_adv_data(10, (uint8_t*)&mesh_manuf_data);
+    ret = aci_gap_update_adv_data(6, (uint8_t*)&mesh_manuf_data);
     if(ret){
         printf("aci_gap_update_adv_data failed \n");
     }
- 
+    
 }
 
 void mesh_disconnect_handle(void* data)
