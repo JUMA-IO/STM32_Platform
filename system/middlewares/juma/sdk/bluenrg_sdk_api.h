@@ -56,8 +56,8 @@ typedef void (*function_t)(void* args);
 #define CONN_L2     (CONN_L(1250))
 
 /*connection handle*/
-#define DEVICE_CONN_HANDLE  0x0801
-#define HOST_CONN_HANDLE    0x0802
+#define MASTER_ROLE  0x00
+#define SLAVE_ROLE    0x01
 
 typedef struct scan_device_found {
     uint8_t		bdaddr_type;  /**< Type of the peer address (@ref PUBLIC_ADDR, @ref RANDOM_ADDR). */

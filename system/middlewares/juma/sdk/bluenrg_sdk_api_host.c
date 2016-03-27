@@ -72,7 +72,7 @@ void ble_host_start_scan(void* arg)
     ret = aci_gap_start_general_conn_establish_proc(scan_type, SCAN_P,  SCAN_L, PUBLIC_ADDR, host_scan_param.fp);
 #endif
 #ifdef CLIENT_SERVER_ROLE
-    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval, host_scan_param.scan_window, PUBLIC_ADDR, host_scan_param.fp);
+    ret = aci_gap_start_general_discovery_proc(host_scan_param.scan_interval+400, host_scan_param.scan_window, PUBLIC_ADDR, host_scan_param.fp);
 #endif
     if(ret != BLE_STATUS_SUCCESS) {
         printf("scan failed\n");
@@ -165,7 +165,6 @@ void ble_host_discover_char(void* arg)
     }
 
     if(host_connected && end_read_write_char_handle && end_read_notify_read_char_handle && end_read_write_without_rsp_char_handle && end_read_notify_char_handle && !host_notification_enabled) {
-        BSP_LED_Off(LED0); //end of the connection and chars discovery phase
         enableNotification();
         printf("discover over\n\r");
     } else {

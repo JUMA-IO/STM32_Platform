@@ -505,11 +505,15 @@ void HCI_Event_CB(void *pckt)
         case EVT_LE_CONN_COMPLETE:
         {
             evt_le_connection_complete *cc = (void *)evt->data;
-            /*device*/
-            ble_device_on_connect();
-            connection_information(cc->handle);
-            /*host*/
-            GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
+            if(cc->role == SLAVE_ROLE){
+                /*device*/
+                ble_device_on_connect();
+                connection_information(cc->handle);
+            }
+            if(cc->role == MASTER_ROLE){
+                /*host*/
+                GAP_ConnectionComplete_CB(cc->peer_bdaddr, cc->handle);
+            }
         }
         break;
         case EVT_LE_ADVERTISING_REPORT:

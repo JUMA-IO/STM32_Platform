@@ -3,17 +3,13 @@
 #include "bluenrg_sdk_api.h"
 #include "bluenrg_sdk_host_api.h"
 
-#define MESH_ID  0x0001
-#define MESH_GROUP_ID 0x0001
-
+#define MESH_ID  0x0004
 
 typedef struct _mesh_manuf_data_t{
  
     uint8_t   len;              //total data length
     uint8_t   data_type;        // advertise data type
     uint16_t  adv_info_number;  // advertising information number
-    uint16_t  group_id;         // group id
-    uint16_t  id;               // member id
     uint16_t  data;             // user data
 }mesh_manuf_data_t;
 
