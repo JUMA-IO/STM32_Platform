@@ -3,7 +3,6 @@
 #include "bluenrg_sdk_api.h"
 #include "bluenrg_sdk_host_api.h"
 
-#define MESH_ID  0x0004
 
 typedef struct _mesh_manuf_data_t{
  
@@ -18,8 +17,6 @@ enum mesh_status_t {
 	mesh_failed = 1,
 };
 
-/*set manufacturing data on the advertising packet*/
-void mesh_adv_data_update(void* arg);
 /*mesh rx scan data handle*/
 void mesh_rx_scan_data(void* data);
 /*mesh rx host message handle*/
