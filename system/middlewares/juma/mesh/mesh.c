@@ -31,6 +31,17 @@ static void mesh_manuf_data_config(void* data)
      printf("mesh_manuf_data_config:data:%x\n", mesh_manuf_data.data);
 }
 
+/*set manufacturing data on the advertising packet*/
+static void mesh_adv_data_update(void* arg)
+{
+    tBleStatus ret;   
+    ret = aci_gap_update_adv_data(6, (uint8_t*)&mesh_manuf_data);
+    if(ret){
+        printf("aci_gap_update_adv_data failed \n");
+    }
+    
+}
+
 void mesh_rx_scan_data(void* data)
 {
       mesh_manuf_data_t* rx_data = data;
@@ -50,17 +61,6 @@ void mesh_rx_host_message(void* data)
     run_after_delay(mesh_disconn_connection, NULL, 10);  
     run_when_idle(mesh_on_message, &(rx_data->data));
     run_when_idle(mesh_manuf_data_config, data);
-}
-
-/*set manufacturing data on the advertising packet*/
-void mesh_adv_data_update(void* arg)
-{
-    tBleStatus ret;   
-    ret = aci_gap_update_adv_data(6, (uint8_t*)&mesh_manuf_data);
-    if(ret){
-        printf("aci_gap_update_adv_data failed \n");
-    }
-    
 }
 
 void mesh_disconnect_handle(void* data)

@@ -1,4 +1,3 @@
-//#include "sensor_service.h"
 
 #include "app.h"
 #include "mesh.h"
@@ -7,15 +6,14 @@
 #define printf(...)
 #endif
 
+#define MESH_ID  0x0004
+
 #ifdef CANNON_V2
 char board_name[20] = "mesh_3";
 #endif
 #ifdef CANNON_V1
 char board_name[20] = "CANNON_V1";
 #endif
-
-#define LED_ON 0x0001
-#define LED_OFF 0x0002
 
 void on_ready(void)
 {
