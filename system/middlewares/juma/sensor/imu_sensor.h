@@ -19,13 +19,23 @@
 #define LSM6DS3_XG_FIFO_THRESHOLD_MASK                      ((uint8_t)0x0F)
 #define LSM6DS3_XG_FIFO_INT_THRESHOLD_MASK                 ((uint8_t)0x08)
 
+/*DMA read 6axis fifo depth*/
+#define DMA_READ_6AXIS_DEPTH     144
+
 /* Six axes sensor IO functions */
 extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Init( void );
 extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Write( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
     uint16_t NumByteToWrite );
 extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
     uint16_t NumByteToRead );
+#ifdef I2C_DMA_MODE
+extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
+
 extern void LSM6DS3_IO_ITConfig( void );
+/*magneto sensor IO functions*/
+extern void LSM303AGR_IO_ITConfig(void);
 
 enum _imu_status{
    imu_status_ok = 0,
@@ -70,12 +80,6 @@ typedef struct _sensor_data_sensitivity{
  
 } imu_sensor_data_sensitivity_t;
 
-typedef struct _sensor_data_read_param_t{
-    uint8_t delay_time;
-    uint8_t group_number;
-    uint32_t sample_rate;
-}sensor_data_read_param_t;
-
 typedef enum _imu_status imu_status_t;
 typedef struct _imu_sensor_data_t imu_sensor_data_t; 
 
@@ -95,7 +99,9 @@ void on_imu_sensor_data(imu_sensor_data_t* data);
 
 void imu_sensor_read_data_from_fifo(void* arg);
 
+void imu_sensor_dma_read_call_back(void);
 
+void imu_sensor_magneto_irq_callback(void);
 #endif /*_IMU_SENSOR_H_*/
 
 

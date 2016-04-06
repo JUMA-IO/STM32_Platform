@@ -1431,7 +1431,13 @@ extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Write( uint8_t* pBuffer, uint8_t Devic
     uint16_t NumByteToWrite );
 extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
     uint16_t NumByteToRead );
+#ifdef I2C_DMA_MODE
+extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
 extern void LSM6DS3_IO_ITConfig( void );
+/*magneto sensor IO functions*/
+extern void LSM303AGR_IO_ITConfig(void);
 
 /**
  * @}
