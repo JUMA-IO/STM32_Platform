@@ -49,6 +49,9 @@
 /* Private variables ---------------------------------------------------------*/
 /* RTC handler declared in "main.c" file */
 extern RTC_HandleTypeDef RTCHandle;
+#ifdef I2C_DMA_MODE
+extern I2C_HandleTypeDef    I2C_EXPBD_Handle;
+#endif
 /** @addtogroup X-CUBE-BLE1_Applications
  *  @{
  */
@@ -205,6 +208,7 @@ void PPP_IRQHandler(void)
 }
 */
 void (*EXTI0_IRQFUNC)(void)=0;
+void (*EXTI9_5_IRQFUNC) (void)=imu_sensor_magneto_irq_callback;
 #ifdef SENSOR_FIFO
 /*lsm6ds3*/
 void EXTI0_IRQHandler(void)
@@ -214,11 +218,26 @@ void EXTI0_IRQHandler(void)
     __HAL_GPIO_EXTI_CLEAR_IT(MEMS_INT1_PIN);
     if(EXTI0_IRQFUNC)
       (*EXTI0_IRQFUNC)();
-//    imu_sensor_read_data_from_fifo();
-//    printf("fifo interrupt \n");
+
   }
 }
 #endif
+/*lsm303agr*/
+void EXTI9_5_IRQHandler(void)
+{
+  if(__HAL_GPIO_EXTI_GET_IT(MAGNETO_INT1_PIN) != RESET)
+  {
+    __HAL_GPIO_EXTI_CLEAR_IT(MAGNETO_INT1_PIN);
+   if(EXTI9_5_IRQFUNC)
+      (EXTI9_5_IRQFUNC) ();
+  }
+}
+
+//#ifdef I2C_DMA_MODE
+void DMA_STREAM_IRQHANDLER(void)
+{
+    HAL_DMA_IRQHandler(I2C_EXPBD_Handle.hdmarx);         
+}
 
 #ifdef INCLUDE_USB_DEVICE
 extern PCD_HandleTypeDef hpcd;

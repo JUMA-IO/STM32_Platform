@@ -37,6 +37,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "x_nucleo_iks01a1.h"
 #include "string.h"
+#include "imu_sensor.h"
 /** @addtogroup BSP
  * @{
  */
@@ -61,7 +62,7 @@
 /*I2c*/
 uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 
-static I2C_HandleTypeDef    I2C_EXPBD_Handle;
+I2C_HandleTypeDef    I2C_EXPBD_Handle;
 
 /*SPI2*/
 #ifdef CANNON_V1
@@ -88,7 +89,14 @@ IMU_6AXES_StatusTypeDef LSM6DS0_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, u
         uint16_t NumByteToRead );
 IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToRead );
+#ifdef I2C_DMA_MODE
+/*LSM6DS3 IO Read DMA*/
+IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
 
+/*Link function for MAGNETO peripheral*/
+void LSM303AGR_IO_ITConfig( void );
 /* Link function for MAGNETO peripheral */
 //MAGNETO_StatusTypeDef LIS3MDL_IO_Init(void);
 //void LIS3MDL_IO_ITConfig( void );
@@ -126,6 +134,10 @@ static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Write(uint8_t* pBuffer, uint8_t Devi
         uint16_t NumByteToWrite);
 static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToRead);
+#ifdef I2C_DMA_MODE
+static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
 #ifdef MAGNETO_DRIVER
 static MAGNETO_StatusTypeDef MAGNETO_IO_Init(void);
 static MAGNETO_StatusTypeDef MAGNETO_IO_Write(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
@@ -150,6 +162,10 @@ static void I2C_EXPBD_Error(uint8_t Addr);
 static HAL_StatusTypeDef I2C_EXPBD_Init(void);
 static HAL_StatusTypeDef I2C_EXPBD_WriteData(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
 static HAL_StatusTypeDef I2C_EXPBD_ReadData(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
+#ifdef I2C_DMA_MODE
+/*I2C read dma*/
+static HAL_StatusTypeDef I2C_EXPBD_Read_DMA(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
+#endif
 /************************************SPI2**********************************************/
 #ifdef CANNON_V1
 static HAL_StatusTypeDef  SPI2_EXPBD_Init(void);
@@ -205,14 +221,7 @@ void LSM6DS3_IO_ITConfig( void )
     /* Configure GPIO PINs to detect Interrupts */
     GPIO_InitStructureInt1.Pin = MEMS_INT1_PIN;
     GPIO_InitStructureInt1.Mode = GPIO_MODE_IT_RISING;
-#if (defined (CANNON_V1))
     GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
-#endif
-
-#if (defined (CANNON_V2))
-    GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
-#endif
-
     GPIO_InitStructureInt1.Pull  = GPIO_NOPULL;
     HAL_GPIO_Init(MEMS_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
 
@@ -297,6 +306,14 @@ IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, u
     return IMU_6AXES_IO_Read( pBuffer, DeviceAddr, RegisterAddr, NumByteToRead );
 }
 
+#ifdef I2C_DMA_MODE
+/*LSM6DS3 IO Read DMA*/
+IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead )
+{
+    return IMU_6AXES_IO_Read_DMA( pBuffer, DeviceAddr, RegisterAddr, NumByteToRead );
+}
+#endif
 
 /********************************* LINK MAGNETO *****************************/
 
@@ -372,6 +389,26 @@ u8_t LSM303AGR_ACC_WriteReg(u8_t Reg, u8_t Data)
     //i.e.: SPI_Mems_Write_Reg(Reg, Data);
     I2C_EXPBD_WriteData(&Data,  LSM303AGR_ACC_I2C_ADDRESS,  Reg, 1);       //[Example]
     return MEMS_SUCCESS;                                                        //[Example]
+}
+
+/**
+ * @brief  Configures LSM303AGR interrupt lines for NUCLEO boards
+ * @retval None
+ */
+void LSM303AGR_IO_ITConfig( void )
+{
+     GPIO_InitTypeDef GPIO_InitStructureInt1;
+   
+     MAGNETO_INT1_GPIO_CLK_ENABLE();
+     GPIO_InitStructureInt1.Pin = MAGNETO_INT1_PIN;
+     GPIO_InitStructureInt1.Mode = GPIO_MODE_IT_RISING;
+     GPIO_InitStructureInt1.Pull = GPIO_NOPULL;
+     GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
+     
+     HAL_GPIO_Init(MAGNETO_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
+     
+     HAL_NVIC_SetPriority(MAGNETO_INT1_EXTI_IRQn, 0, 0);
+     HAL_NVIC_EnableIRQ(MAGNETO_INT1_EXTI_IRQn);
 }
 
 ///**
@@ -652,6 +689,21 @@ static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read( uint8_t* pBuffer, uint8_t Devi
     return ret_val;
 }
 
+#ifdef I2C_DMA_MODE
+/*IMU 6AXES IO Read DMA*/
+static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead )
+{
+    IMU_6AXES_StatusTypeDef ret_val = IMU_6AXES_OK;
+    if(I2C_EXPBD_Read_DMA( pBuffer, DeviceAddr, RegisterAddr, NumByteToRead ) != HAL_OK)
+    {
+        ret_val = IMU_6AXES_ERROR;
+    }
+
+    return ret_val;
+}
+#endif
+
 #ifdef MAGNETO_DRIVER
 /**
  * @brief  Configures magneto I2C interface
@@ -898,6 +950,39 @@ static HAL_StatusTypeDef I2C_EXPBD_WriteData(uint8_t* pBuffer, uint8_t Addr, uin
 }
 
 
+#ifdef I2C_DMA_MODE
+/*I2C read dma*/
+static HAL_StatusTypeDef I2C_EXPBD_Read_DMA(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size)
+{
+    HAL_StatusTypeDef status = HAL_OK;
+    
+    status = HAL_I2C_Mem_Read_DMA(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size);
+    /* Check the communication status */
+    if(status != HAL_OK)
+    {
+        printf("read DMA error\n");
+        /* Execute user timeout callback */
+        I2C_EXPBD_Error(Addr);
+    }
+
+    return status;
+}
+
+
+/*I2C READ DMA CALL BACK */
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+
+    imu_sensor_dma_read_call_back();
+}
+
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
+{
+    printf("DMA error\n");
+}
+#endif
+
+
 /**
  * @brief  Read the value of a register of the device through the bus
  * @param  pBuffer the pointer to data to be read
@@ -948,7 +1033,9 @@ static void I2C_EXPBD_Error(uint8_t Addr)
 static void I2C_EXPBD_MspInit(void)
 {
     GPIO_InitTypeDef  GPIO_InitStruct;
-
+#ifdef I2C_DMA_MODE
+    static DMA_HandleTypeDef     DmaHandle;
+#endif
     /* Enable I2C GPIO clocks */
     NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_CLK_ENABLE();
 
@@ -977,20 +1064,50 @@ static void I2C_EXPBD_MspInit(void)
     NUCLEO_I2C_EXPBD_RELEASE_RESET();
 
     /* Enable and set I2C_EXPBD Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_EV_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_EV_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_EV_IRQn);
 
-#if (defined (CANNON_V1))
-    /* Enable and set I2C_EXPBD Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_ER_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_ER_IRQn);
-#endif
+    
+    #ifdef I2C_DMA_MODE
+        /*## -1- Enable DMA1 clock #################################################*/
+        __HAL_RCC_DMA1_CLK_ENABLE();
 
-#if (defined (CANNON_V2))
-    /* Enable and set I2C_EXPBD Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_ER_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_ER_IRQn);
-#endif
+        /*##-2- Select the DMA functional Parameters ###############################*/
+        DmaHandle.Init.Channel = DMA_CHANNEL;                     /* DMA_CHANNEL_1                    */
+        DmaHandle.Init.Direction = DMA_PERIPH_TO_MEMORY;          /* P2M transfer mode                */
+        DmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;               /* Peripheral increment mode Enable */
+        DmaHandle.Init.MemInc = DMA_MINC_ENABLE;                  /* Memory increment mode Enable     */
+        DmaHandle.Init.PeriphDataAlignment = DMA_MDATAALIGN_HALFWORD; /* Peripheral data alignment : BYTE */
+        DmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;    /* memory data alignment : BYTE     */
+        DmaHandle.Init.Mode = DMA_NORMAL;                         /* CIRCULAR DMA mode                  */
+        DmaHandle.Init.Priority = DMA_PRIORITY_HIGH;              /* priority level : high            */
+        DmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;           /* FIFO mode disabled               */
+        DmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+        DmaHandle.Init.MemBurst = DMA_MBURST_INC16;              /* Memory burst                     */
+        DmaHandle.Init.PeriphBurst = DMA_PBURST_INC16;           /* Peripheral burst                 */
+
+        /*##-3- Select the DMA instance to be used for the transfer : DMA1_Stream0 #*/
+        DmaHandle.Instance = DMA_STREAM;
+        
+        /*##-5- Initialize the DMA stream ##########################################*/
+        if(HAL_DMA_Init(&DmaHandle) != HAL_OK)
+        {
+            /* Initialization Error */
+            printf("dma init error\n");
+            while(1);
+        }
+        
+          /* Associate the initialized DMA handle to the the I2C handle */
+         __HAL_LINKDMA(&I2C_EXPBD_Handle, hdmarx, DmaHandle);
+        
+        /*##-6- Configure NVIC for DMA transfer complete/error interrupts ##########*/
+        /* Set Interrupt Group Priority */
+        HAL_NVIC_SetPriority(DMA_STREAM_IRQ, 0, 0);
+
+        /* Enable the DMA STREAM global Interrupt */
+        HAL_NVIC_EnableIRQ(DMA_STREAM_IRQ);
+#endif     
+     
 }
 
 /*************************************SPI2*************************************************/
