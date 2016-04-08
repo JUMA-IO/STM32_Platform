@@ -208,7 +208,10 @@ void PPP_IRQHandler(void)
 }
 */
 void (*EXTI0_IRQFUNC)(void)=0;
+#ifdef I2C_DMA_MODE
 void (*EXTI9_5_IRQFUNC) (void)=imu_sensor_magneto_irq_callback;
+#endif
+
 #ifdef SENSOR_FIFO
 /*lsm6ds3*/
 void EXTI0_IRQHandler(void)
@@ -222,6 +225,8 @@ void EXTI0_IRQHandler(void)
   }
 }
 #endif
+
+#ifdef I2C_DMA_MODE
 /*lsm303agr*/
 void EXTI9_5_IRQHandler(void)
 {
@@ -233,11 +238,12 @@ void EXTI9_5_IRQHandler(void)
   }
 }
 
-//#ifdef I2C_DMA_MODE
+
 void DMA_STREAM_IRQHANDLER(void)
 {
     HAL_DMA_IRQHandler(I2C_EXPBD_Handle.hdmarx);         
 }
+#endif
 
 #ifdef INCLUDE_USB_DEVICE
 extern PCD_HandleTypeDef hpcd;
