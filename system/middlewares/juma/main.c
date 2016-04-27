@@ -154,7 +154,7 @@ int main(void)
     UART_Init();
     HAL_Delay(1000);
     /*sensor layer init*/
-    #ifndef SENSOR_FIFO
+    #ifdef SENSOR_FIFO
       jsensor_sys_init();
     #endif
     /* Initialize the BlueNRG SPI driver */
