@@ -109,10 +109,10 @@ static void read_mag(void* arg)
 
     tdef.MAG = MAG;
 
-    if(JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MAGNET, (void *)&tdef)) {
-        ble_device_send(0x03, 6, (uint8_t*)MAG);
-        //printf("%x,%x,%x,%x,%x,%x\n\r", MAG[0],MAG[1],MAG[2],MAG[3],MAG[4],MAG[5]);
-    }
+//    if(JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MAGNET, (void *)&tdef)) {
+//        ble_device_send(0x03, 6, (uint8_t*)MAG);
+//        //printf("%x,%x,%x,%x,%x,%x\n\r", MAG[0],MAG[1],MAG[2],MAG[3],MAG[4],MAG[5]);
+//    }
 
     run_after_delay(read_acc, NULL, UPDATE_INTERVAL);
 }

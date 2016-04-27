@@ -406,9 +406,10 @@ void LSM303AGR_IO_ITConfig( void )
      GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
      
      HAL_GPIO_Init(MAGNETO_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
-     
+#ifdef  I2C_DMA_MODE     
      HAL_NVIC_SetPriority(MAGNETO_INT1_EXTI_IRQn, 0, 0);
      HAL_NVIC_EnableIRQ(MAGNETO_INT1_EXTI_IRQn);
+#endif
 }
 
 ///**
