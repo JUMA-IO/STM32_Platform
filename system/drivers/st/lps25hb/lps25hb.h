@@ -416,6 +416,7 @@ extern "C" {
  * @brief Device Identifier. Default value of the WHO_AM_I register.
  */
 #define I_AM_LPS25HB                 ((uint8_t)0xBD)
+#define I_AM_LPS22HB                 ((uint8_t)0xB1)
 
 /** @defgroup LPS25HB_Power_Mode_Selection_CTRL_REG1 LPS25HB_Power_Mode_Selection_CTRL_REG1
  * @{

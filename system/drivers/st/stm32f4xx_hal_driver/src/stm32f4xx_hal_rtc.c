@@ -137,7 +137,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#ifdef STM32F401xE
 #include "stm32f401_lp_mode.h"
+#endif
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{
   */
