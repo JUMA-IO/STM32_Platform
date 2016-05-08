@@ -13,7 +13,6 @@
     <tExt>*.txt; *.h; *.inc</tExt>
     <pExt>*.plm</pExt>
     <CppX>*.cpp</CppX>
-    <nMigrate>0</nMigrate>
   </Extensions>
 
   <DaveTm>
@@ -32,7 +31,6 @@
         <BeepAtEnd>1</BeepAtEnd>
         <RunSim>0</RunSim>
         <RunTarget>1</RunTarget>
-        <RunAbUc>0</RunAbUc>
       </OPTTT>
       <OPTHX>
         <HexSelection>1</HexSelection>
@@ -77,44 +75,49 @@
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
-      <CpuCode>18</CpuCode>
+      <CpuCode>0</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
-          <Title>STM32F429I-Discovery: Blinky Lab (STM32F429I-Discovery)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\Documentation/STMicroelectronics_Blinky_Lab.pdf</Path>
+          <Title>Getting Started (STM32F429I-Discovery)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.3.0\MDK\Boards\ST\STM32F429I-Discovery\Documentation\DM00092920.pdf</Path>
         </Book>
         <Book>
           <Number>1</Number>
-          <Title>Getting Started (STM32F429I-Discovery)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\MDK/Boards/ST/STM32F429I-Discovery/Documentation/DM00092920.pdf</Path>
+          <Title>User Manual (STM32F429I-Discovery)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.3.0\MDK\Boards\ST\STM32F429I-Discovery\Documentation\DM00093903.pdf</Path>
         </Book>
         <Book>
           <Number>2</Number>
-          <Title>User Manual (STM32F429I-Discovery)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\MDK/Boards/ST/STM32F429I-Discovery/Documentation/DM00093903.pdf</Path>
+          <Title>Bill of Materials (STM32F429I-Discovery)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.3.0\MDK\Boards\ST\STM32F429I-Discovery\Documentation\stm32f429i-disco_bom.zip</Path>
         </Book>
         <Book>
           <Number>3</Number>
-          <Title>Bill of Materials (STM32F429I-Discovery)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\MDK/Boards/ST/STM32F429I-Discovery/Documentation/stm32f429i-disco_bom.zip</Path>
+          <Title>Gerber Files (STM32F429I-Discovery)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.3.0\MDK\Boards\ST\STM32F429I-Discovery\Documentation\stm32f429i-disco_gerber.zip</Path>
         </Book>
         <Book>
           <Number>4</Number>
-          <Title>Gerber Files (STM32F429I-Discovery)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\MDK/Boards/ST/STM32F429I-Discovery/Documentation/stm32f429i-disco_gerber.zip</Path>
+          <Title>Schematics (STM32F429I-Discovery)</Title>
+          <Path>C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.3.0\MDK\Boards\ST\STM32F429I-Discovery\Documentation\stm32f429i-disco_sch.zip</Path>
         </Book>
         <Book>
           <Number>5</Number>
-          <Title>Schematics (STM32F429I-Discovery)</Title>
-          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.7.0\MDK/Boards/ST/STM32F429I-Discovery/Documentation/stm32f429i-disco_sch.zip</Path>
-        </Book>
-        <Book>
-          <Number>6</Number>
           <Title>STM32F429I-Discovery Web Page (STM32F429I-Discovery)</Title>
           <Path>http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/LN1199/PF259090</Path>
         </Book>
       </Books>
+      <DllOpt>
+        <SimDllName>SARMCM3.DLL</SimDllName>
+        <SimDllArguments> -REMAP -MPU</SimDllArguments>
+        <SimDlgDllName>DCM.DLL</SimDlgDllName>
+        <SimDlgDllArguments>-pCM4</SimDlgDllArguments>
+        <TargetDllName>SARMCM3.DLL</TargetDllName>
+        <TargetDllArguments> -MPU</TargetDllArguments>
+        <TargetDlgDllName>TCM.DLL</TargetDlgDllName>
+        <TargetDlgDllArguments>-pCM4</TargetDlgDllArguments>
+      </DllOpt>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -391,12 +394,6 @@
       </DebugFlag>
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
-      <DebugDescription>
-        <Enable>1</Enable>
-        <EnableLog>0</EnableLog>
-        <Protocol>2</Protocol>
-        <DbgClock>10000000</DbgClock>
-      </DebugDescription>
     </TargetOption>
   </Target>
 
@@ -412,7 +409,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -425,7 +425,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\stm32f4xx_hal_msp.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_msp.c</FilenameWithoutPath>
@@ -438,7 +441,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
@@ -451,7 +457,10 @@
       <FileType>2</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\startup_stm32f429xx.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f429xx.s</FilenameWithoutPath>
@@ -464,7 +473,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\system_stm32f4xx.c</PathWithFileName>
       <FilenameWithoutPath>system_stm32f4xx.c</FilenameWithoutPath>
@@ -477,7 +489,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\bluenrg_interface.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_interface.c</FilenameWithoutPath>
@@ -490,7 +505,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\app.c</PathWithFileName>
       <FilenameWithoutPath>app.c</FilenameWithoutPath>
@@ -503,7 +521,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\adc0.c</PathWithFileName>
       <FilenameWithoutPath>adc0.c</FilenameWithoutPath>
@@ -516,7 +537,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>49746068</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\FMC_nor.c</PathWithFileName>
       <FilenameWithoutPath>FMC_nor.c</FilenameWithoutPath>
@@ -527,7 +551,7 @@
 
   <Group>
     <GroupName>system/middlewares/st</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -537,9 +561,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_gap_aci.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_gap_aci.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_gap_aci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -550,9 +577,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_gatt_aci.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_gatt_aci.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_gatt_aci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -563,9 +593,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_hal_aci.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_hal_aci.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_hal_aci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -576,9 +609,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_itf_template.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_itf_template.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_itf_template.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -589,9 +625,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_l2cap_aci.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_l2cap_aci.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_l2cap_aci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -602,9 +641,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\gp_timer.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\gp_timer.c</PathWithFileName>
       <FilenameWithoutPath>gp_timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -615,9 +657,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\hci.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\hci.c</PathWithFileName>
       <FilenameWithoutPath>hci.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -628,9 +673,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\list.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\list.c</PathWithFileName>
       <FilenameWithoutPath>list.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -641,9 +689,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\st\bluenrg_ms\src\osal.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\st\bluenrg_ms\src\osal.c</PathWithFileName>
       <FilenameWithoutPath>osal.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -652,7 +703,7 @@
 
   <Group>
     <GroupName>system/middlewares/juma</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -662,9 +713,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\juma\st7789v\sdk\bluenrg_sdk_api.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\juma\sdk\bluenrg_sdk_api.c</PathWithFileName>
       <FilenameWithoutPath>bluenrg_sdk_api.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -675,9 +729,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\juma\sensor\juma_sensor.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\juma\sensor\juma_sensor.c</PathWithFileName>
       <FilenameWithoutPath>juma_sensor.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -688,9 +745,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\juma\dispatcher\dispatch.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\juma\dispatcher\dispatch.c</PathWithFileName>
       <FilenameWithoutPath>dispatch.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -701,9 +761,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\juma\low_power\stm32f401_lp_mode.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\juma\low_power\stm32f401_lp_mode.c</PathWithFileName>
       <FilenameWithoutPath>stm32f401_lp_mode.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -712,7 +775,7 @@
 
   <Group>
     <GroupName>system/drivers/st</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -722,9 +785,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\hts221\hts221.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\hts221\hts221.c</PathWithFileName>
       <FilenameWithoutPath>hts221.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -735,9 +801,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -748,9 +817,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_cortex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_cortex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_cortex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -761,9 +833,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_dma.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_dma.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_dma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -774,9 +849,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_dma_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_dma_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_dma_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -787,9 +865,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_flash.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_flash.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_flash.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -800,9 +881,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_flash_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_flash_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_flash_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -813,9 +897,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_gpio.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_gpio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -826,9 +913,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_i2c.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_i2c.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_i2c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -839,9 +929,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_i2c_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_i2c_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_i2c_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -852,9 +945,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_ltdc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_ltdc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_ltdc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -865,9 +961,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_rcc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_rcc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -878,9 +977,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_rcc_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_rcc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rcc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -891,9 +993,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_spi.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_spi.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_spi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -904,9 +1009,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_uart.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_uart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_uart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -917,9 +1025,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_usart.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_usart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_usart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -930,9 +1041,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_pwr_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_pwr_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_pwr_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -943,9 +1057,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\stm32f4xx_hal_driver\Src\stm32f4xx_hal_pwr.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\Src\stm32f4xx_hal_pwr.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_pwr.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -956,9 +1073,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>84</TopLine>
+      <CurrentLine>104</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\lps25hb\lps25hb.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\lps25hb\lps25hb.c</PathWithFileName>
       <FilenameWithoutPath>lps25hb.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -969,9 +1089,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>753</TopLine>
+      <CurrentLine>775</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\lsm6ds3\lsm6ds3.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\lsm6ds3\lsm6ds3.c</PathWithFileName>
       <FilenameWithoutPath>lsm6ds3.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -982,9 +1105,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\lsm303agr\lsm303agr.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\lsm303agr\lsm303agr.c</PathWithFileName>
       <FilenameWithoutPath>lsm303agr.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -995,9 +1121,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\lsm303agr\LSM303AGR_ACC_driver.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\lsm303agr\LSM303AGR_ACC_driver.c</PathWithFileName>
       <FilenameWithoutPath>LSM303AGR_ACC_driver.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1008,9 +1137,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\lsm303agr\LSM303AGR_MAG_driver.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\lsm303agr\LSM303AGR_MAG_driver.c</PathWithFileName>
       <FilenameWithoutPath>LSM303AGR_MAG_driver.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1021,9 +1153,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\lps25h\lps25h.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\lps25h\lps25h.c</PathWithFileName>
       <FilenameWithoutPath>lps25h.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1034,9 +1169,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rtc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1047,9 +1185,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_rtc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1060,9 +1201,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1073,9 +1217,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc_ex.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_adc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1086,9 +1233,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_nor.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_nor.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_hal_nor.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1099,9 +1249,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_ll_fmc.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_ll_fmc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_ll_fmc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1120,9 +1273,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\drivers\juma\st7789v\st7789v.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\drivers\juma\st7789v\st7789v.c</PathWithFileName>
       <FilenameWithoutPath>st7789v.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1131,7 +1287,7 @@
 
   <Group>
     <GroupName>system/bsp</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1141,9 +1297,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\bsp\sw4690v1\stm32f429i_discovery.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\bsp\sw4690v1\stm32f429i_discovery.c</PathWithFileName>
       <FilenameWithoutPath>stm32f429i_discovery.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1154,9 +1313,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\bsp\sw4690v1\stm32_bluenrg_ble.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\bsp\sw4690v1\stm32_bluenrg_ble.c</PathWithFileName>
       <FilenameWithoutPath>stm32_bluenrg_ble.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1167,9 +1329,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\middlewares\juma\st7789v\clock.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\middlewares\juma\st7789v\clock.c</PathWithFileName>
       <FilenameWithoutPath>clock.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1180,9 +1345,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1.c</PathWithFileName>
       <FilenameWithoutPath>x_nucleo_iks01a1.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1193,9 +1361,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1_hum_temp.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1_hum_temp.c</PathWithFileName>
       <FilenameWithoutPath>x_nucleo_iks01a1_hum_temp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1204,11 +1375,14 @@
       <GroupNumber>6</GroupNumber>
       <FileNumber>59</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1_imu_6axes.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1_imu_6axes.c</PathWithFileName>
       <FilenameWithoutPath>x_nucleo_iks01a1_imu_6axes.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1219,9 +1393,12 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1_pressure.c</PathWithFileName>
+      <PathWithFileName>..\..\..\system\bsp\sw4690v1\x_nucleo_iks01a1_pressure.c</PathWithFileName>
       <FilenameWithoutPath>x_nucleo_iks01a1_pressure.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

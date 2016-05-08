@@ -94,10 +94,14 @@ PRESSURE_DrvExtTypeDef LPS25HBDrv_ext =
 uint8_t LPS25HB_SlaveAddress = LPS25HB_ADDRESS_LOW;
 #endif
 
-
 #ifdef CANNON_V2
 uint8_t LPS25HB_SlaveAddress = LPS25HB_ADDRESS_HIGH;
 #endif
+
+#ifdef JUMA_WATCH
+uint8_t LPS25HB_SlaveAddress = LPS25HB_ADDRESS_HIGH;
+#endif
+
 /**
  * @}
  */

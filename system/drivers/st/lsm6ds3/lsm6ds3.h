@@ -967,6 +967,10 @@ extern "C" {
 	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
 #endif
 
+#ifdef JUMA_WATCH
+	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
+#endif
+
 /**
  * @brief Device Identifier. Default value of the WHO_AM_I register.
  */
