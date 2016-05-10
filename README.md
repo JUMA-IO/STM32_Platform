@@ -15,8 +15,8 @@ This repository includes a comprehensive SDK, together with various software res
 * Learn software API manuals at [here](http://www.juma.io/doc/zh/embedded_sdk.html).
 
 
-> Cannon is FREE now! Apply for a Free Cannon at JUMA's [forum](http://bbs.juma.io:8080/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433).  
-> 小钢炮正处于免费推广期，您可以从我们的[论坛](http://bbs.juma.io:8080/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433)申请一块。
+> Cannon is FREE now! Apply for a Free Cannon at JUMA's [forum](http://www.52cannon.com/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433).  
+> 小钢炮正处于免费推广期，您可以从我们的[论坛]((http://www.52cannon.com/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433)申请一块。
 
 
 ##Quick Start
@@ -41,7 +41,8 @@ The iOS version can be downloaded in AppStore as well.
 
 
 ##Directories
-* `/product` - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
+* `/applications` - several examples based on Cannon, including a Thermometer detector, a BLE echo appliction, a SensorTag, etc. 
+* `/product` - product base main line.
 * `/system` - including drivers, HALs, middlewares, JUMA SDKs, etc.
 * `/tools` - including some APP utilities which could be installed and run on Android mobiles. 
 * `/document` - things like document, datasheet, manuals, etc.
@@ -60,10 +61,10 @@ You are also warmly appreciated if you fix bugs or submit new features for Canno
 
 
 ##Further Resources
-* Home/主页: [http://www.juma.io/cannon.html](http://www.juma.io/cannon.html)
+* Home/主页: [www.juma.io/cannon.html](http://www.juma.io/cannon.html)
 * Contact/联系: [hello@jumacc.com](hello@jumacc.com)
-* Forum/论坛: [juma.io/bbs](juma.io/bbs)
-* Quick Start/上手指南: [http://www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
+* Forum/论坛: [52cannon.com/bbs](http://52cannon.com/bbs)
+* Quick Start/上手指南: [www.juma.io/doc/zh/stm32_platform/cannon_first/](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)
 * QQ group/小钢炮QQ群: `271927055`
 
 
