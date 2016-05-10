@@ -2,8 +2,8 @@
 #include "juma_sensor.h"
 /*start adv*/
 
-char *name = "BlueNRG_IOT_2";
-uint8_t adv_address[6] = {0x08, 0x05, 0x04, 0x03, 0x02, 0x02};
+char *name = "NovaFan";
+uint8_t adv_address[6] = {0x09, 0x05, 0x04, 0x03, 0x02, 0x02};
 
 static void sensor_read(void* arg);
 
@@ -15,7 +15,6 @@ void on_ready(void)
     /*Config Adv Parameter And Ready to Adv*/
     ble_set_adv_param(name, adv_address, tx_power_level, adv_interval);
     ble_device_start_advertising();
-    sensor_read(NULL);
 }
 
 static void sensor_read(void* arg)
@@ -32,6 +31,7 @@ static void sensor_read(void* arg)
             ble_device_send(0x00, 2, (uint8_t *)&temperature);
             ble_device_send(0x01, 2, (uint8_t *)&humidity);
         }
+				run_after_delay(sensor_read,NULL, 1000);
     }
 }
 
@@ -54,7 +54,7 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 /* Device on connect */
 void ble_device_on_connect(void)
 {
-
+	sensor_read(NULL);
 }
 /* Device on disconnect */
 void ble_device_on_disconnect(uint8_t reason)

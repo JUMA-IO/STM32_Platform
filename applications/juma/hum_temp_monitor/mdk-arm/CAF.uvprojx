@@ -14,6 +14,8 @@
         <TargetCommonOption>
           <Device>STM32F401RETx</Device>
           <Vendor>STMicroelectronics</Vendor>
+          <PackID>Keil.STM32F4xx_DFP.2.5.0</PackID>
+          <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x80000) IRAM(0x20000000,0x18000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -72,6 +74,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -128,6 +132,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -139,11 +144,10 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>6</TargetSelection>
+          <TargetSelection>11</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -157,7 +161,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
+            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -167,10 +171,10 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4099</DriverSelection>
+            <DriverSelection>4103</DriverSelection>
           </Flash1>
           <bUseTDR>0</bUseTDR>
-          <Flash2>Segger\JL2CM3.dll</Flash2>
+          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -361,7 +365,7 @@
               <MiscControls>--C99 --gnu  -W#177</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2,SENSOR_FIFO,NO_PRINTF,SERVER_ROLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\hum_temp_monitor;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\inc;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h</IncludePath>
+              <IncludePath>..\..\hum_temp_monitor;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -545,146 +549,6 @@
               <FilePath>..\..\..\..\system\drivers\st\lsm303agr\LSM303AGR_MAG_driver.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_hal.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_adc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_cortex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_cortex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_dma_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_flash_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_i2c_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2c_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_i2s.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2s.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_i2s_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2s_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_pwr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_pwr_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rcc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rcc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_rtc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_sdram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_sdram.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_smartcard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_smartcard.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_hal_wwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_hal_wwdg.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32f4xx_ll_usb.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\src\stm32f4xx_ll_usb.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32_bluenrg_ble.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms\stm32_bluenrg_ble.c</FilePath>
@@ -743,6 +607,326 @@
               <FileName>startup_stm32f401xe.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\..\..\system\cmiss\device\st\src\startup_stm32f401xe.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>stm32f4xx_hal_driver</GroupName>
+          <Files>
+            <File>
+              <FileName>stm32f4xx_hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_adc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_adc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_can.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_can.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_cec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_cec.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_cortex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_cortex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_crc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_crc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_cryp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_cryp.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_cryp_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_cryp_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dac.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dac.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dac_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dac_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dcmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dcmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dcmi_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dcmi_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dma_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_dma2d.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_eth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_eth.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_flash_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_flash_ramfunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_flash_ramfunc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_fmpi2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_fmpi2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_fmpi2c_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_fmpi2c_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_hash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_hash.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_hash_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_hash_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_hcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_hcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2c_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2c_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2s.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2s.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2s_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_i2s_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_irda.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_irda.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_iwdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_ltdc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_ltdc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_nand.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_nand.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_nor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_nor.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pccard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pccard.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pcd_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pcd_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_pwr_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_pwr_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_qspi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_qspi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rcc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rcc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rng.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_rtc_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_rtc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_sai.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_sai.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_sai_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_sai_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_sdram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_sdram.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_smartcard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_smartcard.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_spdifrx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_spdifrx.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_sram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_sram.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_tim_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_wwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_hal_wwdg.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_fmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_ll_fmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_fsmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_ll_fsmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_sdmmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_ll_sdmmc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\hal\stm32f4xx_hal_driver\src\stm32f4xx_ll_usb.c</FilePath>
             </File>
           </Files>
         </Group>
