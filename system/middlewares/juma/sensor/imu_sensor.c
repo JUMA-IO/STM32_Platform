@@ -599,7 +599,7 @@ void imu_sensor_read_data_from_fifo(void* arg)
         number_tmp = 12 - (number_tmp*2);
     }
     /*read from dma*/
-    if(LSM6DS3_IO_Read_DMA(tempReg_sensor, LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_FIFO_DATA_OUT_L, DMA_READ_6AXIS_DEPTH) != imu_status_ok)
+    if(LSM6DS3_IO_Read(tempReg_sensor, LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_FIFO_DATA_OUT_L, DMA_READ_6AXIS_DEPTH) != imu_status_ok)
     {
         printf("LSM6DS3_IO_Read_DMA error \n");
         return;
