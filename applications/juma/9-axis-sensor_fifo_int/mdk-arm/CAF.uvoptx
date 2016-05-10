@@ -755,7 +755,7 @@
   </Group>
 
   <Group>
-    <GroupName>stm32f4xx_hal_driver</GroupName>
+    <GroupName>system\hal\stm32f4xx_hal_driver</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>

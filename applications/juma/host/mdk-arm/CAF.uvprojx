@@ -611,7 +611,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>stm32f4xx_hal_driver</GroupName>
+          <GroupName>system/hal/stm32f4xx_hal_driver</GroupName>
           <Files>
             <File>
               <FileName>stm32f4xx_hal.c</FileName>
