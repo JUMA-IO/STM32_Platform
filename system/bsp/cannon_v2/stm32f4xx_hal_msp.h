@@ -1,18 +1,10 @@
- 
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4XX_HAL_MSP_H
 #define __STM32F4XX_HAL_MSP_H
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "stdio.h"
+#include "stm32f4xx.h"
 
 void UART_Init(void);
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* User can use this section to tailor USARTx/UARTx instance used and associated 
-   resources */
 /* Definition for USARTx clock resources */
 #define USARTx                           USART2
 #define USARTx_CLK_ENABLE()              __HAL_RCC_USART2_CLK_ENABLE();
@@ -30,8 +22,6 @@ void UART_Init(void);
 #define USARTx_RX_GPIO_PORT              GPIOA 
 #define USARTx_RX_AF                     GPIO_AF7_USART2
   
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
 
 #endif /* __STM32F4XX_HAL_MSP_H */
 

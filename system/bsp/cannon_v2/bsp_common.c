@@ -1,72 +1,19 @@
-/**
-  ******************************************************************************
-  * @file    stm32f4xx_nucleo.c
-  * @author  MCD Application Team
-  * @version V1.2.1
-  * @date    02-March-2015
-  * @brief   This file provides set of firmware functions to manage:
-  *          - LEDs and push-button available on STM32F4XX-Nucleo Kit
-  *            from STMicroelectronics
-  *          - LCD, joystick and microSD available on Adafruit 1.8" TFT LCD
-  *            shield (reference ID 802)
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */
-
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_cannon_v2.h"
-
-/** @addtogroup BSP
-  * @{
-  */
-
-/** @addtogroup STM32F4XX_CANON
-  * @{
-  */
-
-/** @addtogroup STM32F4XX_CANON_LOW_LEVEL
-  * @brief This file provides set of firmware functions to manage Leds and push-button
-  *        available on STM32F4xx-Nucleo Kit from STMicroelectronics.
-  * @{
-  */
-
-/** @defgroup STM32F4XX_CANON_LOW_LEVEL_Private_TypesDefinitions
-  * @{
-  */
-/**
-  * @}
-  */
-
-
-/** @defgroup STM32F4XX_CANON_LOW_LEVEL_Private_Defines
-  * @{
-  */
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 
 /**
   * @brief STM32F4xx NUCLEO BSP Driver version number V1.2.1
@@ -86,31 +33,11 @@
 #define SD_DUMMY_BYTE            0xFF
 #define SD_NO_RESPONSE_EXPECTED  0x80
 
-/**
-  * @}
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Private_Macros
-  * @{
-  */
-/**
-  * @}
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Private_Variables
-  * @{
-  */
 GPIO_TypeDef* GPIO_PORT[LEDn] = {LED0_GPIO_PORT};
-
 const uint16_t GPIO_PIN[LEDn] = {LED0_PIN};
-
 GPIO_TypeDef* BUTTON_PORT[BUTTONn] = {KEY_BUTTON_GPIO_PORT};
 const uint16_t BUTTON_PIN[BUTTONn] = {KEY_BUTTON_PIN};
 const uint8_t BUTTON_IRQn[BUTTONn] = {KEY_BUTTON_EXTI_IRQn};
-
-/**
- * @brief BUS variables
- */
 
 uint32_t SpixTimeout = NUCLEO_SPIx_TIMEOUT_MAX; /*<! Value of Timeout when SPI communication fails */
 static SPI_HandleTypeDef hnucleo_Spi;
@@ -119,13 +46,6 @@ static ADC_HandleTypeDef hnucleo_Adc;
 /* ADC channel configuration structure declaration */
 static ADC_ChannelConfTypeDef sConfig;
 
-/**
-  * @}
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Private_FunctionPrototypes
-  * @{
-  */
 static void       SPIx_Init(void);
 static void       SPIx_Write(uint8_t Value);
 static uint32_t   SPIx_Read(void);
@@ -135,7 +55,6 @@ static void       SPIx_MspInit(SPI_HandleTypeDef *hspi);
 static void       ADCx_Init(void);
 static void       ADCx_MspInit(ADC_HandleTypeDef *hadc);
 
-/* SD IO functions */
 void              SD_IO_Init(void);
 HAL_StatusTypeDef SD_IO_WriteCmd(uint8_t Cmd, uint32_t Arg, uint8_t Crc, uint8_t Response);
 HAL_StatusTypeDef SD_IO_WaitResponse(uint8_t Response);
@@ -143,37 +62,40 @@ void              SD_IO_WriteDummy(void);
 void              SD_IO_WriteByte(uint8_t Data);
 uint8_t           SD_IO_ReadByte(void);
 
-/* LCD IO functions */
 void              LCD_IO_Init(void);
 void              LCD_IO_WriteData(uint8_t Data);
 void              LCD_IO_WriteMultipleData(uint8_t *pData, uint32_t Size);
 void              LCD_IO_WriteReg(uint8_t LCDReg);
 void              LCD_Delay(uint32_t delay);
-/**
-  * @}
-  */
 
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Private_Functions
-  * @{
-  */
 
-/**
-  * @brief  This method returns the STM32F4xx NUCLEO BSP Driver revision
-  * @param  None
-  * @retval version: 0xXYZR (8bits for each decimal, R for RC)
-  */
+void bsp_init(void)
+{
+		HAL_Init();
+    /* Configure the system clock */
+    //BSP_SystemClock_Config();
+    /* Configure LED0 */
+    BSP_LED_Init(LED0);
+    /*UART2 init*/
+    UART_Init();
+    HAL_Delay(1000);
+    /* Initialize the BlueNRG SPI driver */
+    BNRG_SPI_Init();
+    /* Initialize the BlueNRG HCI */
+    HCI_Init();
+    /* Reset BlueNRG hardware */
+    BlueNRG_RST();
+    /* Enable Power Clock */
+    __HAL_RCC_PWR_CLK_ENABLE();
+    
+    rtc_init();
+}
+
 uint32_t BSP_GetVersion(void)
 {
     return __STM32F4xx_NUCLEO_BSP_VERSION;
 }
 
-/**
-  * @brief  Configures LED GPIO.
-  * @param  Led: Specifies the Led to be configured.
-  *   This parameter can be one of following parameters:
-  *     @arg LED2
-  * @retval None
-  */
 void BSP_LED_Init(Led_TypeDef Led)
 {
     GPIO_InitTypeDef  GPIO_InitStruct;
@@ -192,37 +114,16 @@ void BSP_LED_Init(Led_TypeDef Led)
     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
 }
 
-/**
-  * @brief  Turns selected LED On.
-  * @param  Led: Specifies the Led to be set on.
-  *   This parameter can be one of following parameters:
-  *     @arg LED2
-  * @retval None
-  */
 void BSP_LED_On(Led_TypeDef Led)
 {
     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
 }
 
-/**
-  * @brief  Turns selected LED Off.
-  * @param  Led: Specifies the Led to be set off.
-  *   This parameter can be one of following parameters:
-  *     @arg LED2
-  * @retval None
-  */
 void BSP_LED_Off(Led_TypeDef Led)
 {
     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_SET);
 }
 
-/**
-  * @brief  Toggles the selected LED.
-  * @param  Led: Specifies the Led to be toggled.
-  *   This parameter can be one of following parameters:
-  *     @arg LED2
-  * @retval None
-  */
 void BSP_LED_Toggle(Led_TypeDef Led)
 {
     HAL_GPIO_TogglePin(GPIO_PORT[Led], GPIO_PIN[Led]);
@@ -270,12 +171,6 @@ void BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
     }
 }
 
-/**
-  * @brief  Returns the selected Button state.
-  * @param  Button: Specifies the Button to be checked.
-  *   This parameter should be: BUTTON_KEY
-  * @retval The Button GPIO pin value.
-  */
 uint32_t BSP_PB_GetState(Button_TypeDef Button)
 {
     return HAL_GPIO_ReadPin(BUTTON_PORT[Button], BUTTON_PIN[Button]);
@@ -368,7 +263,6 @@ static uint32_t SPIx_Read(void)
     uint32_t writevalue = 0xFFFFFFFF;
 
     status = HAL_SPI_TransmitReceive(&hnucleo_Spi, (uint8_t*) &writevalue, (uint8_t*) &readvalue, 1, SpixTimeout);
-
 
     /* Check the communication status */
     if(status != HAL_OK)
@@ -747,106 +641,12 @@ static void ADCx_Init(void)
     }
 }
 
-/**
-  * @brief  Configures joystick available on adafruit 1.8" TFT shield
-  *         managed through ADC to detect motion.
-  * @param  None
-  * @retval Joystickstatus (0=> success, 1=> fail)
-  */
-uint8_t BSP_JOY_Init(void)
+void Error_Handler(void)
 {
-    uint8_t status = 1;
-
-    ADCx_Init();
-
-    /* Select the ADC Channel to be converted */
-    sConfig.Channel = NUCLEO_ADCx_CHANNEL;
-    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-    sConfig.Rank = 1;
-    status = HAL_ADC_ConfigChannel(&hnucleo_Adc, &sConfig);
-
-    /* Return Joystick initialization status */
-    return status;
+    while (1)
+    {
+        /* Toggle LED2 with a period of one second */
+        BSP_LED_Toggle(LED0);
+        HAL_Delay(1000);
+    }
 }
-
-/**
-  * @brief  Returns the Joystick key pressed.
-  * @note   To know which Joystick key is pressed we need to detect the voltage
-  *         level on each key output
-  *           - None  : 3.3 V / 4095
-  *           - SEL   : 1.055 V / 1308
-  *           - DOWN  : 0.71 V / 88
-  *           - LEFT  : 3.0 V / 3720
-  *           - RIGHT : 0.595 V / 737
-  *           - UP    : 1.65 V / 2046
-  * @retval JOYState_TypeDef: Code of the Joystick key pressed.
-  */
-JOYState_TypeDef BSP_JOY_GetState(void)
-{
-    JOYState_TypeDef state;
-    uint16_t  keyconvertedvalue = 0;
-
-    /* Start the conversion process */
-    HAL_ADC_Start(&hnucleo_Adc);
-
-    /* Wait for the end of conversion */
-    HAL_ADC_PollForConversion(&hnucleo_Adc, 10);
-
-    /* Check if the continuous conversion of regular channel is finished */
-    if(HAL_ADC_GetState(&hnucleo_Adc) == HAL_ADC_STATE_EOC_REG)
-    {
-        /* Get the converted value of regular channel */
-        keyconvertedvalue = HAL_ADC_GetValue(&hnucleo_Adc);
-    }
-
-    if((keyconvertedvalue > 2010) && (keyconvertedvalue < 2090))
-    {
-        state = JOY_UP;
-    }
-    else if((keyconvertedvalue > 680) && (keyconvertedvalue < 780))
-    {
-        state = JOY_RIGHT;
-    }
-    else if((keyconvertedvalue > 1270) && (keyconvertedvalue < 1350))
-    {
-        state = JOY_SEL;
-    }
-    else if((keyconvertedvalue > 50) && (keyconvertedvalue < 130))
-    {
-        state = JOY_DOWN;
-    }
-    else if((keyconvertedvalue > 3680) && (keyconvertedvalue < 3760))
-    {
-        state = JOY_LEFT;
-    }
-    else
-    {
-        state = JOY_NONE;
-    }
-
-    /* Loop while a key is pressed */
-    if(state != JOY_NONE)
-    {
-        keyconvertedvalue = HAL_ADC_GetValue(&hnucleo_Adc);
-    }
-    /* Return the code of the Joystick key pressed */
-    return state;
-}
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

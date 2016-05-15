@@ -37,8 +37,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal_msp.h"
-#include "stm32f4xx_hal.h"
-#include "bluenrg_sdk_api.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples
   * @{
@@ -178,7 +176,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
 
 }
 
-
 /**
   * @brief  Initializes the RTC MSP.
   * @param  hrtc: pointer to a RTC_HandleTypeDef structure that contains
@@ -212,7 +209,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
     if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
         /* Initialization Error */
-        Error_Handler();
+        while(1);
     }
 
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
@@ -226,7 +223,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
     if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
     {
         /* Initialization Error */
-        Error_Handler();
+        while(1);
     }
 
     /*##-2- Enable RTC peripheral Clocks #######################################*/
@@ -250,8 +247,6 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef *hrtc)
     /*##-1- Reset peripherals ##################################################*/
     __HAL_RCC_RTC_DISABLE();
 }
-
-
 
 /**
   * @}

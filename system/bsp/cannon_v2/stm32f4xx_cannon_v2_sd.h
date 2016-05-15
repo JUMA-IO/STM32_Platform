@@ -44,9 +44,6 @@
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_cannon_v2.h"
-
 /** @addtogroup BSP
   * @{
   */
