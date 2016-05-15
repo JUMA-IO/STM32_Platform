@@ -1,12 +1,36 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 #include "bluenrg_sdk_api.h"
 #include "bluenrg_sdk_host_api.h"
+#include "ble_status.h"
+#include "bluenrg_gap.h"
+#include "bluenrg_gatt_server.h"
+#include "bluenrg_gap_aci.h"
+#include "bluenrg_gatt_aci.h"
+#include "hci_const.h"
+#include "gp_timer.h"
+#include "bluenrg_hal_aci.h"
+#include "bluenrg_aci_const.h"
+#include "hci.h"
+#include "sm.h"
 
 #if NO_PRINTF
 #define printf(...)
 #endif
-
-#define BDADDR_SIZE 6
 
 #if defined (CLIENT_ROLE) || defined (CLIENT_SERVER_ROLE)
 extern uint8_t host_connect_init_flag;
@@ -44,7 +68,6 @@ ble_gap_adv_params_t m_adv_params;
 static uint8_t adv_name[20] = "BlueNRG", adv_name_len = 20,  local_name[20], local_name_len;
 uint16_t connection_handle = 0 ,notification_enabled = 0;
 
-volatile uint8_t Ble_conn_state = BLE_CONNECTABLE;
 uint16_t BLueNrgServHandle =0x0001, WriteCharHandle = 0x0006, WriteCmdCharHandle = 0x000A, ReadNotifyCharHandle = 0x000D, NotifyCharHandle = 0x0010;
 uint16_t service_handle, dev_name_char_handle, appearance_char_handle;
 
@@ -58,10 +81,10 @@ static void connection_information(uint16_t handle);
 /*Read Req */
 static void Read_Request_CB(uint16_t handle);
 /*Add Service*/
-static tBleStatus Add_Service(void);
+static uint8_t Add_Service(void);
 /*init gap/gatt service*/
 /*Init BLUENrg, HCI, Add Service*/
-tBleStatus ble_init_bluenrg(void);
+uint8_t ble_init_bluenrg(void);
 
 #ifdef CLIENT_ROLE
 BLE_RoleTypeDef BLE_Role = CLIENT;
@@ -81,9 +104,9 @@ BLE_RoleTypeDef BLE_Role = SERVER;
 	*@param  None
 	*@retval ret
 	*/
-tBleStatus ble_init_bluenrg(void)
+uint8_t ble_init_bluenrg(void)
 {
-    tBleStatus ret;
+    uint8_t ret;
     /*gatt_Init*/
     ret = aci_gatt_init();
 
@@ -135,7 +158,7 @@ tBleStatus ble_init_bluenrg(void)
     }
     if(BLE_Role == SERVER) {
         printf("SERVER: BLE Stack Initialized\n");
-        /* add JUMA SERVICE*/
+        /* add JUMA.IO SERVICE*/
         ret = Add_Service();
         if(ret == BLE_STATUS_SUCCESS)
             printf("Service added successfully.\n");
@@ -144,7 +167,7 @@ tBleStatus ble_init_bluenrg(void)
         }
     } else if(BLE_Role == CLIENT_SERVER) {
         printf("CLIENT_SERVER: BLE Stack Initialized\n");
-        /* add JUMA SERVICE*/
+        /* add JUMA.IO SERVICE*/
         ret = Add_Service();
         if(ret == BLE_STATUS_SUCCESS)
             printf("Service added successfully.\n");
@@ -164,9 +187,9 @@ tBleStatus ble_init_bluenrg(void)
 	*@param Level
 	*@retval ret
 */
-tBleStatus ble_set_tx_power(uint8_t level)
+uint8_t ble_set_tx_power(uint8_t level)
 {
-    tBleStatus ret;
+    uint8_t ret;
     /* Set output power level */
     ret = aci_hal_set_tx_power_level(1,level);
 
@@ -177,9 +200,9 @@ tBleStatus ble_set_tx_power(uint8_t level)
 	*@param  None
 	*@retval ret
 	*/
-static tBleStatus Add_Service(void)
+static uint8_t Add_Service(void)
 {
-    tBleStatus ret;
+    uint8_t ret;
     uint8_t service_uuid[16] = { 0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x00, 0x80, 0x00, 0x00};
     uint8_t command_uuid[16] = { 0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x01, 0x80, 0x00, 0x00};
     uint8_t event_char_uuid[16] = {  0x8C, 0xF9, 0x97,0xA6, 0xEE, 0x94, 0xE3,0xBC,0xF8, 0x21, 0xB2, 0x60, 0x02, 0x80, 0x00, 0x00};
@@ -227,7 +250,7 @@ fail:
 	*@param  None
 	*@retval ret
 	*/
-tBleStatus ble_device_set_name(const char* new_device_name)
+uint8_t ble_device_set_name(const char* new_device_name)
 {
     adv_name_len = strlen(new_device_name);
     local_name_len = adv_name_len+1;
@@ -243,9 +266,9 @@ tBleStatus ble_device_set_name(const char* new_device_name)
 	*@param Adv Address
 	*@retval ret
 	*/
-tBleStatus ble_address(uint8_t* advaddress)
+uint8_t ble_address(uint8_t* advaddress)
 {
-    tBleStatus ret;
+    uint8_t ret;
     ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET,
                                     CONFIG_DATA_PUBADDR_LEN,
                                     advaddress);
@@ -263,7 +286,7 @@ tBleStatus ble_address(uint8_t* advaddress)
 	*/
 void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pevel, uint16_t adv_interval)
 {
-    tBleStatus ret;
+    uint8_t ret;
     /*set adv address*/
     ble_address(adv_address);
     /*Set Adv Name*/
@@ -280,19 +303,16 @@ void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pev
     if(ret){
         printf("ble_init_bluenrg\n");
     }
-    
-
 }
-
 
 /**
 	*@brief 	Start To Adv
 	*@param  	None
 	*@retval 	ret
 	*/
-tBleStatus ble_device_start_advertising(void)
+uint8_t ble_device_start_advertising(void)
 {
-    tBleStatus ret;
+    uint8_t ret;
     uint8_t uuid_length = 3;
     uint8_t serviceUUIDList[] = {AD_TYPE_16_BIT_SERV_UUID_CMPLT_LIST,0x90,0xFE};
 
@@ -320,9 +340,9 @@ tBleStatus ble_device_start_advertising(void)
 	*@param  	None
 	*@retval 	ret
 	*/
-tBleStatus ble_device_send(uint8_t type, uint32_t length, uint8_t* value)
+uint8_t ble_device_send(uint8_t type, uint32_t length, uint8_t* value)
 {
-    tBleStatus ret;
+    uint8_t ret;
     uint8_t packet[20];
     if(notification_enabled == 0) {
 
@@ -346,9 +366,9 @@ tBleStatus ble_device_send(uint8_t type, uint32_t length, uint8_t* value)
 	*@param  	None
 	*@retval 	ret
 	*/
-tBleStatus ble_device_stop_advertising(void)
+uint8_t ble_device_stop_advertising(void)
 {
-    tBleStatus ret;
+    uint8_t ret;
     ret = aci_gap_set_non_discoverable();
     if(ret) {
         printf("aci_gap_set_non_discoverable  failed\n");
@@ -371,11 +391,10 @@ void ble_device_set_advertising_interval(uint16_t interval)
 	*@param  	None
 	*@retval 	ret
 	*/
-tBleStatus ble_disconnect_device(void)
+uint8_t ble_disconnect_device(void)
 {
-    tBleStatus ret;
+    uint8_t ret;
     ret = aci_gap_terminate(connection_handle, HCI_OE_USER_ENDED_CONNECTION);
-    Ble_conn_state = BLE_CONNECTABLE;
     return ret;
 }
 /**

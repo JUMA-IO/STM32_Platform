@@ -1,3 +1,18 @@
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "imu_sensor.h"
 #include "app.h"
 
@@ -13,7 +28,7 @@ static imu_sensor_data_sensitivity_t sensor_data_sensitivity;
 
 __weak void on_imu_sensor_data(imu_sensor_data_t* data) {};
 
-static imu_status_t lsm6ds3_fifo_sensor_enable(void);
+	static imu_status_t lsm6ds3_fifo_sensor_enable(void);
 static imu_status_t imu_sensor_config_acc(uint8_t data_rate, uint8_t scale);
 static imu_status_t imu_sensor_config_gyro(uint8_t data_rate, uint8_t scale);
 static imu_status_t imu_sensor_acc_output_status_config(uint8_t status);
@@ -45,7 +60,6 @@ static imu_status_t imu_sensor_magneto_interrupt_enable(void);
 /*reset sensors*/
 imu_status_t imu_sensor_reset(void)
 {
-
     if(LSM6DS3_IO_Init() != imu_status_ok)
     {
         printf("lsm6ds3 io init error\n");
@@ -55,9 +69,7 @@ imu_status_t imu_sensor_reset(void)
     LSM6DS3_IO_ITConfig();
     /*Config LSM303AGR interrupt lines*/
     LSM303AGR_IO_ITConfig();
-
     printf("IT IO Config\n");
-
     if(lsm6ds3_fifo_sensor_enable() != imu_status_ok)
     {
         printf("sensor fifoenable error\n");
@@ -70,26 +82,20 @@ imu_status_t imu_sensor_reset(void)
         printf("imu_sensor_magneto_interrupt_enable\n");
         return imu_status_fail;
     }
-
     return imu_status_ok;
-
 }
 
 /*active sensor*/
 imu_status_t imu_sensor_select_features(sensor_selsection_t features)
 {
-
     sensor_selection = features;
-
     printf("sensor features : %x\n", sensor_selection);
-
     return imu_status_ok;
 }
 
 /*set data rate*/
 imu_status_t imu_sensor_set_data_rate(uint32_t* p_data_rate, uint8_t mode)
 {
-
     uint8_t tmp1 = 0x00;
     uint8_t new_odr = 0x00;
     /*lsm6ds3*/
@@ -128,7 +134,6 @@ imu_status_t imu_sensor_set_data_rate(uint32_t* p_data_rate, uint8_t mode)
         case 1600:
             tmp1 |= LSM6DS3_XG_FIFO_ODR_1600HZ;
             break;
-
         default:
             break;
         }
@@ -143,7 +148,6 @@ imu_status_t imu_sensor_set_data_rate(uint32_t* p_data_rate, uint8_t mode)
         {
             return imu_status_fail;
         }
-
     }
     /*acc and gyro odr */
     {
@@ -180,8 +184,6 @@ imu_status_t imu_sensor_set_data_rate(uint32_t* p_data_rate, uint8_t mode)
         }
         printf("mag odr set over\n");
     }
-
-
     return imu_status_ok;
 }
 
@@ -204,7 +206,6 @@ imu_status_t imu_sensor_start(void)
             }
             printf("gyro output enable\n");
         }
-
     }
     /*lsm303agr odr*/
     {
@@ -224,7 +225,6 @@ imu_status_t imu_sensor_stop(void)
 {
     /*lsm6ds3*/
     {
-
         if(sensor_selection & ACC_ENABLE) {
             if(imu_sensor_acc_output_status_config(OUTPUT_DISABLE) != imu_status_ok)
             {
@@ -240,7 +240,6 @@ imu_status_t imu_sensor_stop(void)
             }
             printf("gyro output disable\n");
         }
-
     }
     /*lsm303agr odr*/
     {
@@ -250,10 +249,8 @@ imu_status_t imu_sensor_stop(void)
         }
         printf("mag output disable\n");
     }
-
     return imu_status_ok;
 }
-
 
 /*fifo config*/
 static imu_status_t lsm6ds3_fifo_sensor_enable(void)

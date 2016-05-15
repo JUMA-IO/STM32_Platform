@@ -1,42 +1,18 @@
-/**
-  ******************************************************************************
-  * @file    ST7789V.h
-  * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    02-December-2014
-  * @brief   This file contains all the functions prototypes for the ST7789V.c
-  *          driver.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
-  *
-  * Redistribution and use in source and binary forms, with or without modification,
-  * are permitted provided that the following conditions are met:
-  *   1. Redistributions of source code must retain the above copyright notice,
-  *      this list of conditions and the following disclaimer.
-  *   2. Redistributions in binary form must reproduce the above copyright notice,
-  *      this list of conditions and the following disclaimer in the documentation
-  *      and/or other materials provided with the distribution.
-  *   3. Neither the name of STMicroelectronics nor the names of its contributors
-  *      may be used to endorse or promote products derived from this software
-  *      without specific prior written permission.
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  *
-  ******************************************************************************
-  */ 
-
-/* Define to prevent recursive inclusion -------------------------------------*/
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #ifndef __ST7789V_H
 #define __ST7789V_H
 
@@ -44,40 +20,9 @@
  extern "C" {
 #endif 
 
-/* Includes ------------------------------------------------------------------*/
 #include "lcd.h"
 
-/** @addtogroup BSP
-  * @{
-  */ 
-
-/** @addtogroup Components
-  * @{
-  */ 
-  
-/** @addtogroup ST7789V
-  * @{
-  */
-
-/** @defgroup ST7789V_Exported_Types
-  * @{
-  */
-/**
-  * @}
-  */ 
-
-/** @defgroup ST7789V_Exported_Constants
-  * @{
-  */
-
-/** 
-  * @brief ST7789V chip IDs  
-  */ 
 #define ST7789V_ID                  0x9341
-
-/** 
-  * @brief  ST7789V Size  
-  */  
 #define  ST7789V_LCD_PIXEL_WIDTH    ((uint16_t)240)
 #define  ST7789V_LCD_PIXEL_HEIGHT   ((uint16_t)320)
 
@@ -197,10 +142,6 @@
 /* Size of read registers */
 #define LCD_READ_ID4_SIZE        3      /* Size of Read ID4 */
 
-/**
-  * @}
-  */
-  
 /** @defgroup ST7789V_Exported_Functions
   * @{
   */ 
@@ -230,20 +171,3 @@ void     LCD_Delay (uint32_t delay);
 
 #endif /* __ST7789V_H */
 
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
-  
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

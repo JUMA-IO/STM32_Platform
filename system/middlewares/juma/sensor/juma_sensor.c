@@ -1,4 +1,19 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 #include "juma_sensor.h"
 #include "x_nucleo_iks01a1.h"
 #include "x_nucleo_iks01a1_hum_temp.h"
@@ -20,19 +35,11 @@ static void read_temp_hum(void* args);
 static void read_6_Axis_data(void* args);
 static void read_raw_magnetometer_data(void* args);
 
-/**
- * Should be implemented by application user.
- */
 __weak void jsensor_app_set_sensors(void)
 {
     return ;
 }
 
-/**
- * Should be called from application user.
- *
- * TODO: the input parameter is by sensor type or id?
- */
 void jsensor_app_set_sensor(uint16_t sid)
 {
     if (sid == JSENSOR_TYPE_HUMITY_TEMP) {
@@ -65,7 +72,6 @@ JSensor_Status jsensor_app_read_sensor(uint16_t sid, void *data)
         read_raw_magnetometer_data(data);
     return JSENSOR_OK;
 }
-
 
 void __jsensor_init_sensor(void)
 {
@@ -164,7 +170,6 @@ static void read_temp_hum(void* args)
         temp = (uint16_t)(fTmp*100);
         *p->humidity = ((temp >> 8) & 0xFF) | ((temp & 0xFF) << 8);
     }
-
     if (p->temperature != NULL) {
         BSP_HUM_TEMP_GetTemperature(&fTmp);
         temp = (uint16_t)(fTmp*100);
@@ -180,7 +185,6 @@ static void read_pressure(void* args)
     uint32_t pressure;
 
     JSensor_Press_Typedef *p = (JSensor_Press_Typedef *)args;
-
     if (p->pressure != NULL) {
         /*pressure*/
         BSP_PRESSURE_GetPressure(&fPress);
@@ -227,13 +231,6 @@ static void read_raw_magnetometer_data(void* args)
     int32_t _Magnetic_mGa[3] = {0};
     JSensor_MAG_Typedef *p = (JSensor_MAG_Typedef *)args;
     
-#ifdef CANNON_V1
-    uint8_t *mag = p->MAG;
-    LSM6DS3_IO_Read(mag, NULL, 0x2e, 6); //read magnetometer data from sensorhub_reg[0]
-#endif
-
-#ifdef CANNON_V2
-
     LSM303AGR_MAG_Get_Magnetic(_Magnetic_mGa);
     p->MAG[0] = (_Magnetic_mGa[0] >> 8) & 0xFF;
     p->MAG[1] = (_Magnetic_mGa[0]) & 0xFF;
@@ -241,5 +238,4 @@ static void read_raw_magnetometer_data(void* args)
     p->MAG[3] = (_Magnetic_mGa[1] ) & 0xFF;
     p->MAG[4] = (_Magnetic_mGa[2] >> 8) & 0xFF;
     p->MAG[5] = (_Magnetic_mGa[2]) & 0xFF;
-#endif
 }

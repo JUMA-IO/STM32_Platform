@@ -1,9 +1,26 @@
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 #include "mesh.h"
+#include "bluenrg_sdk_api.h"
+#include "bluenrg_gap.h"
 
 #if NO_PRINTF
 #define printf(...)
 #endif
-
 
 uint16_t adv_info_number = 1;
 
@@ -18,7 +35,6 @@ static mesh_manuf_data_t  mesh_manuf_data = {
 static void mesh_disconn_connection(void* data)
 {
     ble_disconnect_device();
-    
 }
 
 static void mesh_manuf_data_config(void* data)
@@ -39,7 +55,6 @@ static void mesh_adv_data_update(void* arg)
     if(ret){
         printf("aci_gap_update_adv_data failed \n");
     }
-    
 }
 
 void mesh_rx_scan_data(void* data)
@@ -79,12 +94,3 @@ void mesh_disconnect_handle(void* data)
     
     run_when_idle(mesh_adv_data_update, NULL);
 }
-
-
-
-
-
-
-
-
-

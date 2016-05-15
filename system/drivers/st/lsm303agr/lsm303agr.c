@@ -1,4 +1,3 @@
-
 #include "lsm303agr.h"
 #define FIFO_SIZE	32
 #define FIFO_THSLD	FIFO_SIZE - 2
@@ -191,7 +190,7 @@ static void init_LSM303AGR_Wakeup(void)
 
     /* init accelerometer */
     if (init_LSM303AGR_acc(LSM303AGR_ACC_FS_2G, LSM303AGR_ACC_ODR_DO_100Hz, 0) < 0)
-        Error_Handler(); /* handle error */
+        while(1); /* handle error */
 
     /* Ebale I2 function on INT2 pad */
     LSM303AGR_ACC_W_I2_on_INT2(LSM303AGR_ACC_I2_INT2_ENABLED);

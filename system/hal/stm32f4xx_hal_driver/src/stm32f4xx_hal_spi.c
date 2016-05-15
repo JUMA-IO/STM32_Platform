@@ -229,72 +229,6 @@ HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi)
   return HAL_OK;
 }
 
-#ifdef CANNON_V1
-/**
-  * @brief  Initializes the SPI according to the specified parameters 
-  *         in the SPI_InitTypeDef and create the associated handle.
-  * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
-  *                the configuration information for SPI module.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SPI2_Init(SPI_HandleTypeDef *hspi)
-{
-  /* Check the SPI handle allocation */
-  if(hspi == NULL)
-  {
-    return HAL_ERROR;
-  }
-
-  /* Check the parameters */
-  assert_param(IS_SPI_MODE(hspi->Init.Mode));
-  assert_param(IS_SPI_DIRECTION_MODE(hspi->Init.Direction));
-  assert_param(IS_SPI_DATASIZE(hspi->Init.DataSize));
-  assert_param(IS_SPI_CPOL(hspi->Init.CLKPolarity));
-  assert_param(IS_SPI_CPHA(hspi->Init.CLKPhase));
-  assert_param(IS_SPI_NSS(hspi->Init.NSS));
-  assert_param(IS_SPI_BAUDRATE_PRESCALER(hspi->Init.BaudRatePrescaler));
-  assert_param(IS_SPI_FIRST_BIT(hspi->Init.FirstBit));
-  assert_param(IS_SPI_TIMODE(hspi->Init.TIMode));
-  assert_param(IS_SPI_CRC_CALCULATION(hspi->Init.CRCCalculation));
-  assert_param(IS_SPI_CRC_POLYNOMIAL(hspi->Init.CRCPolynomial));
-
-  if(hspi->State == HAL_SPI_STATE_RESET)
-  {
-    /* Allocate lock resource and initialize it */
-    hspi->Lock = HAL_UNLOCKED;
-    /* Init the low level hardware : GPIO, CLOCK, NVIC... */
-    HAL_SPI2_MspInit(hspi);
-  }
-  
-  hspi->State = HAL_SPI_STATE_BUSY;
-
-  /* Disable the selected SPI peripheral */
-  __HAL_SPI_DISABLE(hspi);
-
-  /*----------------------- SPIx CR1 & CR2 Configuration ---------------------*/
-  /* Configure : SPI Mode, Communication Mode, Data size, Clock polarity and phase, NSS management,
-  Communication speed, First bit and CRC calculation state */
-  hspi->Instance->CR1 = (hspi->Init.Mode | hspi->Init.Direction | hspi->Init.DataSize |
-                         hspi->Init.CLKPolarity | hspi->Init.CLKPhase | (hspi->Init.NSS & SPI_CR1_SSM) |
-                         hspi->Init.BaudRatePrescaler | hspi->Init.FirstBit  | hspi->Init.CRCCalculation);
-
-  /* Configure : NSS management */
-  hspi->Instance->CR2 = (((hspi->Init.NSS >> 16) & SPI_CR2_SSOE) | hspi->Init.TIMode);
-
-  /*---------------------------- SPIx CRCPOLY Configuration ------------------*/
-  /* Configure : CRC Polynomial */
-  hspi->Instance->CRCPR = hspi->Init.CRCPolynomial;
-
-  /* Activate the SPI mode (Make sure that I2SMOD bit in I2SCFGR register is reset) */
-  hspi->Instance->I2SCFGR &= (uint32_t)(~SPI_I2SCFGR_I2SMOD);
-
-  hspi->ErrorCode = HAL_SPI_ERROR_NONE;
-  hspi->State = HAL_SPI_STATE_READY;
-  
-  return HAL_OK;
-}
-#endif
-
 /**
   * @brief  DeInitializes the SPI peripheral 
   * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
@@ -325,55 +259,12 @@ HAL_StatusTypeDef HAL_SPI_DeInit(SPI_HandleTypeDef *hspi)
 }
 
 /**
-  * @brief  DeInitializes the SPI peripheral 
-  * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
-  *                the configuration information for SPI module.
-  * @retval HAL status
-  */
-HAL_StatusTypeDef HAL_SPI2_DeInit(SPI_HandleTypeDef *hspi)
-{
-  /* Check the SPI handle allocation */
-  if(hspi == NULL)
-  {
-    return HAL_ERROR;
-  }
-
-  /* Disable the SPI Peripheral Clock */
-  __HAL_SPI_DISABLE(hspi);
-
-  /* DeInit the low level hardware: GPIO, CLOCK, NVIC... */
-  HAL_SPI2_MspDeInit(hspi);
-
-  hspi->ErrorCode = HAL_SPI_ERROR_NONE;
-  hspi->State = HAL_SPI_STATE_RESET;
-
-  /* Release Lock */
-  __HAL_UNLOCK(hspi);
-
-  return HAL_OK;
-}
-
-
-/**
   * @brief SPI MSP DeInit
   * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
   *                the configuration information for SPI module.
   * @retval None
   */
  __weak void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
-{
-  /* NOTE : This function Should not be modified, when the callback is needed,
-            the HAL_SPI_MspDeInit could be implemented in the user file
-   */
-}
-
-/**
-  * @brief SPI MSP DeInit
-  * @param  hspi: pointer to a SPI_HandleTypeDef structure that contains
-  *                the configuration information for SPI module.
-  * @retval None
-  */
- __weak void HAL_SPI2_MspDeInit(SPI_HandleTypeDef *hspi)
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_SPI_MspDeInit could be implemented in the user file

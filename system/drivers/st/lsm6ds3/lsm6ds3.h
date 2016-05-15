@@ -956,20 +956,9 @@ extern "C" {
 /**
 * @brief Device Address
 */
-#define LSM6DS3_ADDRESS_LOW                                 0xD4    // SAD[0] = 0
-#define LSM6DS3_ADDRESS_HIGH                                0xD6    // SAD[0] = 1
-
-#ifdef CANNON_V1
-	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_LOW    // SAD[0] = 0
-#endif
-
-#ifdef CANNON_V2
-	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
-#endif
-
-#ifdef JUMA_WATCH
-	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
-#endif
+#define LSM6DS3_ADDRESS_LOW                             0xD4    // SAD[0] = 0
+#define LSM6DS3_ADDRESS_HIGH                            0xD6    // SAD[0] = 1
+#define LSM6DS3_XG_MEMS_ADDRESS                         LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
 
 /**
  * @brief Device Identifier. Default value of the WHO_AM_I register.

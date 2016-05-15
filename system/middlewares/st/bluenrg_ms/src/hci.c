@@ -16,14 +16,13 @@
   * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   */
 
-#include "hal_types.h"
+#include "bsp_common.h"
 #include "osal.h"
 #include "ble_status.h"
 #include "hal.h"
 #include "hci_const.h"
 #include "gp_timer.h"
 #include "stm32_bluenrg_ble.h"
-#include "bluenrg_interface.h"
 
 extern SPI_HandleTypeDef SpiHandle;
 

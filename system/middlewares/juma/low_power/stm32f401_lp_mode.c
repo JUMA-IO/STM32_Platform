@@ -1,13 +1,26 @@
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 #include "stm32f401_lp_mode.h"
 #include "bluenrg_sdk_api.h"
 
-
+RTC_HandleTypeDef RTCHandle;
 static void RTC_CalendarConfig(void);
 static void SYSCLKConfig_STOP(void);
-/* Private variables ---------------------------------------------------------*/
-/* RTC handler declaration */
-RTC_HandleTypeDef RTCHandle;
-/*RTC Init*/
+
 void rtc_init(void)
 {
     /* Configure RTC prescaler and RTC data registers as follow:
@@ -28,13 +41,11 @@ void rtc_init(void)
     if(HAL_RTC_Init(&RTCHandle) != HAL_OK)
     {
         /* Initialization Error */
-        Error_Handler();
+        while(1);
     }
     RTC_CalendarConfig();
-
 }
 
-/*config wake up timer*/
 void rtc_wake_up_timer_config(uint32_t time)
 {
     /*## Configure the Wake up timer ###########################################*/
@@ -84,7 +95,7 @@ static void RTC_CalendarConfig(void)
     if(HAL_RTC_SetDate(&RTCHandle,&sdatestructure,RTC_FORMAT_BCD) != HAL_OK)
     {
         /* Initialization Error */
-        Error_Handler();
+        while(1);
     }
 
     /*##-2- Configure the Time #################################################*/
@@ -99,11 +110,9 @@ static void RTC_CalendarConfig(void)
     if(HAL_RTC_SetTime(&RTCHandle,&stimestructure,RTC_FORMAT_BCD) != HAL_OK)
     {
         /* Initialization Error */
-        Error_Handler();
+        while(1);
     }
-
 }
-
 
 uint32_t RTC_CalendarShow(uint8_t* showtime)
 {
@@ -132,7 +141,6 @@ uint32_t RTC_CalendarShow(uint8_t* showtime)
 #endif
 
     current_time &= 0x00FFFFFF;
-
     return current_time;
 }
 
@@ -153,7 +161,6 @@ uint32_t RTC_CalendarShow(uint8_t* showtime)
   */
 void SleepMode_Measure(void)
 {
-
     GPIO_InitTypeDef GPIO_InitStruct;
 
     /* Configure all GPIO as analog to reduce current consumption on non used IOs */
@@ -194,7 +201,6 @@ void SleepMode_Measure(void)
     /* Resume Tick interrupt if disabled prior to sleep mode entry */
     HAL_ResumeTick();
 }
-
 
 void StandbyMode_Measure(void)
 {
@@ -285,7 +291,7 @@ void StopMode_Measure(void)
     if(HAL_RTCEx_DeactivateWakeUpTimer(&RTCHandle) != HAL_OK)
     {
         /* Initialization Error */
-        Error_Handler();
+        while(1);
     }
 }
 
@@ -305,10 +311,10 @@ void StopMode_Measure(void)
   */
 void StandbyRTCBKPSRAMMode_Measure(void)
 {
-//	/*rtc_init */
-//  rtc_init();
-//	/*wake up timer*/
-//	rtc_wake_up_timer_config(0x5000);
+		/*rtc_init */
+		rtc_init();
+		/*wake up timer*/
+		rtc_wake_up_timer_config(0x5000);
     /* Enable BKPRAM Clock */
     __HAL_RCC_BKPSRAM_CLK_ENABLE();
 
@@ -343,7 +349,7 @@ static void SYSCLKConfig_STOP(void)
     //RCC_OscInitStruct.HSICalibrationValue = 0x10;
     if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {
-        Error_Handler();
+        while(1);
     }
 
     /* Get the Clocks configuration according to the internal RCC registers */
@@ -355,12 +361,6 @@ static void SYSCLKConfig_STOP(void)
     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
     if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, pFLatency) != HAL_OK)
     {
-        Error_Handler();
+        while(1);
     }
 }
-
-
-
-
-
-
