@@ -1,5 +1,21 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 #include "x_nucleo_iks01a1_hum_temp.h"
 #include "x_nucleo_iks01a1_pressure.h"
 #include "x_nucleo_iks01a1_imu_6axes.h"
@@ -43,11 +59,11 @@ void on_ready(void)
     ble_device_start_advertising();
     /*check sensor*/
     app_sensor_check();
-	while(1){
-		lcd_fill_color(0,0,200,200);
-	data = LCD_IO_ReadData(0x04,4);
+		while(1){
+			lcd_fill_color(0,0,200,200);
+			data = LCD_IO_ReadData(0x04,4);
 			HAL_Delay(10);
-	}
+		}
 		lcd_set_vram(100,3);
 }
 
@@ -116,14 +132,12 @@ static void hum_temp_monitor_init(void)
 static void pressure_sensor_init(void)
 {
     BSP_PRESSURE_Init();
-
 }
 
 /*init lsm6ds3*/
 static void lsm6ds3_6_axis_init(void)
 {
     BSP_IMU_6AXES_Init();
-
 }
 
 /*init lsm303agr*/
@@ -134,15 +148,13 @@ static void lsm303agr_init(void)
     if(ret !=0x00){
         return;
     }
- 
 }
 
 static void app_sensor_check(void)
 {
     uint8_t ret,tmp1 = 0x55;
- 
     /*init*/
-//    hum_temp_monitor_init();
+		//hum_temp_monitor_init();
     pressure_sensor_init();
     lsm6ds3_6_axis_init();
     lsm303agr_init();
@@ -174,41 +186,32 @@ static void app_sensor_check(void)
     {
         while(1);
     }
-    
-    
 }
 
 static void read_temperature(void* arg)
-// sensor read temperature
 {
     int16_t humidity;
     int16_t temperature;
     JSensor_HUM_TEMP_Typedef tdef;
 
     if (!running) return;
-
     tdef.humidity = &humidity;
     tdef.temperature = &temperature;
-
     if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_HUMITY_TEMP, (void *)&tdef)) {
         ble_device_send(0x00, 2, (uint8_t *)&temperature);
     }
-
     run_after_delay(read_humidity, NULL, UPDATE_INTERVAL);
 }
 
 static void read_humidity(void* arg)
-// sensor read humidity
 {
     int16_t humidity;
     int16_t temperature;
     JSensor_HUM_TEMP_Typedef tdef;
 
     if (!running) return;
-
     tdef.humidity = &humidity;
     tdef.temperature = &temperature;
-
     if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_HUMITY_TEMP, (void *)&tdef)) {
         ble_device_send(0x01, 2, (uint8_t *)&humidity);
     }
@@ -217,15 +220,12 @@ static void read_humidity(void* arg)
 }
 
 static void read_pressure(void* arg)
-// sensor read pressure
 {
     JSensor_Press_Typedef tdef;
     int32_t pressure;
 
     if (!running) return;
-
     tdef.pressure = &pressure;
-
     if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_PRESSURE, (void *)&tdef)) {
         ble_device_send(0x02, 3, (uint8_t *)&pressure);
     }
@@ -234,15 +234,12 @@ static void read_pressure(void* arg)
 }
 
 static void read_mag(void* arg)
-// sensor read magenetometer
 {
     JSensor_MAG_Typedef tdef;
     int8_t  MAG[6];
 
     if (!running) return;
-
     tdef.MAG = MAG;
-
     if(JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MAGNET, (void *)&tdef)) {
         ble_device_send(0x03, 6, (uint8_t*)MAG);
         //printf("%x,%x,%x,%x,%x,%x\n\r", MAG[0],MAG[1],MAG[2],MAG[3],MAG[4],MAG[5]);
@@ -252,16 +249,13 @@ static void read_mag(void* arg)
 }
 
 static void read_acc(void* arg)
-// sensor read accelerometer
 {
     JSensor_AXIS_Typedef tdef;
     int8_t ACC[6], GRO[6];
 
     if (!running) return;
-
     tdef.ACC = ACC;
     tdef.GRO = GRO;
-
     if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&tdef)) {
         ble_device_send(0x04, 6, (uint8_t*)ACC);
     }
@@ -270,16 +264,13 @@ static void read_acc(void* arg)
 }
 
 static void read_gyro(void* arg)
-// sensor read gyroscopic
 {
     JSensor_AXIS_Typedef tdef;
     int8_t ACC[6], GRO[6];
 
     if (!running) return;
-
     tdef.ACC = ACC;
     tdef.GRO = GRO;
-
     if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&tdef)) {
         ble_device_send(0x05, 6, (uint8_t*)GRO);
     }
@@ -287,24 +278,20 @@ static void read_gyro(void* arg)
     run_after_delay(read_temperature, NULL, UPDATE_INTERVAL);
 }
 
-/* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
-
     /*echo data*/
     ble_device_send(type, length, value);
-
 }
-/* Device on connect */
+
 void ble_device_on_connect(void)
 {
     running = 1;
     run_after_delay(read_temperature, NULL, UPDATE_INTERVAL);
 }
-/* Device on disconnect */
+
 void ble_device_on_disconnect(uint8_t reason)
 {
     /* Make the device connectable again. */
-    Ble_conn_state = BLE_CONNECTABLE;
     ble_device_start_advertising();
 }

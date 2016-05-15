@@ -1,20 +1,25 @@
-
-
-/* Includes ------------------------------------------------------------------*/
-#include "main.h"
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 #include "stm32_bluenrg_ble.h"
 #include "bluenrg_sdk_api.h"
 #include "bluenrg_sdk_host_api.h"
 #include "dispatch.h"
 #include "stm32f401_lp_mode.h"
 
-
-/** @addtogroup FMC_NOR
-  * @{
-  */
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
 #define BUFFER_SIZE         ((uint32_t)0x400)
 #define WRITE_READ_ADDR     ((uint32_t)0x8000)
 #define MANUFACTURER_CODE   ((uint16_t)0x0001)
@@ -25,8 +30,6 @@
 #define NOR_BANK_ADDR       ((uint32_t)0x60000000)
 #define NOR_TIMEOUT_VALUE   ((uint32_t)0xFFFF)
 
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
 NOR_HandleTypeDef hnor;
 FMC_NORSRAM_TimingTypeDef NOR_Timing;
 /* NOR IDs structure */
@@ -41,32 +44,19 @@ __IO uint32_t uwWriteReadStatus = 0;
 
 /* Counter index */
 uint32_t uwIndex = 0;
-/* Exported types ------------------------------------------------------------*/
 typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
-/* Private function prototypes -----------------------------------------------*/
 
 static void Error_Handler(void);
 static void Fill_Buffer(uint16_t *pBuffer, uint32_t uwBufferLength, uint16_t uwOffset);
 static TestStatus Buffercmp(uint16_t *pBuffer1, uint16_t *pBuffer2, uint16_t BufferLength);
 
-/* Private functions ---------------------------------------------------------*/
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @param  None
-  * @retval None
-  */
 static void Error_Handler(void)
 {
-
   while (1)
   {
   }
 }
-/**
-  * @brief  Main program
-  * @param  None
-  * @retval None
-  */
+
 int FMC_Test(void)
 {
   uint16_t *pdata = NULL;
@@ -360,12 +350,3 @@ void HAL_NOR_MspDeInit(NOR_HandleTypeDef *hnor)
 //  HAL_GPIO_DeInit(GPIOG, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4 | \
 //                  GPIO_PIN_5 | GPIO_PIN_9);
 }
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
