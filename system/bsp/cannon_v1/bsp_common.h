@@ -1,5 +1,3 @@
-
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4XX_CANNON_V1_H
 #define __STM32F4XX_CANNON_V1_H
 
@@ -7,24 +5,8 @@
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
    
-/** @addtogroup BSP
-  * @{
-  */
-
-/** @addtogroup STM32F4XX_NUCLEO
-  * @{
-  */
-
-/** @addtogroup STM32F4XX_NUCLEO_LOW_LEVEL
-  * @{
-  */ 
-
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Exported_Types
-  * @{
-  */
 typedef enum 
 {
   LED0 = 0
@@ -51,17 +33,6 @@ typedef enum
   JOY_UP    = 5
 }JOYState_TypeDef;
 
-/**
-  * @}
-  */ 
-
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Exported_Constants
-  * @{
-  */ 
-
-/** 
-  * @brief Define for STM32F4XX_NUCLEO board  
-  */ 
 #if !defined (USE_STM32F4XX_NUCLEO)
  #define USE_STM32F4XX_NUCLEO
 #endif
@@ -70,7 +41,6 @@ typedef enum
   * @{
   */
 #define LEDn                                    1
-
 #define LED0_PIN                                GPIO_PIN_5
 #define LED0_GPIO_PORT                          GPIOC
 #define LED0_GPIO_CLK_ENABLE()                  __GPIOC_CLK_ENABLE()
@@ -215,26 +185,8 @@ uint32_t         BSP_PB_GetState(Button_TypeDef Button);
 uint8_t          BSP_JOY_Init(void);
 JOYState_TypeDef BSP_JOY_GetState(void);
   
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* __STM32F4XX_CANNON_V1_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
