@@ -35,9 +35,15 @@
  ******************************************************************************
  */
 /* Includes ------------------------------------------------------------------*/
+#include "bsp_common.h"
 #include "x_nucleo_iks01a1.h"
-#include "string.h"
-#include "imu_sensor.h"
+#include "hum_temp.h"
+#include "imu_6axes.h"
+#include "magneto.h"
+#include "pressure.h"
+#include "LSM303AGR_MAG_driver.h"
+#include "LSM303AGR_ACC_driver.h"
+
 /** @addtogroup BSP
  * @{
  */
@@ -65,9 +71,6 @@ uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Time
 I2C_HandleTypeDef    I2C_EXPBD_Handle;
 
 /*SPI2*/
-#ifdef CANNON_V1
-static void       LSM6DS3_SPIx_Error(void);
-#endif
 uint32_t Lsm6ds3_SpixTimeout = LSM6DS3_SPIx_TIMEOUT_MAX; /*<! Value of Timeout when SPI communication fails */
 static SPI_HandleTypeDef Lsm6ds3_hnucleo_Spi;
 
@@ -166,17 +169,10 @@ static HAL_StatusTypeDef I2C_EXPBD_ReadData(uint8_t* pBuffer, uint8_t Addr, uint
 /*I2C read dma*/
 static HAL_StatusTypeDef I2C_EXPBD_Read_DMA(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
 #endif
-/************************************SPI2**********************************************/
-#ifdef CANNON_V1
-static HAL_StatusTypeDef  SPI2_EXPBD_Init(void);
-static HAL_StatusTypeDef    SPI2_EXPBD_IO_ReadByte(uint8_t* pBuffer, uint8_t RegisterAddr,uint16_t NumByteToRead );
-static HAL_StatusTypeDef SPI2_EXPBD_IO_WriteByte(uint8_t* pBuffer, uint8_t RegisterAddr,uint16_t NumByteToWrite);
-#endif
+
 /** @defgroup X_NUCLEO_IKS01A1_Exported_Functions X_NUCLEO_IKS01A1_Exported_Functions
  * @{
  */
-
-
 
 /********************************* LINK IMU 6 AXES *****************************/
 /**
@@ -229,7 +225,7 @@ void LSM6DS3_IO_ITConfig( void )
     HAL_NVIC_SetPriority(MEMS_INT1_EXTI_IRQn, 0x00, 0x00);
     HAL_NVIC_EnableIRQ(MEMS_INT1_EXTI_IRQn);
 
-//  /* Enable INT2 GPIO clock */
+//..  /* Enable INT2 GPIO clock */
 //  MEMS_INT2_GPIO_CLK_ENABLE();
 //
 //  /* Configure GPIO PINs to detect Interrupts */
@@ -333,9 +329,6 @@ u8_t LSM303AGR_MAG_ReadReg(u8_t Reg, u8_t* Data)
     //To be completed with either I2c or SPI reading function
     //i.e.: *Data = SPI_Mems_Read_Reg( Reg );
     return I2C_EXPBD_ReadData(Data, LSM303AGR_MAG_I2C_ADDRESS, Reg, 1);
-
-
-
 }
 
 /*******************************************************************************
@@ -1043,14 +1036,7 @@ static void I2C_EXPBD_MspInit(void)
     /* I2C_EXPBD SCL and SDA pins configuration -------------------------------------*/
     GPIO_InitStruct.Pin = NUCLEO_I2C_EXPBD_SCL_PIN | NUCLEO_I2C_EXPBD_SDA_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-#if (defined (CANNON_V1))
     GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-#endif
-
-#if (defined (CANNON_V2))
-    GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-#endif
-
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Alternate  = NUCLEO_I2C_EXPBD_SCL_SDA_AF;
     HAL_GPIO_Init(NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_PORT, &GPIO_InitStruct);
@@ -1110,178 +1096,6 @@ static void I2C_EXPBD_MspInit(void)
 #endif     
      
 }
-
-/*************************************SPI2*************************************************/
-#ifdef CANNON_V1
-/**
-  * @brief  Initializes SPI MSP.
-  * @param  None
-  * @retval None
-  */
-void HAL_SPI2_MspInit(SPI_HandleTypeDef *hspi)
-{
-    GPIO_InitTypeDef  GPIO_InitStruct;
-
-    /*** Configure the GPIOs ***/
-    /* Enable GPIO clock */
-    LSM6DS3_SPIx_SCK_GPIO_CLK_ENABLE();
-    LSM6DS3_SPIx_MISO_MOSI_GPIO_CLK_ENABLE();
-    LSM6DS3_SPIx_CS_GPIO_CLK_ENABLE();
-    LSM6DS3_SPIx_IRQ_CLK_ENABLE();
-
-    /* Configure SPI SCK */
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_SCK_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull  = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = LSM6DS3_SPIx_SCK_AF;
-    HAL_GPIO_Init(LSM6DS3_SPIx_SCK_GPIO_PORT, &GPIO_InitStruct);
-
-    /* Configure SPI MISO and MOSI */
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_MOSI_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = LSM6DS3_SPIx_MISO_MOSI_AF;
-    GPIO_InitStruct.Pull  = GPIO_PULLUP;
-    HAL_GPIO_Init(LSM6DS3_SPIx_MISO_MOSI_GPIO_PORT, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_MISO_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-    HAL_GPIO_Init(LSM6DS3_SPIx_MISO_MOSI_GPIO_PORT, &GPIO_InitStruct);
-
-    /* Configure CS_PIN pin */
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_CS_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    HAL_GPIO_Init(LSM6DS3_SPIx_CS_GPIO_PORT, &GPIO_InitStruct);
-
-    /*Configure SPI IRQ*/
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_IRQ_PIN;
-    GPIO_InitStruct.Mode = LSM6DS3_SPIx_IRQ_MODE;
-    GPIO_InitStruct.Pull = LSM6DS3_SPIx_IRQ_PULL;
-    GPIO_InitStruct.Speed = LSM6DS3_SPIx_IRQ_SPEED;
-    GPIO_InitStruct.Alternate = LSM6DS3_SPIx_IRQ_ALTERNATE;
-    HAL_GPIO_Init(LSM6DS3_SPIx_IRQ_PORT, &GPIO_InitStruct);
-
-
-    /*** Configure the SPI peripheral ***/
-    /* Enable SPI clock */
-    LSM6DS3_SPIx_CLK_ENABLE();
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  Initializes SPI HAL.
-  * @param  None
-  * @retval None
-  */
-static HAL_StatusTypeDef SPI2_EXPBD_Init(void)
-{
-    HAL_StatusTypeDef ret_val = HAL_OK;
-    if(HAL_SPI_GetState(&Lsm6ds3_hnucleo_Spi) == HAL_SPI_STATE_RESET)
-    {
-
-        /* SPI Config */
-        Lsm6ds3_hnucleo_Spi.Instance = LSM6DS3_SPIx;
-        /* SPI baudrate is set to 12,5 MHz maximum (PCLK2/SPI_BaudRatePrescaler = 100/8 = 12,5 MHz)
-         to verify these constraints:
-            - ST7735 LCD SPI interface max baudrate is 15MHz for write and 6.66MHz for read
-              Since the provided driver doesn't use read capability from LCD, only constraint
-              on write baudrate is considered.
-            - SD card SPI interface max baudrate is 25MHz for write/read
-            - PCLK2 max frequency is 100 MHz
-         */
-        Lsm6ds3_hnucleo_Spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-        Lsm6ds3_hnucleo_Spi.Init.Direction = SPI_DIRECTION_2LINES;
-        Lsm6ds3_hnucleo_Spi.Init.CLKPhase = SPI_PHASE_2EDGE;
-        Lsm6ds3_hnucleo_Spi.Init.CLKPolarity = SPI_POLARITY_HIGH;
-        Lsm6ds3_hnucleo_Spi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
-        Lsm6ds3_hnucleo_Spi.Init.CRCPolynomial = 7;
-        Lsm6ds3_hnucleo_Spi.Init.DataSize = SPI_DATASIZE_8BIT;
-        Lsm6ds3_hnucleo_Spi.Init.FirstBit = SPI_FIRSTBIT_MSB;
-        Lsm6ds3_hnucleo_Spi.Init.NSS = SPI_NSS_SOFT;
-        Lsm6ds3_hnucleo_Spi.Init.TIMode = SPI_TIMODE_DISABLED;
-        Lsm6ds3_hnucleo_Spi.Init.Mode = SPI_MODE_MASTER;
-
-        ret_val = HAL_SPI2_Init(&Lsm6ds3_hnucleo_Spi);
-    } else {
-        ret_val = HAL_ERROR;
-    }
-    return ret_val;
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  SPI error treatment function.
-  * @param  None
-  * @retval None
-  */
-static void LSM6DS3_SPIx_Error (void)
-{
-    /* De-initialize the SPI communication BUS */
-    HAL_SPI_DeInit(&Lsm6ds3_hnucleo_Spi);
-
-    /* Re-Initiaize the SPI communication BUS */
- 
-     SPI2_EXPBD_Init();
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  Writes a byte on the SD.
-  * @param  Data: byte to send.
-  * @retval None
-  */
-static HAL_StatusTypeDef SPI2_EXPBD_IO_WriteByte(uint8_t* pBuffer, uint8_t RegisterAddr,
-        uint16_t NumByteToWrite)
-{
-    /* Send the byte */
-    //LSM6DS3_SPIx_Write(Data);
-    uint8_t pBufferAddr[20] = {0};
-    memcpy(pBufferAddr, &RegisterAddr, 1);
-    memcpy(pBufferAddr+1, pBuffer, NumByteToWrite);
-    HAL_StatusTypeDef status = HAL_OK;
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_RESET);
-    status = HAL_SPI_Transmit(&Lsm6ds3_hnucleo_Spi, pBufferAddr, NumByteToWrite+1, Lsm6ds3_SpixTimeout);
-
-    if(status != HAL_OK)
-    {
-        /* Execute user timeout callback */
-        LSM6DS3_SPIx_Error();
-    }
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_SET);
-    return status;
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  Reads a byte from the SD.
-  * @param  None
-  * @retval The received byte.
-  */
-static HAL_StatusTypeDef SPI2_EXPBD_IO_ReadByte(uint8_t* pBuffer, uint8_t RegisterAddr,
-        uint16_t NumByteToRead )
-{
-    RegisterAddr = RegisterAddr | 0x80;
-    HAL_StatusTypeDef status = HAL_OK;
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_RESET);
-    status = HAL_SPI_TransmitReceive(&Lsm6ds3_hnucleo_Spi, &RegisterAddr, pBuffer, NumByteToRead+1, Lsm6ds3_SpixTimeout);
-    if(status != HAL_OK)
-    {
-        /* Execute user timeout callback */
-        LSM6DS3_SPIx_Error();
-    }
-    memcpy(pBuffer, pBuffer+1, NumByteToRead);
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_SET);
-
-    return status;
-}
-#endif
 
 /**
  * @}

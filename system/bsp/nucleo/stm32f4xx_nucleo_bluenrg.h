@@ -1,20 +1,9 @@
-
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4XX_NUCLEO_BLUENRG_H
 #define __STM32F4XX_NUCLEO_BLUENRG_H
 
 #ifdef __cplusplus
  extern "C" {
-#endif
-
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#ifdef CANNON_V1
-#include "stm32f4xx_cannon_v1.h"
-#endif
-	 
-#ifdef CANNON_V2
-#include "stm32f4xx_cannon_v2.h"
 #endif
 
 /** @addtogroup BSP

@@ -44,33 +44,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* Includes ------------------------------------------------------------------*/
-#ifdef CANNON_V1
-#include "stm32f4xx_hal.h"
-
-#include "hum_temp.h"
-#include "imu_6axes.h"
-#include "magneto.h"
-#include "pressure.h"
-#include "LSM303AGR_MAG_driver.h"
-#include "LSM303AGR_ACC_driver.h"
-#include "stm32f4xx_hal_msp.h"
-
-#endif
+#include "stdint.h"
 	
-#ifdef CANNON_V2
-#include "stm32f4xx_hal.h"
-
-#include "hum_temp.h"
-#include "imu_6axes.h"
-#include "magneto.h"
-#include "pressure.h"
-#include "LSM303AGR_MAG_driver.h"
-#include "LSM303AGR_ACC_driver.h"
-#include "stm32f4xx_hal_msp.h"
-
-#endif
 /** @addtogroup BSP
   * @{
   */
@@ -111,14 +86,7 @@ typedef struct
   */
 
 /* I2C clock speed configuration (in Hz) */
-#if (defined (CANNON_V1))
 #define NUCLEO_I2C_EXPBD_SPEED                         400000
-#endif /* CANNON_V1 */
-
-#if (defined (CANNON_V2))
-#define NUCLEO_I2C_EXPBD_SPEED                         400000
-#endif /* CANNON_V2 */
-
 
 /* I2C peripheral configuration defines */
 #define NUCLEO_I2C_EXPBD                            I2C1
