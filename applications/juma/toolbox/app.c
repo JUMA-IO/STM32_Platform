@@ -1,28 +1,41 @@
-//#include "sensor_service.h"
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
+#include "x_nucleo_iks01a1.h"
+#include "x_nucleo_iks01a1_hum_temp.h"
+#include "x_nucleo_iks01a1_pressure.h"
+#include "x_nucleo_iks01a1_imu_6axes.h"
+#include "hts221.h"
+#include "lps25hb.h"
+#include "lps25h.h"
+#include "lsm6ds3.h"
+#include "juma_sensor.h"
+
 /*start adv*/
-
-//static void sensor_read(void* arg);
-
-//#ifdef CANNON_V2
-//const char *name = "CANNON_V2";
+const char *name = "CANNON_TBox";
 uint8_t adv_address[] = {0x0D, 0x05, 0x04, 0x03, 0x02, 0x02};	
-//#endif
-//#ifdef CANNON_V1
-//const char *name = "CANNON_V1";
-//uint8_t adv_address[] = {0x0C, 0x05, 0x04, 0x03, 0x02, 0x01};	
-//#endif
 uint8_t tx_power_level 	= 7;
 uint16_t adv_interval 	= 48;
-
 uint8_t g_func_com_en 	= 0;
 uint8_t g_func_alt_en 	= 0;
 uint8_t g_func_htm_en 	= 0;
 uint8_t g_func_cub_en 	= 0;
 uint8_t g_func_dfu_en 	= 0;
-
-
 
 void jsensor_app_set_sensors(void)
 {
@@ -39,8 +52,6 @@ void on_ready(void)
 	ble_set_adv_param((char *)name, adv_address, tx_power_level, adv_interval);
 	ble_device_start_advertising();
 }
-
-
 
 /*********************************
 *        电子罗盘功能函数        *
@@ -59,7 +70,6 @@ void func_com(void* args)
 			// sensor read motion 6 AXIS
 			JSensor_AXIS_Typedef axis_tdef;
 			axis_tdef.ACC = &data[0]+6;
-			
 			if (JSENSOR_OK == jsensor_app_read_sensor(JSENSOR_TYPE_MOTION_6AXIS, (void *)&axis_tdef)) 
 				ble_device_send(0x01, 12, (uint8_t*)data);
 		}
@@ -145,7 +155,6 @@ void func_cube(void* args)
 **********************************/
 void func_dfu(void* args)
 {
-	
 }
 
 void func_off()
@@ -155,9 +164,7 @@ void func_off()
 	g_func_htm_en 	= 0;
 	g_func_cub_en 	= 0;
 	g_func_dfu_en 	= 0;
-	
 }
-
 
 /* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
@@ -221,15 +228,12 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 /* Device on connect */
 void ble_device_on_connect(void)
 {
-		
-//	tBleStatus ret = BLE_WAIT_REMOTE_ENABLE_NOTIFY;
-	
 }
+
 /* Device on disconnect */
 void ble_device_on_disconnect(uint8_t reason)
 {
 	func_off();
 	/* Make the device connectable again. */
-	Ble_conn_state = BLE_CONNECTABLE;
 	ble_device_start_advertising();
 }

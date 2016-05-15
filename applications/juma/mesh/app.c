@@ -1,19 +1,30 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 #include "mesh.h"
+#include "bluenrg_gap.h"
 
 #if NO_PRINTF
 #define printf(...)
 #endif
 
 #define MESH_ID  0x0004
-
-#ifdef CANNON_V2
-char board_name[20] = "mesh_3";
-#endif
-#ifdef CANNON_V1
-char board_name[20] = "CANNON_V1";
-#endif
+char board_name[20] = "Cannon Mesh";
 
 void on_ready(void)
 {
@@ -27,7 +38,6 @@ void on_ready(void)
     /*Host*/
     ble_host_set_scan_param(tx_power_level, bdAddr, scan_interval);
     ble_host_start_scan(NULL);
-
 }
 
 void mesh_on_message(void* data)
@@ -53,14 +63,12 @@ void ble_host_on_device_info(void* data)
     if(temp_buf[10] == AD_TYPE_MANUFACTURER_SPECIFIC_DATA) {
         temp_buf = temp_buf+9;
         run_after_delay(mesh_rx_scan_data, temp_buf,2);
-
     }
 #endif
 }
 
 void ble_host_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
-
 }
 
 void ble_host_on_connect(void)
@@ -70,7 +78,6 @@ void ble_host_on_connect(void)
 
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
-
     mesh_manuf_data_t rx_data ;
     rx_data.data = (((uint16_t)value[0] << 8) | value[1]);
     printf("value: %x\n", rx_data.data);
@@ -79,7 +86,6 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 
 void ble_device_on_connect( void )
 {
-
 }
 
 void ble_device_on_disconnect(uint8_t reason)
@@ -87,6 +93,3 @@ void ble_device_on_disconnect(uint8_t reason)
    printf("device disconnected\n");
    run_after_delay(mesh_disconnect_handle, NULL, 100);
 }
-
-
-

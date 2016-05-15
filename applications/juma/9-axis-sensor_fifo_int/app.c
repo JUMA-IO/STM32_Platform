@@ -1,13 +1,26 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "hal_types.h"
+#include "bluenrg_sdk_api.h"
 #include "imu_sensor_fusion_9-axis.h"
-#include "stm32f4xx_hal_msp.h"
-
+#include "juma_sensor.h"
+#include "imu_sensor_9-axis.h"
 #include <math.h>
-
-#if NO_PRINTF
-#define printf(...)
-#endif
 
 #define SAMPLINGRATE 400
 
@@ -17,15 +30,8 @@ static void sensor_print(void* arg);
 static uint8_t sendFLAG = FALSE;
 static uint8_t sensor_data_ready_FLAG = FALSE;
 static imu_sensor_data_t local_data;
-
 static float q[4] = {1.0f, 0.0f, 0.0f, 0.0f};
-
-#ifdef CANNON_V2
-char name[20] = "CANNON_V2";
-#endif
-#ifdef CANNON_V1
-char name[20] = "CANNON_V1";
-#endif
+char name[20] = "Cannon 9-axis";
 
 void on_ready(void)
 {
@@ -100,7 +106,6 @@ void ble_device_on_disconnect(uint8_t reason)
 {
   sendFLAG = FALSE;
   /* Make the device connectable again. */
-  Ble_conn_state = BLE_CONNECTABLE;
   ble_device_start_advertising();
 }
 

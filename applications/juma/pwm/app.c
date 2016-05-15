@@ -1,14 +1,31 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 #include "pwm.h"
-TIM_HandleTypeDef        TimHandleT2;
+
+TIM_HandleTypeDef TimHandleT2;
 int16_t LED_luminance=0;
  
-void breathing_led_init(){
-	
-TIM_OC_InitTypeDef       pwmConfig;
-	
+void breathing_led_init()
+{
+	TIM_OC_InitTypeDef pwmConfig;
   GPIO_InitTypeDef GPIO_InitStruct;
+
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_TIM2_CLK_ENABLE();
   GPIO_InitStruct.Pin = GPIO_PIN_3;
@@ -29,24 +46,20 @@ TIM_OC_InitTypeDef       pwmConfig;
   pwmConfig.Pulse=0;
   HAL_TIM_PWM_ConfigChannel(&TimHandleT2, &pwmConfig, TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&TimHandleT2, TIM_CHANNEL_2);
-	
-}
- void breathing_led_run(){
-	LED_luminance+=10;
-		if(LED_luminance>=1000)LED_luminance=-1000;
-		TIM_PWM_Duty(&TimHandleT2,TIM_CHANNEL_2,abs(LED_luminance));
-	 run_after_delay(breathing_led_run, NULL, 10);//FIXME:there are warning: #167-D
-	
 }
 
+void breathing_led_run()
+{
+	LED_luminance+=10;
+	if(LED_luminance>=1000)LED_luminance=-1000;
+	TIM_PWM_Duty(&TimHandleT2,TIM_CHANNEL_2,abs(LED_luminance));
+	run_after_delay(breathing_led_run, NULL, 10);
+}
 
 void on_ready(void)
 {
-	
 	breathing_led_init();
-	
 	breathing_led_run();
-  
 }
 
 

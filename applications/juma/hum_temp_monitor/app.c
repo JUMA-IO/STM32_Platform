@@ -1,5 +1,12 @@
 #include "app.h"
+#include "stm32f4xx_hal.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
+#include "x_nucleo_iks01a1.h"
+#include "x_nucleo_iks01a1_hum_temp.h"
+#include "hts221.h"
 #include "juma_sensor.h"
+
 /*start adv*/
 
 char *name = "NovaFan";
@@ -60,5 +67,4 @@ void ble_device_on_connect(void)
 void ble_device_on_disconnect(uint8_t reason)
 {
     /* Make the device connectable again. */
-    Ble_conn_state = BLE_CONNECTABLE;
 }

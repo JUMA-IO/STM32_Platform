@@ -1,17 +1,27 @@
-//#include "sensor_service.h"
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 
 #if NO_PRINTF
 #define printf(...)
 #endif
 
-#ifdef CANNON_V2
-char name[20] = "CANNON_V2";
-#endif
-#ifdef CANNON_V1
-char name[20] = "CANNON_V1";
-#endif
+char name[20] = "Cannon Host";
 
 void on_ready(void)
 {
@@ -19,7 +29,6 @@ void on_ready(void)
     uint16_t scan_interval = 100;
 
     uint8_t bdAddr[6] = {0x03,0x03,0x03,0x03,0x03,0x03};
-    /*Host*/
     ble_host_set_scan_param( tx_power_level, bdAddr, scan_interval);
     ble_host_start_scan(NULL);
 }

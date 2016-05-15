@@ -1,12 +1,27 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
 #include "stm32f4xx_cannon_v2_sd.h"
-/* FatFs includes component */
 #include "ff_gen_drv.h"
 #include "sd_diskio.h"
-	FATFS SDFatFs;  /* File system object for SD disk logical drive */
-	FIL MyFile;     /* File object */
-	char SDPath[4]; /* SD disk logical drive path */ 
+
+FATFS SDFatFs;  /* File system object for SD disk logical drive */
+FIL MyFile;     /* File object */
+char SDPath[4]; /* SD disk logical drive path */ 
 
   void SD_Init(void){	
 	FRESULT res;                                          /* FatFs function common result code */
@@ -100,8 +115,5 @@
 
 void on_ready(void)
 {
-	
    SD_Init();
 }
-
-

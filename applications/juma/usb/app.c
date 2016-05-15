@@ -1,5 +1,21 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 
 static void app_led_control(uint8_t flag);
 
@@ -22,7 +38,6 @@ void on_ready(void)
   /* Start Device Process */
   USBD_Start(&USBD_Device);
 
-	// TODO: send HID report to host periodically.
 	//run_after_delay(sensor_read, NULL, 500);
 }
 

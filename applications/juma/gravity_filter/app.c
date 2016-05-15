@@ -1,22 +1,27 @@
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 #include "imu_sensor_fusion.h"
-/*start adv*/
-
-#if 0 //NO_PRINTF
-#define printf(...)
-#endif
 
 static void adv_name_generate(uint8_t* uni_name);
 void print_message(void* args);
 
-#ifdef CANNON_V2
-char name[20] = "CANNON_V2";
-#endif
-#ifdef CANNON_V1
-char name[20] = "CANNON_V1";
-#endif
-
+char name[20] = "Cannon Gravity";
 gravity_filter_context_t gravity_filter_context;
 
 void on_ready(void)
@@ -34,18 +39,12 @@ void on_ready(void)
 
     BSP_LED_On(LED0);
     imu_sensor_select_features(ALL_ENABLE);
-
     imu_sensor_reset();
-
     imu_sensor_set_data_rate(&data_rate, LSM6DS3_XG_FIFO_MODE_FIFO);
-
     gravity_filter_init(&gravity_filter_context);
-
     imu_sensor_start();
-
     run_after_delay(print_message, NULL, 0);
 }
-
 
 static void adv_name_generate(uint8_t* uni_name) {
     char temp[3] = "_";
@@ -72,7 +71,6 @@ void print_message(void* args)
     x = (int32_t) cx->gravity.x;
     y = (int32_t) cx->gravity.y;
     z = (int32_t) cx->gravity.z;
-
     tmp_buf[0] = (x >> 8) & 0xFF;
     tmp_buf[1] = (x) & 0xFF;
     tmp_buf[2] = (y >> 8) & 0xFF;
@@ -86,19 +84,14 @@ void print_message(void* args)
 /* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
-
-
 }
 /* Device on connect */
 void ble_device_on_connect(void)
 {
-
-
 }
 /* Device on disconnect */
 void ble_device_on_disconnect(uint8_t reason)
 {
     /* Make the device connectable again. */
-    Ble_conn_state = BLE_CONNECTABLE;
     ble_device_start_advertising();
 }

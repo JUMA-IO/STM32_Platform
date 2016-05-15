@@ -1,17 +1,30 @@
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
-/*start adv*/
-
-#define UPDATE_INTERVAL 100
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
+#include "juma_sensor.h"
 
 static void read_acc(void* arg);
 static void led_on(void* arg);
 static void led_off(void* arg);
 
-#if defined(CANNON_V2)
-const char* board_name = "CANNON V2";
-#elif defined(CANNON_V1)
-const char* board_name = "CANNON V1";
-#endif
+/*start adv*/
+#define UPDATE_INTERVAL 100
+const char* board_name = "Cannon 3axis";
 static uint8_t running;
  
 void jsensor_app_set_sensors(void)
@@ -27,7 +40,6 @@ void on_ready(void)
     char name[32];
 
     running = 0;
-
     BSP_LED_On(LED0);
     HCI_get_bdAddr(bdAddr);
     sprintf(name, "%s %01x%01x", board_name, bdAddr[0], bdAddr[1]);
@@ -35,7 +47,6 @@ void on_ready(void)
     ble_set_adv_param(name, bdAddr, tx_power_level, adv_interval);
     ble_device_start_advertising();
 }
-
 
 static void read_acc(void* arg)
 // sensor read accelerometer
@@ -84,6 +95,5 @@ void ble_device_on_disconnect(uint8_t reason)
 {
     running = 0;
     /* Make the device connectable again. */
-    Ble_conn_state = BLE_CONNECTABLE;
     ble_device_start_advertising();
 }

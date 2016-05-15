@@ -1,8 +1,23 @@
-//#include "sensor_service.h"
-
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
 #include "app.h"
-/*start adv*/
+#include "bsp_common.h"
+#include "bluenrg_sdk_api.h"
 
+/*start adv*/
 char *name = "BlueNRG_Blink";
 uint8_t adv_address[] = {0x08, 0x05, 0x04, 0x03, 0x02, 0x04};	
 uint8_t tx_power_level = 7;
