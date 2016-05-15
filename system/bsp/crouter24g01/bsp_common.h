@@ -172,6 +172,6 @@ void BSP_LED_Off(Led_TypeDef Led);
 void BSP_LED_Toggle(Led_TypeDef Led);
 
 void BSP_SystemClock_Config(void);
-void system_init(void);
+void bsp_init(void);
 
 #endif

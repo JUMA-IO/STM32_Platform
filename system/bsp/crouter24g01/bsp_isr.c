@@ -1,15 +1,4 @@
 /**
-  ******************************************************************************
-  * @file    stm32xx_it.c
-  * @author  CL
-  * @version V1.0.0
-  * @date    04-July-2014
-  * @brief   Main Interrupt Service Routines.
-  *          This file provides template for all exceptions handler and
-  *          peripherals interrupt service routine.
-  ******************************************************************************
-  * @attention
-  *
   */
 #include "debug.h"
 #include "stm32l0xx_hal.h"
@@ -121,7 +110,6 @@ void BNRG_SPI_EXTI_IRQHandler(void)
 void PUSH_BUTTON_EXTI_IRQHandler(void)
 {
     //HAL_GPIO_EXTI_IRQHandler(KEY_BUTTON_PIN);
-
     button_event = 1;
 }
 

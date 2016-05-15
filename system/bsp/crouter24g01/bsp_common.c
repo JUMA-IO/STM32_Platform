@@ -13,7 +13,7 @@ SPI_HandleTypeDef g_spi_handle;
 static SPI_HandleTypeDef cannon_si24r1_Spi;
 static void SPIx_Error (void);
 	
-void system_init(void)
+void bsp_init(void)
 {
     HAL_Init();
     /* Configure the system clock */
