@@ -7,15 +7,13 @@
 
   <Targets>
     <Target>
-      <TargetName>Cannon_V2</TargetName>
+      <TargetName>GRAVITY</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F401RETx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.5.0</PackID>
-          <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x80000) IRAM(0x20000000,0x18000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -47,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>CAF_V2</OutputName>
+          <OutputName>gravity</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -74,8 +72,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopB1X>0</nStopB1X>
-            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -132,7 +128,6 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
-            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -144,10 +139,11 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreSysVw>1</RestoreSysVw>
+            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreTracepoints>1</RestoreTracepoints>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>11</TargetSelection>
+          <TargetSelection>6</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -161,7 +157,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
+            <Driver>Segger\JL2CM3.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -171,10 +167,10 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4103</DriverSelection>
+            <DriverSelection>4099</DriverSelection>
           </Flash1>
-          <bUseTDR>0</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <bUseTDR>1</bUseTDR>
+          <Flash2>Segger\JL2CM3.dll</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -365,7 +361,7 @@
               <MiscControls>--C99 --gnu  -W#177</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2,SENSOR_FIFO,NO_PRINTF,SERVER_ROLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\class\HID\inc;..\..\..\..\system\drivers\st\stm32f4xx_hal_driver\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h;..\..\sensor_tag;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc</IncludePath>
+              <IncludePath>..\..\gravity_filter;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -416,13 +412,18 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>system/middlewares/juma</GroupName>
+          <GroupName>system</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\main.c</FilePath>
+              <FilePath>..\..\..\..\system\main.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>system/middlewares/juma</GroupName>
+          <Files>
             <File>
               <FileName>bluenrg_sdk_api.c</FileName>
               <FileType>1</FileType>
@@ -439,35 +440,25 @@
               <FilePath>..\..\..\..\system\middlewares\juma\low_power\stm32f401_lp_mode.c</FilePath>
             </File>
             <File>
-              <FileName>bluenrg_interface.c</FileName>
+              <FileName>imu_sensor_fusion.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\bluenrg_interface.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32xx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\stm32xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>cube_hal_f4.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\cube_hal_f4.c</FilePath>
-            </File>
-            <File>
-              <FileName>clock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\clock.c</FilePath>
-            </File>
-            <File>
-              <FileName>juma_sensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\sensor\juma_sensor.c</FilePath>
+              <FilePath>..\..\..\..\system\middlewares\juma\sensor\sensor_fusion\imu_sensor_fusion.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>system/middlewares/st</GroupName>
           <Files>
+            <File>
+              <FileName>clock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\middlewares\st\bluenrg_ms\src\clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>imu_sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\middlewares\juma\sensor\imu_sensor.c</FilePath>
+            </File>
             <File>
               <FileName>bluenrg_gap_aci.c</FileName>
               <FileType>1</FileType>
@@ -482,11 +473,6 @@
               <FileName>bluenrg_hal_aci.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_hal_aci.c</FilePath>
-            </File>
-            <File>
-              <FileName>bluenrg_itf_template.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\st\bluenrg_ms\src\bluenrg_itf_template.c</FilePath>
             </File>
             <File>
               <FileName>bluenrg_l2cap_aci.c</FileName>
@@ -584,14 +570,19 @@
               <FilePath>..\..\..\..\system\bsp\nucleo\x_nucleo_iks01a1_pressure.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f4xx_cannon_v2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\bsp\cannon_v2\stm32f4xx_cannon_v2.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\bsp\cannon_v2\stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\bsp\cannon_v2\bsp_common.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\bsp\cannon_v2\bsp_isr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -943,7 +934,7 @@
       <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.1.0" condition="CMSIS Core">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.3.0"/>
         <targetInfos>
-          <targetInfo name="Cannon_V2"/>
+          <targetInfo name="GRAVITY"/>
         </targetInfos>
       </component>
     </components>
