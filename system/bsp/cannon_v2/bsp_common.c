@@ -79,6 +79,10 @@ void bsp_init(void)
     /*UART2 init*/
     UART_Init();
     HAL_Delay(1000);
+		/*sensor layer init*/
+		#ifdef SENSOR_FIFO
+		jsensor_sys_init();
+		#endif
     /* Initialize the BlueNRG SPI driver */
     BNRG_SPI_Init();
     /* Initialize the BlueNRG HCI */

@@ -25,7 +25,7 @@ static void read_humidity(void* arg);
 static void read_pressure(void* arg);
 static void read_magenetometer(void* arg);
 static void read_accelerometer(void* arg);
-static void gyroscopic(void* arg);
+static void read_gyroscopic(void* arg);
 static void led_on(void* arg);
 static void led_off(void* arg);
 
@@ -138,7 +138,7 @@ static void read_accelerometer(void* arg)
         ble_device_send(0x04, 6, (uint8_t*)ACC);
     }
 
-    run_after_delay(gyroscopic, NULL, UPDATE_INTERVAL);
+    run_after_delay(read_gyroscopic, NULL, UPDATE_INTERVAL);
 }
 
 static void read_gyroscopic(void* arg)
