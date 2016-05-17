@@ -243,6 +243,7 @@ void BSP_LED_On(Led_TypeDef Led);
 void BSP_LED_Off(Led_TypeDef Led);
 void BSP_LED_Toggle(Led_TypeDef Led);
 void BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
+void BSP_SystemClock_Config(void);
 
 #ifdef __cplusplus
 }
