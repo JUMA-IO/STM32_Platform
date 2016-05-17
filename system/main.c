@@ -17,11 +17,11 @@
 
 int main(void)
 {
-		bsp_init();
+  		bsp_init();
     dispatch_init();
     on_ready();
     while(1)
-		{
+  	 {
         HCI_Process();
         dispatch();
     }
