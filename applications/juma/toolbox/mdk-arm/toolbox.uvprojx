@@ -14,6 +14,8 @@
         <TargetCommonOption>
           <Device>STM32F401RETx</Device>
           <Vendor>STMicroelectronics</Vendor>
+          <PackID>Keil.STM32F4xx_DFP.2.5.0</PackID>
+          <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x80000) IRAM(0x20000000,0x18000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
@@ -72,6 +74,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopB1X>0</nStopB1X>
+            <nStopB2X>0</nStopB2X>
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
@@ -128,6 +132,7 @@
             <RestoreFunctions>1</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <LimitSpeedToRealTime>0</LimitSpeedToRealTime>
+            <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
             <UseTarget>1</UseTarget>
@@ -139,8 +144,7 @@
             <RestoreFunctions>0</RestoreFunctions>
             <RestoreToolbox>1</RestoreToolbox>
             <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
-            <RestoreTracepoints>1</RestoreTracepoints>
+            <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
           <TargetSelection>11</TargetSelection>
@@ -361,7 +365,7 @@
               <MiscControls>--C99 --gnu  -W#177</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F401xE,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,CANNON_V2,SENSOR_FIFO,NO_PRINTF,SERVER_ROLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\cmiss\device\st\inc;..\..\..\..\system\cmiss\include;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h;..\..\toolbox;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc</IncludePath>
+              <IncludePath>..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\cmsis\device\st\inc;..\..\..\..\system\cmsis\include;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h;..\..\toolbox;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -582,17 +586,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>system/cmiss</GroupName>
+          <GroupName>system/cmsis</GroupName>
           <Files>
             <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\cmiss\device\st\src\system_stm32f4xx.c</FilePath>
+              <FilePath>..\..\..\..\system\cmsis\device\st\src\system_stm32f4xx.c</FilePath>
             </File>
             <File>
               <FileName>startup_stm32f401xe.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\..\system\cmiss\device\st\src\startup_stm32f401xe.s</FilePath>
+              <FilePath>..\..\..\..\system\cmsis\device\st\src\startup_stm32f401xe.s</FilePath>
             </File>
           </Files>
         </Group>
