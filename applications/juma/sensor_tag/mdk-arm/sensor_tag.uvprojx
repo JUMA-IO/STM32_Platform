@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>STM32F401RETx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.5.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.7.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x80000) IRAM(0x20000000,0x18000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -429,6 +429,11 @@
           <GroupName>system/middlewares/juma</GroupName>
           <Files>
             <File>
+              <FileName>juma_sensor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\middlewares\juma\sensor\juma_sensor.c</FilePath>
+            </File>
+            <File>
               <FileName>bluenrg_sdk_api.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\middlewares\juma\sdk\bluenrg_sdk_api.c</FilePath>
@@ -452,11 +457,6 @@
               <FileName>clock.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\middlewares\st\bluenrg_ms\src\clock.c</FilePath>
-            </File>
-            <File>
-              <FileName>juma_sensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\system\middlewares\juma\sensor\juma_sensor.c</FilePath>
             </File>
             <File>
               <FileName>bluenrg_gap_aci.c</FileName>
