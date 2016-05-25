@@ -256,7 +256,7 @@ void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-    //HCI_Isr();
+    HCI_Isr();
 }
 
 void Error_Handler(void)

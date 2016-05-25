@@ -173,18 +173,18 @@ typedef struct
 #define MEMS_INT1_EXTI_IRQn           EXTI15_10_IRQn
 
 // ready for use
-//#define MEMS_INT2_GPIO_PORT           GPIOB
-//#define MEMS_INT2_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
-//#define MEMS_INT2_GPIO_CLK_DISABLE()  __GPIOB_CLK_DISABLE()
-//#define MEMS_INT2_PIN                 GPIO_PIN_0
+#define MEMS_INT2_GPIO_PORT           GPIOB
+#define MEMS_INT2_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
+#define MEMS_INT2_GPIO_CLK_DISABLE()  __GPIOB_CLK_DISABLE()
+#define MEMS_INT2_PIN                 GPIO_PIN_0
 
-//#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)))
-//#define MEMS_INT2_EXTI_IRQn           EXTI0_IRQn
-//#endif
+#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)))
+#define MEMS_INT2_EXTI_IRQn           EXTI0_IRQn
+#endif
 
-//#if (defined (USE_STM32L0XX_NUCLEO))
-//#define MEMS_INT2_EXTI_IRQn           EXTI0_1_IRQn
-//#endif
+#if (defined (USE_STM32L0XX_NUCLEO))
+#define MEMS_INT2_EXTI_IRQn           EXTI0_1_IRQn
+#endif
 
 /*############################### SPI2 #######################################*/
 #define LSM6DS3_SPIx                                     SPI2
