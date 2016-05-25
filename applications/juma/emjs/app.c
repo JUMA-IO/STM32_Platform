@@ -32,7 +32,7 @@ static void hello(js_State *J)
 {
 	const char *name = js_tostring(J, 1);
 	static int invert = 0;
-	//printf("Hello, %s!\n", name);
+
 	if (invert > 0) {
 		BSP_LED_On(LED0);
 		invert --;
@@ -74,32 +74,16 @@ void user_process(void)
 /* Device On Message */
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 {
-	static uint16_t len;
-	uint8_t len1,len2,len3,len4;
 	static uint8_t i = 0;
-	
-	if (i==0) len = sizeof(js_State);//0x1b60
-	//if (i==2) len = JS_STACKSIZE * sizeof *J->stack;//0x1000
-	if (i==4) len = sizeof(js_Object); // 17 jsobj + 10 + more? //0x40
-	if (i==6) len = sizeof(js_Environment); //0x10
-	len1 = len & 0xff; len2 = (len & 0xff00) >> 8;
-	if (i==0) len3 = len1;
-	if (i==1) len3 = len2;
-	if (i==2) len3 = len1;
-	if (i==3) len3 = len2;
-	if (i==4) len3 = len1;
-	if (i==5) len3 = len2;
-	if (i==6) len3 = len1;
-	if (i==7) len3 = len2;
+
     /*LED Control*/
     if(*value == 0x00) {
         BSP_LED_On(LED0);
     } else if(*value == 0x01) {
         BSP_LED_Off(LED0);
         do_js_task();
-		*value = len3;
+		*value = i++;
         ble_device_send(type, length, value);
-        i++;
     }
 
 }
