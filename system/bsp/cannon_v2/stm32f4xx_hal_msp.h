@@ -4,6 +4,14 @@
 #include "stm32f4xx.h"
 
 void UART_Init(void);
+int Uart_Tx_String(char *string, uint16_t len);
+int Uart_Rx_String(char *string, uint16_t len, uint32_t timeout);
+
+
+
+#define HAL_MSP_SUCCESS     (0)
+#define HAL_MSP_FAIL        (1)
+
 
 /* Definition for USARTx clock resources */
 #define USARTx                           USART2

@@ -87,6 +87,37 @@ int fputc(int ch, FILE *f)
     return ch;
 }
 
+
+int Uart_Tx_String(char *string, uint16_t len)
+{
+    HAL_StatusTypeDef status = HAL_UART_Transmit(&UartHandle, (uint8_t *)string, len, 0xFFFF);
+
+    if (status != HAL_OK) {
+        //while (1);
+        return HAL_MSP_FAIL;
+    }
+    return HAL_MSP_SUCCESS;
+}
+
+/* You know it's a blocking call, don't you? */
+int Uart_Rx_String(char *string, uint16_t len, uint32_t timeout)
+{
+    uint8_t i;
+    for(i=0; i<len; i++){
+      //string[i] = 13; //set to a CR (acsii 13 or Enter)
+      string[i] = 0;    //set to '\0'
+    }
+
+    HAL_StatusTypeDef status = HAL_UART_Receive(&UartHandle, (uint8_t *)string, len, timeout);
+		//printf("status:%d\n", status);
+		
+    if ( (status != HAL_OK) && (status != HAL_TIMEOUT) ){
+       return HAL_MSP_FAIL;
+    }
+
+    return HAL_MSP_SUCCESS;
+}
+
 void UART_Init(void)
 {
     /*##-1- Configure the UART peripheral ######################################*/
@@ -104,7 +135,7 @@ void UART_Init(void)
     UartHandle.Init.StopBits     = UART_STOPBITS_1;
     UartHandle.Init.Parity       = UART_PARITY_NONE;
     UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-    UartHandle.Init.Mode         = UART_MODE_TX;
+    UartHandle.Init.Mode         = UART_MODE_TX|UART_MODE_RX;
     UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
 
     if(HAL_UART_Init(&UartHandle) != HAL_OK)
