@@ -35,8 +35,15 @@
  ******************************************************************************
  */
 /* Includes ------------------------------------------------------------------*/
+#include "bsp_common.h"
 #include "x_nucleo_iks01a1.h"
-#include "string.h"
+#include "hum_temp.h"
+#include "imu_6axes.h"
+#include "magneto.h"
+#include "pressure.h"
+#include "LSM303AGR_MAG_driver.h"
+#include "LSM303AGR_ACC_driver.h"
+
 /** @addtogroup BSP
  * @{
  */
@@ -61,12 +68,9 @@
 /*I2c*/
 uint32_t I2C_EXPBD_Timeout = NUCLEO_I2C_EXPBD_TIMEOUT_MAX;    /*<! Value of Timeout when I2C communication fails */
 
-static I2C_HandleTypeDef    I2C_EXPBD_Handle;
+I2C_HandleTypeDef    I2C_EXPBD_Handle;
 
 /*SPI2*/
-#ifdef CANNON_V1
-static void       LSM6DS3_SPIx_Error(void);
-#endif
 uint32_t Lsm6ds3_SpixTimeout = LSM6DS3_SPIx_TIMEOUT_MAX; /*<! Value of Timeout when SPI communication fails */
 static SPI_HandleTypeDef Lsm6ds3_hnucleo_Spi;
 
@@ -88,7 +92,14 @@ IMU_6AXES_StatusTypeDef LSM6DS0_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, u
         uint16_t NumByteToRead );
 IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToRead );
+#ifdef I2C_DMA_MODE
+/*LSM6DS3 IO Read DMA*/
+IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
 
+/*Link function for MAGNETO peripheral*/
+void LSM303AGR_IO_ITConfig( void );
 /* Link function for MAGNETO peripheral */
 //MAGNETO_StatusTypeDef LIS3MDL_IO_Init(void);
 //void LIS3MDL_IO_ITConfig( void );
@@ -126,6 +137,10 @@ static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Write(uint8_t* pBuffer, uint8_t Devi
         uint16_t NumByteToWrite);
 static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
         uint16_t NumByteToRead);
+#ifdef I2C_DMA_MODE
+static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
 #ifdef MAGNETO_DRIVER
 static MAGNETO_StatusTypeDef MAGNETO_IO_Init(void);
 static MAGNETO_StatusTypeDef MAGNETO_IO_Write(uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
@@ -150,17 +165,14 @@ static void I2C_EXPBD_Error(uint8_t Addr);
 static HAL_StatusTypeDef I2C_EXPBD_Init(void);
 static HAL_StatusTypeDef I2C_EXPBD_WriteData(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
 static HAL_StatusTypeDef I2C_EXPBD_ReadData(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
-/************************************SPI2**********************************************/
-#ifdef CANNON_V1
-static HAL_StatusTypeDef  SPI2_EXPBD_Init(void);
-static HAL_StatusTypeDef    SPI2_EXPBD_IO_ReadByte(uint8_t* pBuffer, uint8_t RegisterAddr,uint16_t NumByteToRead );
-static HAL_StatusTypeDef SPI2_EXPBD_IO_WriteByte(uint8_t* pBuffer, uint8_t RegisterAddr,uint16_t NumByteToWrite);
+#ifdef I2C_DMA_MODE
+/*I2C read dma*/
+static HAL_StatusTypeDef I2C_EXPBD_Read_DMA(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size);
 #endif
+
 /** @defgroup X_NUCLEO_IKS01A1_Exported_Functions X_NUCLEO_IKS01A1_Exported_Functions
  * @{
  */
-
-
 
 /********************************* LINK IMU 6 AXES *****************************/
 /**
@@ -205,14 +217,7 @@ void LSM6DS3_IO_ITConfig( void )
     /* Configure GPIO PINs to detect Interrupts */
     GPIO_InitStructureInt1.Pin = MEMS_INT1_PIN;
     GPIO_InitStructureInt1.Mode = GPIO_MODE_IT_RISING;
-#if (defined (CANNON_V1))
     GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
-#endif
-
-#if (defined (CANNON_V2))
-    GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
-#endif
-
     GPIO_InitStructureInt1.Pull  = GPIO_NOPULL;
     HAL_GPIO_Init(MEMS_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
 
@@ -220,7 +225,7 @@ void LSM6DS3_IO_ITConfig( void )
     HAL_NVIC_SetPriority(MEMS_INT1_EXTI_IRQn, 0x00, 0x00);
     HAL_NVIC_EnableIRQ(MEMS_INT1_EXTI_IRQn);
 
-//  /* Enable INT2 GPIO clock */
+//..  /* Enable INT2 GPIO clock */
 //  MEMS_INT2_GPIO_CLK_ENABLE();
 //
 //  /* Configure GPIO PINs to detect Interrupts */
@@ -297,6 +302,14 @@ IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, u
     return IMU_6AXES_IO_Read( pBuffer, DeviceAddr, RegisterAddr, NumByteToRead );
 }
 
+#ifdef I2C_DMA_MODE
+/*LSM6DS3 IO Read DMA*/
+IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead )
+{
+    return IMU_6AXES_IO_Read_DMA( pBuffer, DeviceAddr, RegisterAddr, NumByteToRead );
+}
+#endif
 
 /********************************* LINK MAGNETO *****************************/
 
@@ -316,9 +329,6 @@ u8_t LSM303AGR_MAG_ReadReg(u8_t Reg, u8_t* Data)
     //To be completed with either I2c or SPI reading function
     //i.e.: *Data = SPI_Mems_Read_Reg( Reg );
     return I2C_EXPBD_ReadData(Data, LSM303AGR_MAG_I2C_ADDRESS, Reg, 1);
-
-
-
 }
 
 /*******************************************************************************
@@ -372,6 +382,27 @@ u8_t LSM303AGR_ACC_WriteReg(u8_t Reg, u8_t Data)
     //i.e.: SPI_Mems_Write_Reg(Reg, Data);
     I2C_EXPBD_WriteData(&Data,  LSM303AGR_ACC_I2C_ADDRESS,  Reg, 1);       //[Example]
     return MEMS_SUCCESS;                                                        //[Example]
+}
+
+/**
+ * @brief  Configures LSM303AGR interrupt lines for NUCLEO boards
+ * @retval None
+ */
+void LSM303AGR_IO_ITConfig( void )
+{
+     GPIO_InitTypeDef GPIO_InitStructureInt1;
+   
+     MAGNETO_INT1_GPIO_CLK_ENABLE();
+     GPIO_InitStructureInt1.Pin = MAGNETO_INT1_PIN;
+     GPIO_InitStructureInt1.Mode = GPIO_MODE_IT_RISING;
+     GPIO_InitStructureInt1.Pull = GPIO_NOPULL;
+     GPIO_InitStructureInt1.Speed = GPIO_SPEED_FAST;
+     
+     HAL_GPIO_Init(MAGNETO_INT1_GPIO_PORT, &GPIO_InitStructureInt1);
+#ifdef  I2C_DMA_MODE     
+     HAL_NVIC_SetPriority(MAGNETO_INT1_EXTI_IRQn, 0, 0);
+     HAL_NVIC_EnableIRQ(MAGNETO_INT1_EXTI_IRQn);
+#endif
 }
 
 ///**
@@ -652,6 +683,21 @@ static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read( uint8_t* pBuffer, uint8_t Devi
     return ret_val;
 }
 
+#ifdef I2C_DMA_MODE
+/*IMU 6AXES IO Read DMA*/
+static IMU_6AXES_StatusTypeDef IMU_6AXES_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead )
+{
+    IMU_6AXES_StatusTypeDef ret_val = IMU_6AXES_OK;
+    if(I2C_EXPBD_Read_DMA( pBuffer, DeviceAddr, RegisterAddr, NumByteToRead ) != HAL_OK)
+    {
+        ret_val = IMU_6AXES_ERROR;
+    }
+
+    return ret_val;
+}
+#endif
+
 #ifdef MAGNETO_DRIVER
 /**
  * @brief  Configures magneto I2C interface
@@ -898,6 +944,39 @@ static HAL_StatusTypeDef I2C_EXPBD_WriteData(uint8_t* pBuffer, uint8_t Addr, uin
 }
 
 
+#ifdef I2C_DMA_MODE
+/*I2C read dma*/
+static HAL_StatusTypeDef I2C_EXPBD_Read_DMA(uint8_t* pBuffer, uint8_t Addr, uint8_t Reg, uint16_t Size)
+{
+    HAL_StatusTypeDef status = HAL_OK;
+    
+    status = HAL_I2C_Mem_Read_DMA(&I2C_EXPBD_Handle, Addr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, pBuffer, Size);
+    /* Check the communication status */
+    if(status != HAL_OK)
+    {
+        printf("read DMA error\n");
+        /* Execute user timeout callback */
+        I2C_EXPBD_Error(Addr);
+    }
+
+    return status;
+}
+
+
+/*I2C READ DMA CALL BACK */
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+
+    imu_sensor_dma_read_call_back();
+}
+
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
+{
+    printf("DMA error\n");
+}
+#endif
+
+
 /**
  * @brief  Read the value of a register of the device through the bus
  * @param  pBuffer the pointer to data to be read
@@ -948,21 +1027,16 @@ static void I2C_EXPBD_Error(uint8_t Addr)
 static void I2C_EXPBD_MspInit(void)
 {
     GPIO_InitTypeDef  GPIO_InitStruct;
-
+#ifdef I2C_DMA_MODE
+    static DMA_HandleTypeDef     DmaHandle;
+#endif
     /* Enable I2C GPIO clocks */
     NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_CLK_ENABLE();
 
     /* I2C_EXPBD SCL and SDA pins configuration -------------------------------------*/
     GPIO_InitStruct.Pin = NUCLEO_I2C_EXPBD_SCL_PIN | NUCLEO_I2C_EXPBD_SDA_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-#if (defined (CANNON_V1))
     GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-#endif
-
-#if (defined (CANNON_V2))
-    GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
-#endif
-
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Alternate  = NUCLEO_I2C_EXPBD_SCL_SDA_AF;
     HAL_GPIO_Init(NUCLEO_I2C_EXPBD_SCL_SDA_GPIO_PORT, &GPIO_InitStruct);
@@ -977,193 +1051,51 @@ static void I2C_EXPBD_MspInit(void)
     NUCLEO_I2C_EXPBD_RELEASE_RESET();
 
     /* Enable and set I2C_EXPBD Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_EV_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_EV_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_EV_IRQn);
 
-#if (defined (CANNON_V1))
-    /* Enable and set I2C_EXPBD Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_ER_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_ER_IRQn);
-#endif
+    
+    #ifdef I2C_DMA_MODE
+        /*## -1- Enable DMA1 clock #################################################*/
+        __HAL_RCC_DMA1_CLK_ENABLE();
 
-#if (defined (CANNON_V2))
-    /* Enable and set I2C_EXPBD Interrupt to the highest priority */
-    HAL_NVIC_SetPriority(NUCLEO_I2C_EXPBD_ER_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(NUCLEO_I2C_EXPBD_ER_IRQn);
-#endif
+        /*##-2- Select the DMA functional Parameters ###############################*/
+        DmaHandle.Init.Channel = DMA_CHANNEL;                     /* DMA_CHANNEL_1                    */
+        DmaHandle.Init.Direction = DMA_PERIPH_TO_MEMORY;          /* P2M transfer mode                */
+        DmaHandle.Init.PeriphInc = DMA_PINC_DISABLE;               /* Peripheral increment mode Enable */
+        DmaHandle.Init.MemInc = DMA_MINC_ENABLE;                  /* Memory increment mode Enable     */
+        DmaHandle.Init.PeriphDataAlignment = DMA_MDATAALIGN_HALFWORD; /* Peripheral data alignment : BYTE */
+        DmaHandle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;    /* memory data alignment : BYTE     */
+        DmaHandle.Init.Mode = DMA_NORMAL;                         /* CIRCULAR DMA mode                  */
+        DmaHandle.Init.Priority = DMA_PRIORITY_HIGH;              /* priority level : high            */
+        DmaHandle.Init.FIFOMode = DMA_FIFOMODE_DISABLE;           /* FIFO mode disabled               */
+        DmaHandle.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_FULL;
+        DmaHandle.Init.MemBurst = DMA_MBURST_INC16;              /* Memory burst                     */
+        DmaHandle.Init.PeriphBurst = DMA_PBURST_INC16;           /* Peripheral burst                 */
+
+        /*##-3- Select the DMA instance to be used for the transfer : DMA1_Stream0 #*/
+        DmaHandle.Instance = DMA_STREAM;
+        
+        /*##-5- Initialize the DMA stream ##########################################*/
+        if(HAL_DMA_Init(&DmaHandle) != HAL_OK)
+        {
+            /* Initialization Error */
+            printf("dma init error\n");
+            while(1);
+        }
+        
+          /* Associate the initialized DMA handle to the the I2C handle */
+         __HAL_LINKDMA(&I2C_EXPBD_Handle, hdmarx, DmaHandle);
+        
+        /*##-6- Configure NVIC for DMA transfer complete/error interrupts ##########*/
+        /* Set Interrupt Group Priority */
+        HAL_NVIC_SetPriority(DMA_STREAM_IRQ, 0, 0);
+
+        /* Enable the DMA STREAM global Interrupt */
+        HAL_NVIC_EnableIRQ(DMA_STREAM_IRQ);
+#endif     
+     
 }
-
-/*************************************SPI2*************************************************/
-#ifdef CANNON_V1
-/**
-  * @brief  Initializes SPI MSP.
-  * @param  None
-  * @retval None
-  */
-void HAL_SPI2_MspInit(SPI_HandleTypeDef *hspi)
-{
-    GPIO_InitTypeDef  GPIO_InitStruct;
-
-    /*** Configure the GPIOs ***/
-    /* Enable GPIO clock */
-    LSM6DS3_SPIx_SCK_GPIO_CLK_ENABLE();
-    LSM6DS3_SPIx_MISO_MOSI_GPIO_CLK_ENABLE();
-    LSM6DS3_SPIx_CS_GPIO_CLK_ENABLE();
-    LSM6DS3_SPIx_IRQ_CLK_ENABLE();
-
-    /* Configure SPI SCK */
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_SCK_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull  = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = LSM6DS3_SPIx_SCK_AF;
-    HAL_GPIO_Init(LSM6DS3_SPIx_SCK_GPIO_PORT, &GPIO_InitStruct);
-
-    /* Configure SPI MISO and MOSI */
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_MOSI_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = LSM6DS3_SPIx_MISO_MOSI_AF;
-    GPIO_InitStruct.Pull  = GPIO_PULLUP;
-    HAL_GPIO_Init(LSM6DS3_SPIx_MISO_MOSI_GPIO_PORT, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_MISO_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-    HAL_GPIO_Init(LSM6DS3_SPIx_MISO_MOSI_GPIO_PORT, &GPIO_InitStruct);
-
-    /* Configure CS_PIN pin */
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_CS_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    HAL_GPIO_Init(LSM6DS3_SPIx_CS_GPIO_PORT, &GPIO_InitStruct);
-
-    /*Configure SPI IRQ*/
-    GPIO_InitStruct.Pin = LSM6DS3_SPIx_IRQ_PIN;
-    GPIO_InitStruct.Mode = LSM6DS3_SPIx_IRQ_MODE;
-    GPIO_InitStruct.Pull = LSM6DS3_SPIx_IRQ_PULL;
-    GPIO_InitStruct.Speed = LSM6DS3_SPIx_IRQ_SPEED;
-    GPIO_InitStruct.Alternate = LSM6DS3_SPIx_IRQ_ALTERNATE;
-    HAL_GPIO_Init(LSM6DS3_SPIx_IRQ_PORT, &GPIO_InitStruct);
-
-
-    /*** Configure the SPI peripheral ***/
-    /* Enable SPI clock */
-    LSM6DS3_SPIx_CLK_ENABLE();
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  Initializes SPI HAL.
-  * @param  None
-  * @retval None
-  */
-static HAL_StatusTypeDef SPI2_EXPBD_Init(void)
-{
-    HAL_StatusTypeDef ret_val = HAL_OK;
-    if(HAL_SPI_GetState(&Lsm6ds3_hnucleo_Spi) == HAL_SPI_STATE_RESET)
-    {
-
-        /* SPI Config */
-        Lsm6ds3_hnucleo_Spi.Instance = LSM6DS3_SPIx;
-        /* SPI baudrate is set to 12,5 MHz maximum (PCLK2/SPI_BaudRatePrescaler = 100/8 = 12,5 MHz)
-         to verify these constraints:
-            - ST7735 LCD SPI interface max baudrate is 15MHz for write and 6.66MHz for read
-              Since the provided driver doesn't use read capability from LCD, only constraint
-              on write baudrate is considered.
-            - SD card SPI interface max baudrate is 25MHz for write/read
-            - PCLK2 max frequency is 100 MHz
-         */
-        Lsm6ds3_hnucleo_Spi.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-        Lsm6ds3_hnucleo_Spi.Init.Direction = SPI_DIRECTION_2LINES;
-        Lsm6ds3_hnucleo_Spi.Init.CLKPhase = SPI_PHASE_2EDGE;
-        Lsm6ds3_hnucleo_Spi.Init.CLKPolarity = SPI_POLARITY_HIGH;
-        Lsm6ds3_hnucleo_Spi.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
-        Lsm6ds3_hnucleo_Spi.Init.CRCPolynomial = 7;
-        Lsm6ds3_hnucleo_Spi.Init.DataSize = SPI_DATASIZE_8BIT;
-        Lsm6ds3_hnucleo_Spi.Init.FirstBit = SPI_FIRSTBIT_MSB;
-        Lsm6ds3_hnucleo_Spi.Init.NSS = SPI_NSS_SOFT;
-        Lsm6ds3_hnucleo_Spi.Init.TIMode = SPI_TIMODE_DISABLED;
-        Lsm6ds3_hnucleo_Spi.Init.Mode = SPI_MODE_MASTER;
-
-        ret_val = HAL_SPI2_Init(&Lsm6ds3_hnucleo_Spi);
-    } else {
-        ret_val = HAL_ERROR;
-    }
-    return ret_val;
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  SPI error treatment function.
-  * @param  None
-  * @retval None
-  */
-static void LSM6DS3_SPIx_Error (void)
-{
-    /* De-initialize the SPI communication BUS */
-    HAL_SPI_DeInit(&Lsm6ds3_hnucleo_Spi);
-
-    /* Re-Initiaize the SPI communication BUS */
- 
-     SPI2_EXPBD_Init();
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  Writes a byte on the SD.
-  * @param  Data: byte to send.
-  * @retval None
-  */
-static HAL_StatusTypeDef SPI2_EXPBD_IO_WriteByte(uint8_t* pBuffer, uint8_t RegisterAddr,
-        uint16_t NumByteToWrite)
-{
-    /* Send the byte */
-    //LSM6DS3_SPIx_Write(Data);
-    uint8_t pBufferAddr[20] = {0};
-    memcpy(pBufferAddr, &RegisterAddr, 1);
-    memcpy(pBufferAddr+1, pBuffer, NumByteToWrite);
-    HAL_StatusTypeDef status = HAL_OK;
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_RESET);
-    status = HAL_SPI_Transmit(&Lsm6ds3_hnucleo_Spi, pBufferAddr, NumByteToWrite+1, Lsm6ds3_SpixTimeout);
-
-    if(status != HAL_OK)
-    {
-        /* Execute user timeout callback */
-        LSM6DS3_SPIx_Error();
-    }
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_SET);
-    return status;
-}
-#endif
-
-#ifdef CANNON_V1
-/**
-  * @brief  Reads a byte from the SD.
-  * @param  None
-  * @retval The received byte.
-  */
-static HAL_StatusTypeDef SPI2_EXPBD_IO_ReadByte(uint8_t* pBuffer, uint8_t RegisterAddr,
-        uint16_t NumByteToRead )
-{
-    RegisterAddr = RegisterAddr | 0x80;
-    HAL_StatusTypeDef status = HAL_OK;
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_RESET);
-    status = HAL_SPI_TransmitReceive(&Lsm6ds3_hnucleo_Spi, &RegisterAddr, pBuffer, NumByteToRead+1, Lsm6ds3_SpixTimeout);
-    if(status != HAL_OK)
-    {
-        /* Execute user timeout callback */
-        LSM6DS3_SPIx_Error();
-    }
-    memcpy(pBuffer, pBuffer+1, NumByteToRead);
-    HAL_GPIO_WritePin(LSM6DS3_SPIx_CS_GPIO_PORT,LSM6DS3_SPIx_CS_PIN,GPIO_PIN_SET);
-
-    return status;
-}
-#endif
 
 /**
  * @}

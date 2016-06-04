@@ -43,46 +43,6 @@
  extern "C" {
 #endif 
 
-/* Includes ------------------------------------------------------------------*/ 
-#ifdef CANNON_V1
-  #include "stm32f4xx_hal.h"
-  #include "stm32f4xx_cannon_v1.h"
-  #include "stm32f4xx_nucleo_bluenrg.h"
-  #define SYSCLK_FREQ 84000000
-#endif
-
-#ifdef CANNON_V2
-  #include "stm32f4xx_hal.h"
-  #include "stm32f4xx_cannon_v2.h"
-  #include "stm32f4xx_nucleo_bluenrg.h"
-  #define SYSCLK_FREQ 84000000
-#endif
-	 
-	 
-#ifdef USE_STM32L0XX_NUCLEO
-  #include "stm32l0xx_hal.h"
-  #include "stm32l0xx_nucleo.h"
-  #include "stm32l0xx_nucleo_bluenrg.h"
-  #define SYSCLK_FREQ 32000000
-#endif
-
-	 
-/** @addtogroup BSP
- *  @{
- */
-
-/** @addtogroup X-NUCLEO-IDB04A1
- *  @{
- */
- 
-/** @addtogroup STM32_BLUENRG_BLE
- *  @{
- */
-
-/** @defgroup STM32_BLUENRG_BLE_Exported_Functions 
- * @{
- */
-  
 // FIXME: add prototypes for BlueNRG here
 void BNRG_SPI_Init(void);
 void BlueNRG_RST(void);
@@ -97,21 +57,6 @@ int32_t BlueNRG_SPI_Write(SPI_HandleTypeDef *hspi,
                           uint8_t Nb_bytes1,
                           uint8_t Nb_bytes2);
 
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
- 
-/**
- * @}
- */
  
 #ifdef __cplusplus
 }

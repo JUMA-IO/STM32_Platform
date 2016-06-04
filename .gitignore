@@ -1,8 +1,0 @@
-*.bak
-*.uvguix.*
-RTE_Components.h
-Listings/
-DebugConfig/
-Objects/
-JLinkLog.txt
-JLinkSettings.ini

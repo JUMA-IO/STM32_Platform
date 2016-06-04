@@ -44,33 +44,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* Includes ------------------------------------------------------------------*/
-#ifdef CANNON_V1
-#include "stm32f4xx_hal.h"
-
-#include "hum_temp.h"
-#include "imu_6axes.h"
-#include "magneto.h"
-#include "pressure.h"
-#include "LSM303AGR_MAG_driver.h"
-#include "LSM303AGR_ACC_driver.h"
-#include "stm32f4xx_hal_msp.h"
-
-#endif
+#include "stdint.h"
 	
-#ifdef CANNON_V2
-#include "stm32f4xx_hal.h"
-
-#include "hum_temp.h"
-#include "imu_6axes.h"
-#include "magneto.h"
-#include "pressure.h"
-#include "LSM303AGR_MAG_driver.h"
-#include "LSM303AGR_ACC_driver.h"
-#include "stm32f4xx_hal_msp.h"
-
-#endif
 /** @addtogroup BSP
   * @{
   */
@@ -111,14 +86,7 @@ typedef struct
   */
 
 /* I2C clock speed configuration (in Hz) */
-#if (defined (CANNON_V1))
 #define NUCLEO_I2C_EXPBD_SPEED                         400000
-#endif /* CANNON_V1 */
-
-#if (defined (CANNON_V2))
-#define NUCLEO_I2C_EXPBD_SPEED                         400000
-#endif /* CANNON_V2 */
-
 
 /* I2C peripheral configuration defines */
 #define NUCLEO_I2C_EXPBD                            I2C1
@@ -180,27 +148,13 @@ typedef struct
 #define IMU_6AXES_INT1_EXTI_IRQn           EXTI0_IRQn
 #endif
 
-
-//#define MAGNETO_DRDY_GPIO_PORT           GPIOB
-//#define MAGNETO_DRDY_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
-//#define MAGNETO_DRDY_GPIO_CLK_DISABLE()  __GPIOB_CLK_DISABLE()
-//#define MAGNETO_DRDY_PIN                 GPIO_PIN_5
-
-//#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)))
-//#define MAGNETO_DRDY_EXTI_IRQn           EXTI9_5_IRQn
-//#endif
-
-//#if (defined (USE_STM32L0XX_NUCLEO))
-//#define MAGNETO_DRDY_EXTI_IRQn           EXTI0_1_IRQn
-//#endif
-
 #define MAGNETO_INT1_GPIO_PORT           GPIOB
 #define MAGNETO_INT1_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
 #define MAGNETO_INT1_GPIO_CLK_DISABLE()  __GPIOB_CLK_DISABLE()
 #define MAGNETO_INT1_PIN                 GPIO_PIN_5
 
 #if (defined (CANNON_V2))
-#define MAGNETO_INT1_EXTI_IRQn           EXTI1_IRQn
+#define MAGNETO_INT1_EXTI_IRQn           EXTI9_5_IRQn
 #endif
 
 
@@ -234,18 +188,18 @@ typedef struct
 #endif
 
 // ready for use
-//#define MEMS_INT2_GPIO_PORT           GPIOB
-//#define MEMS_INT2_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
-//#define MEMS_INT2_GPIO_CLK_DISABLE()  __GPIOB_CLK_DISABLE()
-//#define MEMS_INT2_PIN                 GPIO_PIN_0
+#define MEMS_INT2_GPIO_PORT           GPIOB
+#define MEMS_INT2_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
+#define MEMS_INT2_GPIO_CLK_DISABLE()  __GPIOB_CLK_DISABLE()
+#define MEMS_INT2_PIN                 GPIO_PIN_0
 
-//#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)))
-//#define MEMS_INT2_EXTI_IRQn           EXTI0_IRQn
-//#endif
+#if ((defined (USE_STM32F4XX_NUCLEO)) || (defined (USE_STM32L1XX_NUCLEO)))
+#define MEMS_INT2_EXTI_IRQn           EXTI0_IRQn
+#endif
 
-//#if (defined (USE_STM32L0XX_NUCLEO))
-//#define MEMS_INT2_EXTI_IRQn           EXTI0_1_IRQn
-//#endif
+#if (defined (USE_STM32L0XX_NUCLEO))
+#define MEMS_INT2_EXTI_IRQn           EXTI0_1_IRQn
+#endif
 
 /*############################### SPI2 #######################################*/
 #define LSM6DS3_SPIx                                     SPI2
@@ -294,6 +248,15 @@ typedef struct
    You may modify these timeout values depending on CPU frequency and application
    conditions (interrupts routines ...). */   
 #define LSM6DS3_SPIx_TIMEOUT_MAX									1000
+
+#ifdef I2C_DMA_MODE
+/*************************************************************DMA**************************************************************************************/
+#define DMA_STREAM               DMA1_Stream0
+#define DMA_CHANNEL              DMA_CHANNEL_1 
+#define DMA_STREAM_IRQ           DMA1_Stream0_IRQn
+#define DMA_STREAM_IRQHANDLER    DMA1_Stream0_IRQHandler
+
+#endif
 /**
   * @}
   */

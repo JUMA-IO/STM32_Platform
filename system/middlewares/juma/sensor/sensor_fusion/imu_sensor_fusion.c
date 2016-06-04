@@ -327,4 +327,3 @@ void gravity_filter_run(gravity_filter_context_t* cx, imu_sensor_data_t* sensor)
     cx->gravity.y = (double)1000.0 * cx->gravity.y / gravity_magnitude;
     cx->gravity.z = (double)1000.0 * cx->gravity.z / gravity_magnitude;
 }
-

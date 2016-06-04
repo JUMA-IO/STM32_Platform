@@ -6,48 +6,9 @@
  * @date    11-February-2015
  * @brief   This file provides a set of functions needed to manage the lps25hb.
  ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *   1. Redistributions of source code must retain the above copyright notice,
- *      this list of conditions and the following disclaimer.
- *   2. Redistributions in binary form must reproduce the above copyright notice,
- *      this list of conditions and the following disclaimer in the documentation
- *      and/or other materials provided with the distribution.
- *   3. Neither the name of STMicroelectronics nor the names of its contributors
- *      may be used to endorse or promote products derived from this software
- *      without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************
  */
-/* Includes ------------------------------------------------------------------*/
+#include "bsp_common.h"
 #include "lps25hb.h"
-
-/** @addtogroup BSP
- * @{
- */
-
-/** @addtogroup Components
- * @{
- */
-
-/** @addtogroup LPS25HB
- * @{
- */
 
 static PRESSURE_StatusTypeDef LPS25HB_Init(PRESSURE_InitTypeDef *LPS25HB_Init);
 static PRESSURE_StatusTypeDef LPS25HB_ReadID(uint8_t *p_id);
@@ -60,6 +21,8 @@ static void LPS25HB_SlaveAddrRemap(uint8_t SA0_Bit_Status);
 /** @defgroup LPS25HB_Private_Variables LPS25HB_Private_Variables
  * @{
  */
+uint8_t LPS25HB_SlaveAddress = LPS25HB_ADDRESS_HIGH;
+ 
 PRESSURE_DrvTypeDef LPS25HBDrv =
 {
     LPS25HB_Init,
@@ -90,14 +53,7 @@ PRESSURE_DrvExtTypeDef LPS25HBDrv_ext =
     PRESSURE_LPS25HB_DIL24_COMPONENT, /* unique ID for LPS25HB in the PRESSURE driver class */
     NULL /* pointer to internal struct of extended features of LPS25HB */
 };
-#ifdef CANNON_V1
-uint8_t LPS25HB_SlaveAddress = LPS25HB_ADDRESS_LOW;
-#endif
 
-
-#ifdef CANNON_V2
-uint8_t LPS25HB_SlaveAddress = LPS25HB_ADDRESS_HIGH;
-#endif
 /**
  * @}
  */
@@ -378,22 +334,5 @@ static void LPS25HB_SlaveAddrRemap(uint8_t SA0_Bit_Status)
 {
     LPS25HB_SlaveAddress = (SA0_Bit_Status == LPS25HB_SA0_LOW ? LPS25HB_ADDRESS_LOW : LPS25HB_ADDRESS_HIGH);
 }
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
-/**
- * @}
- */
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

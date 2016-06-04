@@ -1,14 +1,29 @@
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "lsm6ds3.h"
+#include "lsm303agr.h"
 #include "imu_sensor_9-axis.h"
-#include "stm32xx_it.h"
+#include "bsp_isr.h"
 
 #if NO_PRINTF
 #define printf(...)
 #endif
 
 static sensor_selsection_t sensor_selection;
-
 __weak void on_imu_sensor_9_axis_data(imu_sensor_data_t* data) {};
-
 static imu_status_t lsm6ds3_fifo_sensor_enable(void);
 static imu_status_t imu_sensor_9_axis_config_acc(uint8_t data_rate, uint8_t scale);
 static imu_status_t imu_sensor_9_axis_config_gyro(uint8_t data_rate, uint8_t scale);
@@ -77,26 +92,20 @@ imu_status_t imu_sensor_9_axis_reset(void)
   }
   printf("sensor enable\n");
 
-
   return imu_status_ok;
-
 }
 
 /*active sensor*/
 imu_status_t imu_sensor_9_axis_select_features(sensor_selsection_t features)
 {
-
   sensor_selection = features;
-
   printf("sensor features : %x\n", sensor_selection);
-
   return imu_status_ok;
 }
 
 /*set data rate*/
 imu_status_t imu_sensor_9_axis_set_data_rate(uint32_t* p_data_rate, uint8_t mode)
 {
-
   uint8_t tmp1 = 0x00;
   uint8_t new_odr = 0x00;
   /*lsm6ds3*/
@@ -185,14 +194,12 @@ imu_status_t imu_sensor_9_axis_set_data_rate(uint32_t* p_data_rate, uint8_t mode
     printf("mag odr set over\n");
   }
 
-
   return imu_status_ok;
 }
 
 /*start get sensor data*/
 imu_status_t imu_sensor_9_axis_start(void)
 {
-
   /*lsm6ds3*/
   {
     if (sensor_selection & ACC_ENABLE) {
@@ -209,7 +216,6 @@ imu_status_t imu_sensor_9_axis_start(void)
       }
       printf("gyro output enable\n");
     }
-
   }
   /*lsm303agr odr*/
   {
@@ -243,7 +249,6 @@ imu_status_t imu_sensor_9_axis_stop(void)
       }
       printf("gyro output disable\n");
     }
-
   }
   /*lsm303agr odr*/
   {
@@ -264,7 +269,6 @@ static imu_status_t lsm6ds3_fifo_sensor_enable(void)
   uint8_t tmp1 = 0x00;
   /*lsm6ds3*/
   {
-
     if (LSM6DS3_IO_Read(&tmp1, LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_CTRL3_C, 1) != imu_status_ok)
     {
       return imu_status_fail;
@@ -278,11 +282,8 @@ static imu_status_t lsm6ds3_fifo_sensor_enable(void)
     {
       return imu_status_fail;
     }
-
   }
-
   return imu_status_ok;
-
 }
 
 /*active acc*/
@@ -306,7 +307,6 @@ static imu_status_t imu_sensor_9_axis_config_acc(uint8_t data_rate, uint8_t scal
   {
     return imu_status_fail;
   }
-
   return imu_status_ok;
 }
 
@@ -331,10 +331,8 @@ static imu_status_t imu_sensor_9_axis_config_gyro(uint8_t data_rate, uint8_t sca
   {
     return imu_status_fail;
   }
-
   return imu_status_ok;
 }
-
 
 /*set acc output state*/
 static imu_status_t imu_sensor_9_axis_acc_output_status_config(uint8_t status)
@@ -476,7 +474,6 @@ void imu_sensor_9_axis_read_data_from_fifo(void)
 /*fifo threshold interrupt*/
 static imu_status_t imu_sensor_9_axis_fifo_threshold_interrupt(void)
 {
-
   uint8_t tmp1;
 
   if (LSM6DS3_IO_Read(&tmp1, LSM6DS3_XG_MEMS_ADDRESS, LSM6DS3_XG_INT1_CTRL, 1) != imu_status_ok)
@@ -493,9 +490,7 @@ static imu_status_t imu_sensor_9_axis_fifo_threshold_interrupt(void)
   }
 
   return imu_status_ok;
-
 }
-
 
 /*fifo threshold level setting*/
 static imu_status_t imu_sensor_9_axis_fifo_threshold_level(uint16_t fifo_level)
@@ -513,7 +508,6 @@ static imu_status_t imu_sensor_9_axis_fifo_threshold_level(uint16_t fifo_level)
     {
       return imu_status_fail;
     }
-
   }
 
   {
@@ -528,7 +522,6 @@ static imu_status_t imu_sensor_9_axis_fifo_threshold_level(uint16_t fifo_level)
     {
       return imu_status_fail;
     }
-
   }
 
   {
@@ -543,7 +536,6 @@ static imu_status_t imu_sensor_9_axis_fifo_threshold_level(uint16_t fifo_level)
     {
       return imu_status_fail;
     }
-
   }
 
   return imu_status_ok;
@@ -635,6 +627,4 @@ static imu_status_t imu_sensor_9_axis_clear_fifo(void)
   }
   printf("clear fifo over \n");
   return imu_status_ok;
-
 }
-

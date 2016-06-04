@@ -13,11 +13,10 @@
 * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 *******************************************************************************/
 
-#include "hal_types.h"
+#include "bsp_common.h"
 #include "osal.h"
 #include "ble_status.h"
 #include "hal.h"
-#include "osal.h"
 #include "hci_const.h"
 #include "bluenrg_aci_const.h"
 #include "bluenrg_hal_aci.h"

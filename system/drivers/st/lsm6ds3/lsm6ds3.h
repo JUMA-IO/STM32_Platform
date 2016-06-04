@@ -956,16 +956,9 @@ extern "C" {
 /**
 * @brief Device Address
 */
-#define LSM6DS3_ADDRESS_LOW                                 0xD4    // SAD[0] = 0
-#define LSM6DS3_ADDRESS_HIGH                                0xD6    // SAD[0] = 1
-
-#ifdef CANNON_V1
-	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_LOW    // SAD[0] = 0
-#endif
-
-#ifdef CANNON_V2
-	#define LSM6DS3_XG_MEMS_ADDRESS                             LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
-#endif
+#define LSM6DS3_ADDRESS_LOW                             0xD4    // SAD[0] = 0
+#define LSM6DS3_ADDRESS_HIGH                            0xD6    // SAD[0] = 1
+#define LSM6DS3_XG_MEMS_ADDRESS                         LSM6DS3_ADDRESS_HIGH    // SAD[0] = 0
 
 /**
  * @brief Device Identifier. Default value of the WHO_AM_I register.
@@ -1431,7 +1424,13 @@ extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Write( uint8_t* pBuffer, uint8_t Devic
     uint16_t NumByteToWrite );
 extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
     uint16_t NumByteToRead );
+#ifdef I2C_DMA_MODE
+extern IMU_6AXES_StatusTypeDef LSM6DS3_IO_Read_DMA( uint8_t* pBuffer, uint8_t DeviceAddr, uint8_t RegisterAddr,
+        uint16_t NumByteToRead );
+#endif
 extern void LSM6DS3_IO_ITConfig( void );
+/*magneto sensor IO functions*/
+extern void LSM303AGR_IO_ITConfig(void);
 
 /**
  * @}

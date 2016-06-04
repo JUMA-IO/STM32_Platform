@@ -17,14 +17,11 @@
 #ifndef __CLOCK_H__
 #define __CLOCK_H__
 
-#include <hal_types.h>
-
 /**
  * Number of clocks in one seconds.
  * This value must be set by each platorm implementation, basing on its needs.
  */
 extern const uint32_t CLOCK_SECOND;
-
 typedef uint32_t tClockTime;
 
 /**

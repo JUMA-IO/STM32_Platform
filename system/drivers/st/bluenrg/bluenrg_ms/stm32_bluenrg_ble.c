@@ -35,7 +35,7 @@
   ******************************************************************************
   */ 
   
-/* Includes ------------------------------------------------------------------*/
+#include "bsp_common.h"
 #include "stm32_bluenrg_ble.h"
 #include "gp_timer.h"
 #include "debug.h"
@@ -196,7 +196,6 @@ void Hal_Write_Serial(const void* data1, const void* data2, int32_t n_bytes1,
                       int32_t n_bytes2)
 {
   struct timer t;
-
   Timer_Set(&t, CLOCK_SECOND/10);
 
 #ifdef PRINT_CSV_FORMAT

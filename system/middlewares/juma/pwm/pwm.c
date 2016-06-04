@@ -1,5 +1,20 @@
+/*
+ *
+ *  JUMA.IO - JUMA SDK for STM families
+ *
+ *  Copyright (C) 2013-2016  JUMA Technology
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the Apache V2 License as published by
+ *  the Free Software Foundation.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+#include "bsp_common.h"
 #include "pwm.h"
-
 
 /**
   * @brief  Init TIM PWM .
@@ -18,9 +33,9 @@
 	* @param  Pulse: specifies the PWM duty cycle to be written.
   * @retval HAL status
   */
-HAL_StatusTypeDef TIM_PWM_Init(TIM_HandleTypeDef *htim,  uint32_t Channel,GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin,uint32_t Freq,uint32_t Pulse){
-	
-	//TODO:Simplify the PWM initialization function
+HAL_StatusTypeDef TIM_PWM_Init(TIM_HandleTypeDef *htim,  uint32_t Channel,GPIO_TypeDef* GPIOx, 
+																uint16_t GPIO_Pin,uint32_t Freq,uint32_t Pulse)
+{
 	return HAL_OK;
 }
 
@@ -45,8 +60,8 @@ HAL_StatusTypeDef TIM_PWM_Duty(TIM_HandleTypeDef *htim,  uint32_t Channel,uint32
   {
     case TIM_CHANNEL_1:
     {
-			  /* Set the Capture Compare Register value */
-   htim->Instance->CCR1 =Pulse;
+			/* Set the Capture Compare Register value */
+			htim->Instance->CCR1 =Pulse;
     }break;
     case TIM_CHANNEL_2:
     {
@@ -66,6 +81,5 @@ HAL_StatusTypeDef TIM_PWM_Duty(TIM_HandleTypeDef *htim,  uint32_t Channel,uint32
     default:
     break;  
   }
-   return HAL_OK;
-	
+  return HAL_OK;
 }

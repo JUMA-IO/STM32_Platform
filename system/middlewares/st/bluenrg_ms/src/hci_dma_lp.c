@@ -264,7 +264,6 @@ static uint8_t new_packet;
 
 void new_hci_event(void *pckt, uint16_t len)
 {
-  
   new_packet = TRUE;
 }
 
