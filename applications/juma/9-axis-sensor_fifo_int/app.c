@@ -99,12 +99,14 @@ void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value)
 void ble_device_on_connect(void)
 {
   sendFLAG = TRUE;
+	BSP_LED_On(LED0);
 
 }
 /* Device on disconnect */
 void ble_device_on_disconnect(uint8_t reason)
 {
   sendFLAG = FALSE;
+	BSP_LED_Off(LED0);
   /* Make the device connectable again. */
   ble_device_start_advertising();
 }

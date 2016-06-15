@@ -15,6 +15,8 @@
  */
 #include "bsp_common.h"
 
+__weak void loop(void){};
+
 int main(void)
 {
 		bsp_init();
@@ -24,6 +26,7 @@ int main(void)
   	 {
         HCI_Process();
         dispatch();
+			  loop();
     }
 }
 
