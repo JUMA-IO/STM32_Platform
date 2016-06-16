@@ -13,7 +13,7 @@ mesh协议demo需要配置:
 
 
 
-![](./images/mesh1.png)![](./images/mesh2.png)![](./images/mesh3.png)![](./images/mesh4.png)
+![](./images/mesh1.png) ![](./images/mesh2.png) ![](./images/mesh3.png) ![](./images/mesh4.png)
 
 对应的android端程序界面效果展示。
 
