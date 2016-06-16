@@ -1,21 +1,18 @@
-# acc
-acc是一个加速度传感器的应用demo，即将时时三轴数据(加速度)发送到手机，并通过手机显示出来。他可以用来做硬件的三轴测试，亦或者是三轴数据模板。
-
+# hum_temp_monitor
+hum_temp_monitor是一个温湿度检测程序，即可以获取实时温湿度发送给手机，手机也可以通过发送指令控制蓝牙（如代码中的开关灯）。由于手机可以同时链接多个设备，便能通过分析一个板子的回报数据去控制另一个板子实现温湿度检测。
 ### 效果展示
 
 
 
-![](./images/acc1.png)
+![](./images/TH.png)
 
-![](./images/acc2.png)
-
-由图可观察到较为明显的三轴数据变化。
+上图展示的是一个自定义温湿度阀值，当检测到的温湿度超过阀值，对硬件进行控制的app界面。
 
 视频链接：
-[http://v.youku.com/v_show/id_XMTQwNzU5OTY4NA==.html?from=s1.8-1-1.2](http://v.youku.com/v_show/id_XMTQwNzU5OTY4NA==.html?from=s1.8-1-1.2)
+[http://v.youku.com/v_show/id_XMTQxMDA3MTg0NA==.html?from=s1.8-1-1.2](http://v.youku.com/v_show/id_XMTQxMDA3MTg0NA==.html?from=s1.8-1-1.2)
 
 代码解析：
-可参考：[http://www.52cannon.com/bbs/thread-272-1-1.html](http://www.52cannon.com/bbs/thread-272-1-1.html)
+[http://www.52cannon.com/bbs/thread-272-1-1.html](http://www.52cannon.com/bbs/thread-272-1-1.html)
 
 ### 代码流程介绍
 

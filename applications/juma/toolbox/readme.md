@@ -1,21 +1,13 @@
-# acc
-acc是一个加速度传感器的应用demo，即将时时三轴数据(加速度)发送到手机，并通过手机显示出来。他可以用来做硬件的三轴测试，亦或者是三轴数据模板。
+# toolbox
+toolbox是一个传感器应用程序，即可以将硬件上的传感器数据发送给手机，可以通过手机来观察传感器的数据变化。
 
 ### 效果展示
 
 
 
-![](./images/acc1.png)
+![](./images/tb1.png)![](./images/tb2.png)![](./images/tb3.png)![](./images/tb4.png)![](./images/tb5.png)
 
-![](./images/acc2.png)
-
-由图可观察到较为明显的三轴数据变化。
-
-视频链接：
-[http://v.youku.com/v_show/id_XMTQwNzU5OTY4NA==.html?from=s1.8-1-1.2](http://v.youku.com/v_show/id_XMTQwNzU5OTY4NA==.html?from=s1.8-1-1.2)
-
-代码解析：
-可参考：[http://www.52cannon.com/bbs/thread-272-1-1.html](http://www.52cannon.com/bbs/thread-272-1-1.html)
+对应的android端程序界面效果展示。
 
 ### 代码流程介绍
 

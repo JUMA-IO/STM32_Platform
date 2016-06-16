@@ -1,21 +1,27 @@
-# acc
-acc是一个加速度传感器的应用demo，即将时时三轴数据(加速度)发送到手机，并通过手机显示出来。他可以用来做硬件的三轴测试，亦或者是三轴数据模板。
+# mesh
+mesh中的demo是一个灯控程序，即可以通过手机给任意一个设备发送指令，从而控制所有设备。
+
+mesh协议demo需要配置:
+1.设备的MESH_ID(app.c的宏定义)
+
+2.广播名字用于区分不同设备(board_name，app.c中)
+
+3.demo用的四个设备的MESH_ID分别定义为0x0001,0x0002,0x0004,0x0008.
+名字也需改成不同的以方便识别。
 
 ### 效果展示
 
 
 
-![](./images/acc1.png)
+![](./images/mesh1.png)![](./images/mesh2.png)![](./images/mesh3.png)![](./images/mesh4.png)
 
-![](./images/acc2.png)
-
-由图可观察到较为明显的三轴数据变化。
+对应的android端程序界面效果展示。
 
 视频链接：
-[http://v.youku.com/v_show/id_XMTQwNzU5OTY4NA==.html?from=s1.8-1-1.2](http://v.youku.com/v_show/id_XMTQwNzU5OTY4NA==.html?from=s1.8-1-1.2)
+[http://v.qq.com/boke/page/v/0/o/v0190dvi7ro.html](http://v.qq.com/boke/page/v/0/o/v0190dvi7ro.html)
 
 代码解析：
-可参考：[http://www.52cannon.com/bbs/thread-272-1-1.html](http://www.52cannon.com/bbs/thread-272-1-1.html)
+[http://www.52cannon.com/bbs/thread-274-1-1.html](http://www.52cannon.com/bbs/thread-274-1-1.html)
 
 ### 代码流程介绍
 
