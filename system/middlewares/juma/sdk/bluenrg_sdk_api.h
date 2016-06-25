@@ -89,11 +89,11 @@ uint8_t ble_device_set_name(const char* new_device_name);
 /*config adv interval (min_adv_interval > 32*0.625)*/
 void ble_device_set_advertising_interval(uint16_t interval);
 /*add adv address*/
-uint8_t ble_address(uint8_t* advaddress);
+uint8_t ble_address(uint8_t* bdaddr);
 /*start to adv*/
 uint8_t ble_device_start_advertising(void);
 /*set adv param*/
-void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_level, uint16_t adv_interval);
+void ble_set_adv_param(char* adv_name, uint8_t* bdaddr, uint8_t tx_power_level, uint16_t adv_interval);
 /*stop adv*/
 uint8_t ble_device_stop_advertising(void);
 /*to disconnect ble connection*/
@@ -104,5 +104,6 @@ uint8_t ble_device_send(uint8_t type, uint32_t length, uint8_t* value);
 void ble_device_on_message(uint8_t type, uint16_t length, uint8_t* value);
 void ble_device_on_connect( void );
 void ble_device_on_disconnect(uint8_t reason);
+
 
 #endif //_BLUENRG_SDK_API_H_
