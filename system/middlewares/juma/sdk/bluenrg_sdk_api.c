@@ -262,16 +262,16 @@ uint8_t ble_device_set_name(const char* new_device_name)
 }
 
 /**
-	*@brief Adv Address
-	*@param Adv Address
+	*@brief bdaddr
+	*@param bdaddr
 	*@retval ret
 	*/
-uint8_t ble_address(uint8_t* advaddress)
+uint8_t ble_address(uint8_t* bdaddr)
 {
     uint8_t ret;
     ret = aci_hal_write_config_data(CONFIG_DATA_PUBADDR_OFFSET,
                                     CONFIG_DATA_PUBADDR_LEN,
-                                    advaddress);
+                                    bdaddr);
     if(ret) {
         return BLE_SET_BD_ADDR_FAILED;
     }
@@ -281,14 +281,14 @@ uint8_t ble_address(uint8_t* advaddress)
 
 /**
 	*@brief	 Config adv param and ready to adv
-	*@param	 Advname,AdvAddress,TxPowerLevel,Advinterval
+	*@param	 Advname,bdaddr,TxPowerLevel,Advinterval
 	*@retval None
 	*/
-void ble_set_adv_param(char* adv_name, uint8_t*adv_address, uint8_t tx_power_pevel, uint16_t adv_interval)
+void ble_set_adv_param(char* adv_name, uint8_t* bdaddr, uint8_t tx_power_pevel, uint16_t adv_interval)
 {
     uint8_t ret;
     /*set adv address*/
-    ble_address(adv_address);
+    ble_address(bdaddr);
     /*Set Adv Name*/
     ble_device_set_name(adv_name);
     /*Set Tx Power Level*/
