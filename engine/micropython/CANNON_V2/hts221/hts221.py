@@ -88,6 +88,10 @@ class HTS221(object):
         b = self.getReg(reg + 1)
         return a + b * 256
 
+    # Device identification
+    def WhoAmI(self):
+        return self.getReg(HTS221_WHO_AM_I)
+        
     # get STATUS regster
     def STATUS(self):
         return self.getReg(HTS221_STATUS_REG)
@@ -109,7 +113,7 @@ class HTS221(object):
         else:
             return self.getReg(HTS221_CTRL_REG1) & 0x03
         
-    # get/set Humidity and temperature average configuration
+    # get/set Humidity and temperature average configuratio
     def av(self, av=''):
         if av != '':
             self.setReg(av, HTS221_AV_CONF)
