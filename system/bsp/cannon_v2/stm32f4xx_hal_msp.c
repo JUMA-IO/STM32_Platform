@@ -53,7 +53,9 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-UART_HandleTypeDef UartHandle;
+UART_HandleTypeDef Uart1Handle;
+UART_HandleTypeDef Uart2Handle;
+
 
 /* Private function prototypes -----------------------------------------------*/
 #ifdef __GNUC__
@@ -76,21 +78,26 @@ UART_HandleTypeDef UartHandle;
   */
 int fputc(int ch, FILE *f)
 {
+#if 1
     /* Place your implementation of fputc here */
     /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-    HAL_StatusTypeDef status = HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
+    HAL_StatusTypeDef status = HAL_UART_Transmit(&Uart1Handle, (uint8_t *)&ch, 1, 0xFFFF);
 
     if (status != HAL_OK) {
         //while (1);
-        return 0;
+        return EOF;
     }
     return ch;
+#else
+    return ch;
+#endif
+
 }
 
 
 int Uart_Tx_String(char *string, uint16_t len)
 {
-    HAL_StatusTypeDef status = HAL_UART_Transmit(&UartHandle, (uint8_t *)string, len, 0xFFFF);
+    HAL_StatusTypeDef status = HAL_UART_Transmit(&Uart2Handle, (uint8_t *)string, len, 0xFFFF);
 
     if (status != HAL_OK) {
         //while (1);
@@ -108,9 +115,9 @@ int Uart_Rx_String(char *string, uint16_t len, uint32_t timeout)
       string[i] = 0;    //set to '\0'
     }
 
-    HAL_StatusTypeDef status = HAL_UART_Receive(&UartHandle, (uint8_t *)string, len, timeout);
-		//printf("status:%d\n", status);
-		
+    HAL_StatusTypeDef status = HAL_UART_Receive(&Uart2Handle, (uint8_t *)string, len, timeout);
+    //printf("status:%d\n", status);
+
     if ( (status != HAL_OK) && (status != HAL_TIMEOUT) ){
        return HAL_MSP_FAIL;
     }
@@ -120,7 +127,26 @@ int Uart_Rx_String(char *string, uint16_t len, uint32_t timeout)
 
 void UART_Init(void)
 {
-    /*##-1- Configure the UART peripheral ######################################*/
+
+    /*##-1- Configure the UART1 peripheral ######################################*/
+    Uart1Handle.Instance          = USARTx1;
+
+    Uart1Handle.Init.BaudRate     = 115200;
+    Uart1Handle.Init.WordLength   = UART_WORDLENGTH_8B;
+    Uart1Handle.Init.StopBits     = UART_STOPBITS_1;
+    Uart1Handle.Init.Parity       = UART_PARITY_NONE;
+    Uart1Handle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+    Uart1Handle.Init.Mode         = UART_MODE_TX|UART_MODE_RX;
+    Uart1Handle.Init.OverSampling = UART_OVERSAMPLING_16;
+
+    if(HAL_UART_Init(&Uart1Handle) != HAL_OK)
+    {
+        while (1);
+    }
+
+    printf("\n\r UART Printf Example: retarget the C library printf function to the UART1\n\r");
+
+    /*##-1- Configure the UART2 peripheral ######################################*/
     /* Put the USART peripheral in the Asynchronous mode (UART Mode) */
     /* UART1 configured as follow:
         - Word Length = 8 Bits
@@ -128,23 +154,24 @@ void UART_Init(void)
         - Parity = ODD parity
         - BaudRate = 9600 baud
         - Hardware flow control disabled (RTS and CTS signals) */
-    UartHandle.Instance          = USARTx;
+    Uart2Handle.Instance          = USARTx2;
 
-    UartHandle.Init.BaudRate     = 115200;
-    UartHandle.Init.WordLength   = UART_WORDLENGTH_8B;
-    UartHandle.Init.StopBits     = UART_STOPBITS_1;
-    UartHandle.Init.Parity       = UART_PARITY_NONE;
-    UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-    UartHandle.Init.Mode         = UART_MODE_TX|UART_MODE_RX;
-    UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
+    Uart2Handle.Init.BaudRate     = 115200;
+    Uart2Handle.Init.WordLength   = UART_WORDLENGTH_8B;
+    Uart2Handle.Init.StopBits     = UART_STOPBITS_1;
+    Uart2Handle.Init.Parity       = UART_PARITY_NONE;
+    Uart2Handle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+    Uart2Handle.Init.Mode         = UART_MODE_TX|UART_MODE_RX;
+    Uart2Handle.Init.OverSampling = UART_OVERSAMPLING_16;
 
-    if(HAL_UART_Init(&UartHandle) != HAL_OK)
+
+    if(HAL_UART_Init(&Uart2Handle) != HAL_OK)
     {
-        /* Initialization Error */
         while (1);
     }
 
-    printf("\n\r UART Printf Example: retarget the C library printf function to the UART\n\r");
+    //printf("\n\r UART2 initialized!\n\r");   
+
 }
 
 
@@ -158,31 +185,66 @@ void UART_Init(void)
   */
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 {
-    GPIO_InitTypeDef  GPIO_InitStruct;
+    if(huart == &Uart1Handle)
+    {
+        GPIO_InitTypeDef  GPIO_InitStruct;
 
-    /*##-1- Enable peripherals and GPIO Clocks #################################*/
-    /* Enable GPIO TX/RX clock */
-    USARTx_TX_GPIO_CLK_ENABLE();
-    USARTx_RX_GPIO_CLK_ENABLE();
+        /*##-1- Enable peripherals and GPIO Clocks #################################*/
+        /* Enable GPIO TX/RX clock */
+        USARTx1_TX_GPIO_CLK_ENABLE();
+        USARTx1_RX_GPIO_CLK_ENABLE();
 
-    /* Enable USARTx clock */
-    USARTx_CLK_ENABLE();
+        /* Enable USARTx clock */
+        USARTx1_CLK_ENABLE();
 
-    /*##-2- Configure peripheral GPIO ##########################################*/
-    /* UART TX GPIO pin configuration  */
-    GPIO_InitStruct.Pin       = USARTx_TX_PIN;
-    GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull      = GPIO_PULLUP;
-    GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
-    GPIO_InitStruct.Alternate = USARTx_TX_AF;
+        /*##-2- Configure peripheral GPIO ##########################################*/
+        /* UART TX GPIO pin configuration  */
+        GPIO_InitStruct.Pin       = USARTx1_TX_PIN;
+        GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull      = GPIO_PULLUP;
+        GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
+        GPIO_InitStruct.Alternate = USARTx1_TX_AF;
 
-    HAL_GPIO_Init(USARTx_TX_GPIO_PORT, &GPIO_InitStruct);
+        HAL_GPIO_Init(USARTx1_TX_GPIO_PORT, &GPIO_InitStruct);
 
-    /* UART RX GPIO pin configuration  */
-    GPIO_InitStruct.Pin = USARTx_RX_PIN;
-    GPIO_InitStruct.Alternate = USARTx_RX_AF;
+        /* UART RX GPIO pin configuration  */
+        GPIO_InitStruct.Pin = USARTx1_RX_PIN;
+        GPIO_InitStruct.Alternate = USARTx1_RX_AF;
 
-    HAL_GPIO_Init(USARTx_RX_GPIO_PORT, &GPIO_InitStruct);
+        HAL_GPIO_Init(USARTx1_RX_GPIO_PORT, &GPIO_InitStruct);   
+
+    }
+    else if(huart == &Uart2Handle)
+    {
+        GPIO_InitTypeDef  GPIO_InitStruct;
+
+        /*##-1- Enable peripherals and GPIO Clocks #################################*/
+        /* Enable GPIO TX/RX clock */
+        USARTx2_TX_GPIO_CLK_ENABLE();
+        USARTx2_RX_GPIO_CLK_ENABLE();
+
+        /* Enable USARTx clock */
+        USARTx2_CLK_ENABLE();
+
+        /*##-2- Configure peripheral GPIO ##########################################*/
+        /* UART TX GPIO pin configuration  */
+        GPIO_InitStruct.Pin       = USARTx2_TX_PIN;
+        GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
+        GPIO_InitStruct.Pull      = GPIO_PULLUP;
+        GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
+        GPIO_InitStruct.Alternate = USARTx2_TX_AF;
+
+        HAL_GPIO_Init(USARTx2_TX_GPIO_PORT, &GPIO_InitStruct);
+
+        /* UART RX GPIO pin configuration  */
+        GPIO_InitStruct.Pin = USARTx2_RX_PIN;
+        GPIO_InitStruct.Alternate = USARTx2_RX_AF;
+
+        HAL_GPIO_Init(USARTx2_RX_GPIO_PORT, &GPIO_InitStruct);    
+    }
+    else{
+        while(1);
+    }
 }
 
 /**
@@ -195,15 +257,33 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   */
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
 {
-    /*##-1- Reset peripherals ##################################################*/
-    USARTx_FORCE_RESET();
-    USARTx_RELEASE_RESET();
+    if(huart == &Uart1Handle)
+    {
+        /*##-1- Reset peripherals ##################################################*/
+        USARTx1_FORCE_RESET();
+        USARTx1_RELEASE_RESET();
 
-    /*##-2- Disable peripherals and GPIO Clocks #################################*/
-    /* Configure UART Tx as alternate function  */
-    HAL_GPIO_DeInit(USARTx_TX_GPIO_PORT, USARTx_TX_PIN);
-    /* Configure UART Rx as alternate function  */
-    HAL_GPIO_DeInit(USARTx_RX_GPIO_PORT, USARTx_RX_PIN);
+        /*##-2- Disable peripherals and GPIO Clocks #################################*/
+        /* Configure UART Tx as alternate function  */
+        HAL_GPIO_DeInit(USARTx1_TX_GPIO_PORT, USARTx1_TX_PIN);
+        /* Configure UART Rx as alternate function  */
+        HAL_GPIO_DeInit(USARTx1_RX_GPIO_PORT, USARTx1_RX_PIN);    
+    }
+    else if(huart == &Uart2Handle)
+    {
+        /*##-1- Reset peripherals ##################################################*/
+        USARTx2_FORCE_RESET();
+        USARTx2_RELEASE_RESET();
+
+        /*##-2- Disable peripherals and GPIO Clocks #################################*/
+        /* Configure UART Tx as alternate function  */
+        HAL_GPIO_DeInit(USARTx2_TX_GPIO_PORT, USARTx2_TX_PIN);
+        /* Configure UART Rx as alternate function  */
+        HAL_GPIO_DeInit(USARTx2_RX_GPIO_PORT, USARTx2_RX_PIN);    
+    }
+    else{
+        while(1);
+    }
 
 }
 
@@ -290,5 +370,20 @@ void HAL_RTC_MspDeInit(RTC_HandleTypeDef *hrtc)
 /**
   * @}
   */
+
+
+/*
+ * Original HAL_Delay may cause overflow.
+ */
+void HAL_Delay(__IO uint32_t Delay)
+{
+  uint32_t tt = HAL_GetTick();
+   
+  while((uint32_t)(HAL_GetTick() - tt) < Delay)
+  {
+  }
+}
+ 
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
