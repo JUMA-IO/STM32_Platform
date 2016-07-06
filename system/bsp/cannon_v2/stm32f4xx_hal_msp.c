@@ -78,7 +78,6 @@ UART_HandleTypeDef Uart2Handle;
   */
 int fputc(int ch, FILE *f)
 {
-#if 1
     /* Place your implementation of fputc here */
     /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
     HAL_StatusTypeDef status = HAL_UART_Transmit(&Uart1Handle, (uint8_t *)&ch, 1, 0xFFFF);
@@ -88,10 +87,6 @@ int fputc(int ch, FILE *f)
         return EOF;
     }
     return ch;
-#else
-    return ch;
-#endif
-
 }
 
 
