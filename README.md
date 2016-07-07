@@ -1,41 +1,33 @@
 # STM32_Platform
 
-This is the JUMA.IO implementation for STM32 embedded platform. It further includes software resources including cmsis, bsp, hal for STM, drivers, drivers for sensors, middlewares, algorithm, open source product line trees based on the platform.
+This is the JUMA.IO implementation for STM32 embedded platform. It includes a comprehensive SDK to facilitate development work for BLE communication and typical Wireless Sensor Applications.
 
-##Hardware
-Current Supported Hardware:
-
-* Cannon Development Board 小钢炮 (STM32F401, BlueNRG-MS, 6 aixs, gyroscope, thermometer...)
-* SMM02 Bluetooth System module (STM32L052, BlueNRG-MS)
-* JUMA Developer Watch 小钢炮手表 (STM32F429, BlueNRG-MS, 6 aixs, gyroscope, moto, LCD, touch screen, Mems MIC...)
-* To be continued...
-
-(Welcome to contact us at [hello@jumacc.com](hello@jumacc.com) to add support your product.)
+##Hardware Support
 
 
-#####Cannon 小钢炮
+###Cannon 小钢炮
 
-[](https://img.alicdn.com/imgextra/i3/410813612/TB2gO8ElVXXXXXSXXXXXXXXXXXX_!!410813612.jpg_620x10000.jpg)
+![](./documents/cannon_v2/cannon_front.png)
 
-Cannon is the development board made by JUMA for JUMA.IO STM32 platform, donated by [STM](http://www.st.com). Cannon boards make it easier to try out new ideas and to build prototypes quickly in IoT and Smart device cases.
+Cannon board consists of a powerful MCU, a BLE transmitter(BlueNRG-MS), and several MEMS sensors. All the software resources of this repository can run on it, Both hardware and software are open-sourced, making it an ideal platform for learning or developping BLE/IoT applications.
 
 * Learn hardware specs at [here](http://www.juma.io/platform/cannon.html).
 * Learn step-by-step tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).
 
-Cannon is FREE for developers right now! Apply for a Cannon at JUMA's [forum](http://www.52cannon.com/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433).  
-小钢炮对开发者免费推广，您可以从我们的[论坛]((http://www.52cannon.com/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433)申请。
+> Cannon is FREE for developers right now! Apply for a Cannon at JUMA's [forum](http://www.52cannon.com/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433).  
+> 小钢炮对开发者免费推广，您可以从我们的[论坛]((http://www.52cannon.com/bbs/forum.php?mod=viewthread&tid=131&page=1&extra=#pid433)申请。
 
-#####SMM02 Bluetooth System module 蓝牙系统模块
+###SMM02 BLE module 低功耗蓝牙模块
 
-SMM02 is a ultra low power module which integrates STM32L052 MCU and BlueNRG-MS, the Bluetooth LE chip. 
+SMM02 is a ultra low power BLE module integrating STM32L052 MCU and BlueNRG-MS. 
 
-The module is available at JUMA store [here](https://item.taobao.com/item.htm?spm=a1z10.5-c.w4002-11176521396.38.Wcwon6&id=531299933708).
+> The module is available at JUMA store [here](https://item.taobao.com/item.htm?spm=a1z10.5-c.w4002-11176521396.38.Wcwon6&id=531299933708).
 
-#####JUMA Developer Watch 小钢炮手表
+###JUMA Developer Watch 小钢炮手表
 
-JUMA developer watch integrates STM32F429, BlueNRG-MS, 6 aixs, gyroscope, moto, LCD, touch screen, Mems MIC, speaker etc. It has an external flash for 128M and 64M RAM. It is suitable for wearable device and algorthim developement.
+JUMA developer watch integrates STM32F429, BlueNRG-MS, 6 aixs, gyroscope, moto, LCD, touch screen, Mems MIC, speaker etc. It has an external flash for 128M and 64M RAM. It is suitable for wearable developement and motion data analysis.
 
-Check out the watch [here](https://item.taobao.com/item.htm?spm=a1z10.5-c.w4002-11176521396.29.9s3TVH&id=531660250386).
+> Check out the watch [here](https://item.taobao.com/item.htm?spm=a1z10.5-c.w4002-11176521396.29.9s3TVH&id=531660250386).
 
 
 
@@ -59,7 +51,6 @@ The iOS version can be downloaded in AppStore as well.
 > You can get detailed tutorial at [here](http://www.juma.io/doc/zh/stm32_platform/cannon_first/).    
 > 详细的小钢炮的上手指南文档请[戳我](http://www.juma.io/doc/zh/stm32_platform/cannon_first/)，请仔细阅读。
 
-* Learn software API manuals at [here](http://www.juma.io/doc/zh/embedded_sdk.html).
 
 
 ##Directories
