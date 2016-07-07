@@ -139,7 +139,7 @@ void UART_Init(void)
         while (1);
     }
 
-    printf("\n\r UART Printf Example: retarget the C library printf function to the UART1\n\r");
+    printf("\n\rRetarget the C library printf function to the UART1\n\r");
 
     /*##-1- Configure the UART2 peripheral ######################################*/
     /* Put the USART peripheral in the Asynchronous mode (UART Mode) */
@@ -165,7 +165,7 @@ void UART_Init(void)
         while (1);
     }
 
-    //printf("\n\r UART2 initialized!\n\r");   
+    //printf("\n\rUART2 initialized!\n\r");   
 
 }
 

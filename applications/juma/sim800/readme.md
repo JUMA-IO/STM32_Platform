@@ -1,22 +1,22 @@
-#SimCom800
+#SIMCOM800
 
-SimCom800 is a GSM/GPRS module.  
-This demos how Cannon drives a SimCom800 to achieve two things:
+SIMCOM800(C) is a GSM/GPRS module.  
+This demos how Cannon drives a SIMCOM800 to achieve two things:
 
 - make a phone call.
 - post a HTTP JSON data to a sever.
 
 ##Set up the evironment
-1. prepare the boards
+Prepare the boards
 
 ![](1.jpg)
 
-2. connect each other with UART
+The SIMCOM800 module can be purchased at [here](https://item.taobao.com/item.htm?spm=a1z09.2.0.0.PF3rCc&id=523182226729&_u=7c7p15c78c2).  
 
-![](2.jpg)
-The AT commands and response will be transmitted on the UART bus.
+Connect each other with UART. In this case, UART2 is used for transmitting AT commands, whereas UART1 is used for printing logs.
 
-##Make a phone call
+##AT commands Introducation
+###1. Make a phone call
 AT commands and response are listed below:
 
 ```
@@ -30,7 +30,7 @@ AT commands and response are listed below:
 ```
 
 
-##HTTP demo
+###2. HTTP POST data to a server
 AT commands and response are listed below:
 
 ```
@@ -49,13 +49,13 @@ AT commands and response are listed below:
         OK
         AT+HTTPPARA="CID",1
         OK
-        AT+HTTPPARA="URL","http://wsensor.applinzi.com/data/write"
+        AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
         OK
         AT+HTTPPARA="CONTENT","application/json"
         OK
         AT+HTTPDATA=200,10000
         DOWNLOAD
-        {"SENSOR_ID":"0002-0002-0003-0005","SENSOR_TIME":"Thu May 26 12:38:15 CST 2016","SENSOR_LOCATION":"shanghai","SENSOR_TYPE":"Temperature", "SENSOR_DATA":"25"}
+        {"did":"peter123","steps":"53711","volt":"86"}
         OK
         AT+HTTPACTION=1
         OK
@@ -68,18 +68,43 @@ AT commands and response are listed below:
         OK
 ```
 
-Description:
 
-1. send a JSON data to the sever, you can try it by CURL command as well:
+
+Above AT commands of HTTP POST can be imitated by CURL tool :
 
 ```
-curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X POST -d '{"SENSOR_ID":"0002-0002-0003-0005", "SENSOR_TIME":"Thu May 26 12:38:15 CST 2016", "SENSOR_LOCATION":"上海", "SENSOR_TYPE":"Temperature", "SENSOR_DATA":"21°"}' http://wsensor.applinzi.com/data/write
+curl -H "Content-Type: application/json" -X POST -d '{"did":"peter123", "steps":"56789", "volt":"99"}' http://117.121.38.191:3000/save_chicken    
 ```
 
-2. you can see the data on the web page
 
-open a browser and go to URL: [http://wsensor.applinzi.com/data/read](http://wsensor.applinzi.com/data/write)
 
-Result shows below:
+##Application DEMO
+
+###1. Code Flow
+
+Please find details in [app.c](app.c):
+
+- initialize the SIMCOM800 module
+- Make a phone call
+- HTTP POST data to a server (the server will store the data in database).
+
+
+
+###2. Log captured
+
+Please find details in [successful_AT_log.txt](successful_AT_log.txt):
+
+![](2.png)
 
 ![](3.png)
+
+###3. Check server database
+
+![](4.png)
+
+
+##Usage
+
+Include `sim800.h` in your project, API usages are described along with the function. 
+
+Have fun.

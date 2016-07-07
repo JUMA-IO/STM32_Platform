@@ -1,0 +1,327 @@
+
+Retarget the C library printf function to the UART1
+
+*****************************************
+**********SIMCOM TEST APPLICATION *******
+*****************************************
+
+Initialize SIMCOM800
+[sim800 TX]: AT+IPR=115200
+[sim800 RX]: 
+OK
+
+[sim800 TX]: ATE0
+[sim800 RX]: 
+OK
+
+[sim800 TX]: AT+CPIN?
+[sim800 RX]: 
++CPIN: READY
+
+OK
+[sim800 TX]: AT+CREG?
+[sim800 RX]: 
++CREG: 0,1
+
+OK
+[sim800 TX]: AT+CGATT?
+[sim800 RX]: 
++CGATT: 1
+
+OK
+[sim800 TX]: AT+SAPBR=3,1,"Contype","GPRS"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+SAPBR=3,1,"APN","CMNET"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+SAPBR=1,1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+SAPBR=2,1
+[sim800 RX]: 
++SAPBR: 1,1,"10.138.144.187"
+
+OK
+
+
+
+[sim800]: init setup completed!
+
+Test to make a phone call
+[sim800 TX]: ATD18621797323;
+[sim800 RX]: 
+OK
+[sim800 TX]: ATH
+[sim800 RX]: 
+OK
+
+
+Test HTTP post JSON data
+========== No: 0 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"56172","volt":"27"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2594(ms) =====
+========== No: 1 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"53711","volt":"86"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2601(ms) =====
+========== No: 2 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"51786","volt":"13"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2600(ms) =====
+========== No: 3 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"55229","volt":"20"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2600(ms) =====
+========== No: 4 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"57720","volt":"55"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2603(ms) =====
+========== No: 5 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"56907","volt":"22"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2600(ms) =====
+========== No: 6 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"58422","volt":"41"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2602(ms) =====
+========== No: 7 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"55785","volt":"64"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2602(ms) =====
+========== No: 8 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"54292","volt":"47"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2600(ms) =====
+========== No: 9 ==========
+[sim800 TX]: AT+HTTPINIT
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CID",1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="URL","http://117.121.38.191:3000/save_chicken"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPPARA="CONTENT","application/json"
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPDATA=48,10000
+[sim800 RX]: 
+DOWNLOAD
+[sim800 TX]: {"did":"peter123","steps":"54087","volt":"90"}
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPACTION=1
+[sim800 RX]: 
+OK
+[sim800 TX]: AT+HTTPTERM
+[sim800 RX]: 
+OK
+===== diff = 2604(ms) =====
+
+De-initialize SIMCOM800
+[sim800 TX]: AT+SAPBR=0,1
+[sim800 RX]: 
+OK
+
+************** Application Done! ***********

@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>STM32F401RETx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.7.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.5.0</PackID>
           <PackURL>http://www.keil.com/pack</PackURL>
           <Cpu>IROM(0x08000000,0x80000) IRAM(0x20000000,0x18000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -147,7 +147,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>6</TargetSelection>
+          <TargetSelection>11</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -161,7 +161,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
+            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -365,7 +365,7 @@
               <MiscControls>--C99 --gnu  -W#177</MiscControls>
               <Define>STM32F401xE,USE_HAL_DRIVER,USE_STM32F4XX_NUCLEO,ENABLE_SPI_FIX,BLUENRG_MS,RTC_LSE,SENSOR_FIFO,SERVER_ROLE,CANNON_V2</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\echo;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\cmsis\include;..\..\..\..\system\cmsis\device\st\inc;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h</IncludePath>
+              <IncludePath>..\..\echo;..\..\..\..\system\bsp\cannon_v2;..\..\..\..\system\bsp\nucleo;..\..\..\..\system\cmsis\include;..\..\..\..\system\cmsis\device\st\inc;..\..\..\..\system\hal\stm32f4xx_hal_driver\inc;..\..\..\..\system\middlewares\juma;..\..\..\..\system\middlewares\juma\sdk;..\..\..\..\system\middlewares\juma\sensor;..\..\..\..\system\middlewares\juma\device_lib_Juma_Cannon;..\..\..\..\system\middlewares\juma\dispatcher;..\..\..\..\system\middlewares\juma\low_power;..\..\..\..\system\middlewares\st\bluenrg_ms\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\class\HID\inc;..\..\..\..\system\drivers\juma\stm32_usb_device_library\core\inc;..\..\..\..\system\drivers\st\bluenrg\bluenrg_ms;..\..\..\..\system\drivers\st\common;..\..\..\..\system\drivers\st\hts221;..\..\..\..\system\drivers\st\lps25hb;..\..\..\..\system\drivers\st\lsm303agr;..\..\..\..\system\drivers\st\lsm6ds3;..\..\..\..\system\drivers\st\lps25h;..\..\..\..\system\middlewares\juma\simcom</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -447,6 +447,11 @@
               <FileName>juma_sensor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\system\middlewares\juma\sensor\juma_sensor.c</FilePath>
+            </File>
+            <File>
+              <FileName>sim800.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\system\middlewares\juma\simcom\sim800.c</FilePath>
             </File>
           </Files>
         </Group>
