@@ -43,8 +43,8 @@ void on_ready(void)
     if(SUCCESS == sim800_init()){
         
         // Test to make a phone call
-        printf("\r\nTest to make a phone call\r\n");    
-        sim800_test_phone_call("18621797323");
+        //printf("\r\nTest to make a phone call\r\n");    
+        //sim800_test_phone_call("18621797323");
 
         // Test HTTP post JSON data
         printf("\r\nTest HTTP post JSON data\r\n");

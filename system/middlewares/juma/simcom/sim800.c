@@ -104,10 +104,15 @@ static int sim800_setup(){
     if(ERROR == send_AT_cmd("AT+SAPBR=3,1,\"Contype\",\"GPRS\"\r\n", "OK", AT_CMD_TIMEOUT))
         return ERROR;
 
+#if 1 /* APN Setting for IOT SIM Card of CHINA MOBILE */
+    if(ERROR == send_AT_cmd("AT+SAPBR=3,1,\"APN\",\"CMIOT\"\r\n", "OK", AT_CMD_TIMEOUT))
+        return ERROR;
+#else /* Normal SIM Card */
     if(ERROR == send_AT_cmd("AT+SAPBR=3,1,\"APN\",\"CMNET\"\r\n", "OK", AT_CMD_TIMEOUT))
         return ERROR;
+#endif
 
-    if(ERROR == send_AT_cmd("AT+SAPBR=1,1\r\n", "OK", 1000)){
+    if(ERROR == send_AT_cmd("AT+SAPBR=1,1\r\n", "OK", 3000)){
         
         //ERROR, maybe it's because that it's already be opened, let's check:
         if(ERROR == send_AT_cmd("AT+SAPBR=2,1\r\n", "+SAPBR: 1,1", 2000))
